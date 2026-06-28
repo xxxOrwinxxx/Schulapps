@@ -52,5 +52,63 @@
   <footer>
     FOS Nürnberg &middot; Diese Seite kannst du nur ansehen, nichts wird verändert.
   </footer>
+<!-- QR-SHARE-BLOCK -->
+<button id="qrshare-btn" type="button" aria-label="QR-Code anzeigen" title="QR-Code anzeigen">&#9783; QR-Code</button>
+<div id="qrshare-overlay" hidden role="dialog" aria-modal="true" aria-label="QR-Code zu dieser Seite">
+  <div id="qrshare-card" role="document">
+    <div id="qrshare-code"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="segno"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#000" d="M2 2.5h7m3 0h1m2 0h1m3 0h1m4 0h7m-29 1h1m5 0h1m1 0h5m3 0h1m3 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m2 0h1m2 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h2m1 0h3m2 0h2m1 0h2m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m4 0h1m1 0h5m1 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m4 0h2m5 0h1m1 0h1m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h1m7 0h1m1 0h3m-21 1h1m5 0h1m1 0h1m1 0h5m2 0h1m3 0h2m2 0h3m-28 1h1m2 0h1m3 0h1m1 0h1m1 0h1m3 0h1m3 0h1m1 0h1m1 0h2m1 0h2m-27 1h1m3 0h2m3 0h4m1 0h2m4 0h1m1 0h1m-23 1h1m3 0h1m3 0h2m3 0h1m1 0h1m2 0h2m1 0h2m1 0h1m-24 1h1m1 0h1m1 0h2m1 0h3m2 0h2m4 0h1m1 0h2m4 0h1m-29 1h4m5 0h1m1 0h1m1 0h1m1 0h2m1 0h2m1 0h4m2 0h2m-29 1h2m2 0h4m3 0h5m1 0h2m5 0h3m-26 1h5m4 0h1m5 0h1m1 0h1m1 0h2m4 0h1m1 0h1m-29 1h3m1 0h1m1 0h5m1 0h1m4 0h4m2 0h1m1 0h2m-27 1h2m6 0h1m1 0h2m3 0h6m1 0h3m1 0h3m-29 1h10m1 0h1m1 0h3m3 0h3m1 0h3m2 0h1m-29 1h1m1 0h1m4 0h1m3 0h1m3 0h1m2 0h1m2 0h1m-22 1h1m2 0h1m2 0h3m1 0h3m2 0h1m1 0h1m1 0h6m1 0h3m-21 1h1m1 0h1m1 0h4m1 0h4m3 0h2m-26 1h7m2 0h1m1 0h1m1 0h4m1 0h3m1 0h1m1 0h3m-27 1h1m5 0h1m2 0h3m1 0h1m1 0h1m3 0h2m3 0h1m-25 1h1m1 0h3m1 0h1m2 0h3m1 0h1m1 0h1m3 0h7m1 0h1m-28 1h1m1 0h3m1 0h1m3 0h1m1 0h1m3 0h3m2 0h1m1 0h1m1 0h2m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m1 0h2m1 0h4m2 0h8m-28 1h1m5 0h1m2 0h1m2 0h1m1 0h2m3 0h1m1 0h1m2 0h3m1 0h1m-29 1h7m1 0h5m1 0h1m2 0h3m1 0h2m2 0h2"/></svg>
+</div>
+    <div id="qrshare-cap">Mit der Handy-Kamera scannen</div>
+    <div id="qrshare-url">https://xxxorwinxxx.github.io/Schulapps/</div>
+    <button id="qrshare-close" type="button">Schliessen</button>
+  </div>
+</div>
+<style>
+  #qrshare-btn{
+    position:fixed; right:16px; bottom:16px; z-index:100000;
+    font:600 0.95rem system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    color:#0f172a; background:#38bdf8; border:none; border-radius:999px;
+    padding:10px 16px; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.35);
+  }
+  #qrshare-btn:hover{background:#7dd3fc}
+  #qrshare-overlay{
+    position:fixed; inset:0; z-index:100001; display:flex;
+    align-items:center; justify-content:center; padding:20px;
+    background:rgba(2,6,23,.78);
+  }
+  #qrshare-overlay[hidden]{display:none}
+  #qrshare-card{
+    background:#fff; color:#0f172a; border-radius:18px; padding:24px;
+    max-width:90vw; text-align:center; box-shadow:0 12px 40px rgba(0,0,0,.5);
+  }
+  #qrshare-code svg{
+    width:min(70vmin,420px); height:auto; display:block; margin:0 auto;
+  }
+  #qrshare-cap{margin-top:14px; font:600 1.05rem system-ui,sans-serif}
+  #qrshare-url{
+    margin-top:6px; font:0.82rem ui-monospace,Consolas,monospace;
+    color:#475569; word-break:break-all;
+  }
+  #qrshare-close{
+    margin-top:18px; font:600 0.95rem system-ui,sans-serif; color:#fff;
+    background:#0f172a; border:none; border-radius:10px; padding:10px 22px; cursor:pointer;
+  }
+  #qrshare-close:hover{background:#1e293b}
+  @media print{ #qrshare-btn,#qrshare-overlay{display:none!important} }
+</style>
+<script>
+(function(){
+  var btn=document.getElementById('qrshare-btn');
+  var ov=document.getElementById('qrshare-overlay');
+  var cl=document.getElementById('qrshare-close');
+  function open(){ov.hidden=false}
+  function close(){ov.hidden=true}
+  btn.addEventListener('click',open);
+  cl.addEventListener('click',close);
+  ov.addEventListener('click',function(e){if(e.target===ov)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
+
 </body>
 </html>
