@@ -251,6 +251,8 @@
     color: var(--text-dim);
     font-size: 11px;
   }
+  /* Positions-Hinweis, nur auf kleinen Bildschirmen sichtbar (dort fehlen die Pfeile) */
+  .legend-anno .la-pos { display: none; }
   /* Obere Reihe, drei Bezeichnungen über dem Kästchen */
   .la-a    { top: 24px;  left: 30px;     width: 180px; text-align: right; }
   .la-mass { top: 24px;  left: 50%; transform: translateX(-50%); width: 200px; text-align: center; }
@@ -282,6 +284,14 @@
       margin-top: 10px;
       padding-left: 12px;
       border-left: 2px solid var(--accent);
+    }
+    .legend-anno .la-pos {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--accent);
+      margin: 1px 0 3px;
     }
   }
 
@@ -894,26 +904,32 @@
           </div>
           <div class="legend-anno la-mass">
             <strong>Atommasse</strong>
+            <span class="la-pos">oben Mitte</span>
             <span>gewichteter Mittelwert in u über alle natürlichen Isotope</span>
           </div>
           <div class="legend-anno la-a">
             <strong>Massenzahl A</strong>
+            <span class="la-pos">oben links</span>
             <span>Protonen + Neutronen (häufigstes Isotop)</span>
           </div>
           <div class="legend-anno la-z">
             <strong>Ordnungszahl Z</strong>
+            <span class="la-pos">links, unter der Massenzahl</span>
             <span>Anzahl der Protonen im Kern</span>
           </div>
           <div class="legend-anno la-sym">
             <strong>Elementsymbol</strong>
+            <span class="la-pos">groß in der Mitte</span>
             <span>ein bis zwei Buchstaben, oft aus dem lateinischen Namen</span>
           </div>
           <div class="legend-anno la-name">
             <strong>Elementname</strong>
+            <span class="la-pos">unter dem Symbol</span>
             <span>deutscher Name des Elements</span>
           </div>
           <div class="legend-anno la-en">
             <strong>Elektronegativität</strong>
+            <span class="la-pos">unten rechts</span>
             <span>Pauling-Skala, 0,7 bis 4,0</span>
           </div>
         </div>
