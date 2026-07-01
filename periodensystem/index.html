@@ -35,11 +35,11 @@
     /* Bewertungs-Stufen Abschlussbericht (5 Stufen) */
     --tier-fail:     #c0392b;   /* < 40 % rot */
     --tier-fail-bg:  rgba(192,57,43,0.10);
-    --tier-min:      #b88500;   /* 40–59 % gelb-orange */
+    --tier-min:      #b88500;   /* 40 bis 59 % gelb-orange */
     --tier-min-bg:   rgba(184,133,0,0.10);
-    --tier-pass:     #4caf50;   /* 60–74 % hellgrün */
+    --tier-pass:     #4caf50;   /* 60 bis 74 % hellgrün */
     --tier-pass-bg:  rgba(76,175,80,0.10);
-    --tier-good:     #2e7d32;   /* 75–89 % dunkelgrün */
+    --tier-good:     #2e7d32;   /* 75 bis 89 % dunkelgrün */
     --tier-good-bg:  rgba(46,125,50,0.12);
     --tier-top:      #1565c0;   /* ≥ 90 % blau-top */
     --tier-top-bg:   rgba(21,101,192,0.12);
@@ -174,10 +174,10 @@
     border: 2px solid var(--panel-bg);
     z-index: 2;
   }
-  /* Marker-Positionen — A oben links, Z darunter, Symbol/Name rechts an die jeweilige Höhe */
+  /* Marker-Positionen, A oben links, Z darunter, Symbol/Name rechts an die jeweilige Höhe */
   .legend-cell-sample .m1 { top: -9px; left: 50%; transform: translateX(-50%); }  /* Atommasse oben */
-  .legend-cell-sample .m5 { top: 32px; left: -10px; }                              /* A — Massenzahl, links oben */
-  .legend-cell-sample .m2 { top: 54px; left: -10px; }                              /* Z — Ordnungszahl, darunter */
+  .legend-cell-sample .m5 { top: 32px; left: -10px; }                              /* A, Massenzahl, links oben */
+  .legend-cell-sample .m2 { top: 54px; left: -10px; }                              /* Z, Ordnungszahl, darunter */
   .legend-cell-sample .m3 { top: 96px; right: -10px; }                             /* Symbol mittig */
   .legend-cell-sample .m4 { top: 120px; right: -10px; }                            /* Name direkt unter Symbol */
   .legend-cell-sample .m6 { bottom: -9px; right: -10px; }                          /* EN unten rechts */
@@ -251,11 +251,11 @@
     color: var(--text-dim);
     font-size: 11px;
   }
-  /* Obere Reihe — drei Bezeichnungen über dem Kästchen */
+  /* Obere Reihe, drei Bezeichnungen über dem Kästchen */
   .la-a    { top: 24px;  left: 30px;     width: 180px; text-align: right; }
   .la-mass { top: 24px;  left: 50%; transform: translateX(-50%); width: 200px; text-align: center; }
   .la-sym  { top: 24px;  right: 30px;    width: 180px; text-align: left;  }
-  /* Untere Reihe — drei Bezeichnungen unter dem Kästchen */
+  /* Untere Reihe, drei Bezeichnungen unter dem Kästchen */
   .la-z    { top: 318px; left: 30px;     width: 180px; text-align: right; }
   .la-name { top: 318px; left: 50%; transform: translateX(-50%); width: 200px; text-align: center; }
   .la-en   { top: 318px; right: 30px;    width: 180px; text-align: left;  }
@@ -360,7 +360,7 @@
   .el .en   { grid-column: 1 / 3; grid-row: 4; font-size: 9px; text-align: right; color: var(--cell-text); font-weight: 500; padding-right: 1px; }
 
   /* Verweis-Marker auf Lanthanoide/Actinoide bei Lu (71) und Lr (103):
-     nur noch ein farbiger Streifen am unteren Rand mit zentriertem ▼ — kein linker Streifen mehr.
+     nur noch ein farbiger Streifen am unteren Rand mit zentriertem ▼, kein linker Streifen mehr.
      EN rutscht durch padding-bottom etwas nach oben, damit sie nicht vom Streifen überlagert wird. */
   .el[data-z="71"], .el[data-z="103"] {
     padding-bottom: 10px;
@@ -914,15 +914,15 @@
           </div>
           <div class="legend-anno la-en">
             <strong>Elektronegativität</strong>
-            <span>Pauling-Skala, 0,7 – 4,0</span>
+            <span>Pauling-Skala, 0,7 bis 4,0</span>
           </div>
         </div>
       </div>
       <div class="legend-block">
         <div class="legend-title">Farben & Orbital-Block</div>
-        <div><strong>Zellfarbe</strong> = <strong>Hauptenergiestufe n</strong> des zuletzt aufgefüllten Orbitals. Sieben Stufen — sieben Farben (siehe Filterleiste „Energiestufe" oben).</div>
+        <div><strong>Zellfarbe</strong> = <strong>Hauptenergiestufe n</strong> des zuletzt aufgefüllten Orbitals. Sieben Stufen, sieben Farben (siehe Filterleiste „Energiestufe" oben).</div>
         <div style="margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:3px;font-size:12px;line-height:1.5;">
-          <strong>Was ist ein Orbital?</strong> Ein Orbital ist ein <em>räumlicher Bereich</em> um den Atomkern, in dem sich ein Elektron mit hoher Wahrscheinlichkeit aufhält. Es gibt verschiedene Orbital-Formen (s, p, d, f) — jede kann nur eine ganz bestimmte Anzahl Elektronen aufnehmen.
+          <strong>Was ist ein Orbital?</strong> Ein Orbital ist ein <em>räumlicher Bereich</em> um den Atomkern, in dem sich ein Elektron mit hoher Wahrscheinlichkeit aufhält. Es gibt verschiedene Orbital-Formen (s, p, d, f), jede kann nur eine ganz bestimmte Anzahl Elektronen aufnehmen.
         </div>
         <div style="margin-top:10px;">Die untere Beschriftungsleiste (<em>s¹, s², d¹…d¹⁰, p¹…p⁶, f¹…f¹⁴</em>) zeigt, welches Orbital gerade aufgefüllt wird. <strong>Wichtig:</strong> Wie viele Elektronen ein Orbital aufnimmt, so viele Spalten ist der zugehörige Block im PSE breit.</div>
         <ul class="legend-orbitals">
@@ -944,7 +944,7 @@
               <circle cx="21" cy="13" r="1.6" class="core"/>
             </svg>
             <span class="ok">p</span>
-            <div><strong>hantelförmig</strong> · max. 6 Elektronen → <strong>p-Block = 6 Spalten</strong> (Hauptgruppen III–VIII)</div>
+            <div><strong>hantelförmig</strong> · max. 6 Elektronen → <strong>p-Block = 6 Spalten</strong> (Hauptgruppen III bis VIII)</div>
           </li>
           <li>
             <svg class="orb-shape" viewBox="0 0 36 30" aria-hidden="true">
@@ -980,7 +980,7 @@
           </li>
         </ul>
         <div class="legend-note" style="margin-top:12px;padding:8px 10px;background:var(--surface2);border-radius:3px;font-style:normal;color:var(--text);">
-          <strong>💡 Merke:</strong> Jede Spalte des PSE fügt ein <em>Proton</em> im Kern hinzu — und ein weiteres <em>Elektron</em> in das gerade gefüllte Orbital. Sobald das Orbital voll ist, beginnt der nächste Block. Deshalb passen die Zahlen genau zusammen: <strong>s → 2, p → 6, d → 10, f → 14</strong>.
+          <strong>💡 Merke:</strong> Jede Spalte des PSE fügt ein <em>Proton</em> im Kern hinzu, und ein weiteres <em>Elektron</em> in das gerade gefüllte Orbital. Sobald das Orbital voll ist, beginnt der nächste Block. Deshalb passen die Zahlen genau zusammen: <strong>s → 2, p → 6, d → 10, f → 14</strong>.
         </div>
         <div class="legend-note" style="margin-top:6px;">Beispiel: Natrium steht in Periode 3 und füllt das 3s-Orbital → Hauptenergiestufe n=3 → <em>grüne Zellfarbe</em>.</div>
       </div>
@@ -1005,7 +1005,7 @@
         <div class="fb-icon">🎉</div>
         <div class="fb-text">
           <div class="fb-title">Lernpfad abgeschlossen!</div>
-          <div class="fb-sub">Schau dir deinen persönlichen Abschlussbericht an — Gesamtergebnis, Stärken, Empfehlungen.</div>
+          <div class="fb-sub">Schau dir deinen persönlichen Abschlussbericht an, Gesamtergebnis, Stärken, Empfehlungen.</div>
         </div>
         <button class="fb-btn" id="openReportBtn">📊 Mein Abschlussbericht</button>
       </div>
@@ -1070,7 +1070,7 @@ const elements = [
   [18,"Ar","Argon",39.948,"noble",3,18,84,87,null,"[Ne] 3s² 3p⁶",1894,"Häufigstes Edelgas der Atmosphäre (0,93 %). Vollkommen reaktionsträge. Schutzgas beim Schweißen und in Glühlampen. Name aus dem Griechischen ἀργός = 'untätig'.","Argon"],
   [19,"K","Kalium",39.098,"alkali",4,1,337,1032,0.82,"[Ar] 4s¹",1807,"Wichtigstes intrazelluläres Kation (K⁺), entscheidend für Ruhemembranpotential der Nervenzellen. Bananen sind kaliumreich. Düngemittelkomponente (NPK-Dünger). Reagiert noch heftiger mit Wasser als Natrium.","Kalium"],
   [20,"Ca","Calcium",40.078,"alkaline",4,2,1115,1757,1.00,"[Ar] 4s²",1808,"Fünfthäufigstes Element der Erdkruste. Hauptbestandteil von Knochen und Zähnen (Hydroxylapatit). Calciumcarbonat (Kalk, Marmor) bildet ganze Gebirgsketten. Wichtig für Muskelkontraktion, Blutgerinnung und Signalweiterleitung.","Calcium"],
-  [21,"Sc","Scandium",44.956,"transition",4,3,1814,3109,1.36,"[Ar] 3d¹ 4s²",1879,"Selten und teuer. Legierungszusatz für hochfeste Aluminium-Scandium-Legierungen (Sportartikel, Luftfahrt). Mendelejew sagte Existenz und Eigenschaften (als 'Eka-Bor') vorher, bevor das Element entdeckt wurde – ein Durchbruch für das PSE-Konzept.","Scandium"],
+  [21,"Sc","Scandium",44.956,"transition",4,3,1814,3109,1.36,"[Ar] 3d¹ 4s²",1879,"Selten und teuer. Legierungszusatz für hochfeste Aluminium-Scandium-Legierungen (Sportartikel, Luftfahrt). Mendelejew sagte Existenz und Eigenschaften (als 'Eka-Bor') vorher, bevor das Element entdeckt wurde, ein Durchbruch für das PSE-Konzept.","Scandium"],
   [22,"Ti","Titan",47.867,"transition",4,4,1941,3560,1.54,"[Ar] 3d² 4s²",1791,"Sehr leicht, hochfest, korrosionsbeständig und biokompatibel. Wichtig für Hüft- und Zahnimplantate. Titandioxid (TiO₂) ist häufigstes Weißpigment in Farben, Sonnencremes und Zahnpasta.","Titan_(Element)"],
   [23,"V","Vanadium",50.942,"transition",4,5,2183,3680,1.63,"[Ar] 3d³ 4s²",1801,"Stahlveredler: Vanadium-Stahl ist sehr zäh und wird für Werkzeuge und Achsen verwendet. Vanadium-Redox-Batterien vielversprechend für stationäre Energiespeicher. Zeigt fünf Oxidationsstufen mit charakteristisch unterschiedlichen Farben.","Vanadium"],
   [24,"Cr","Chrom",51.996,"transition",4,6,2180,2944,1.66,"[Ar] 3d⁵ 4s¹",1798,"Verleiht Edelstahl seine Korrosionsbeständigkeit (Bildung passivierender Cr₂O₃-Schicht). Chromgelb (PbCrO₄) war wichtiges Pigment. Sechswertige Chromverbindungen sind krebserregend. Verchromung von Autoteilen.","Chrom"],
@@ -1082,7 +1082,7 @@ const elements = [
   [30,"Zn","Zink",65.38,"transition",4,12,693,1180,1.65,"[Ar] 3d¹⁰ 4s²",1746,"Korrosionsschutz für Stahl durch Verzinken (Opferanode). Essentielles Spurenelement: Cofaktor in über 300 Enzymen, wichtig für Immunsystem und Wundheilung. Zinkoxid (ZnO) in Sonnencremes (UV-Schutz). Bestandteil von Messing.","Zink"],
   [31,"Ga","Gallium",69.723,"post-transition",4,13,303,2477,1.81,"[Ar] 3d¹⁰ 4s² 4p¹",1875,"Schmilzt schon in der Hand bei 29,8 °C (klassisches Demoexperiment). Galliumnitrid (GaN) in blauen LEDs (Nobelpreis 2014) und in modernen Leistungstransistoren. Mendelejew sagte das Element als 'Eka-Aluminium' voraus.","Gallium"],
   [32,"Ge","Germanium",72.63,"metalloid",4,14,1211,3106,2.01,"[Ar] 3d¹⁰ 4s² 4p²",1886,"Erster Transistor (Bell Labs 1947) wurde aus Germanium gebaut, später durch Silicium ersetzt. Heute wichtig für Glasfasern und Infrarotoptik. Drittes von Mendelejew vorhergesagtes Element ('Eka-Silicium').","Germanium"],
-  [33,"As","Arsen",74.922,"metalloid",4,15,1090,887,2.18,"[Ar] 3d¹⁰ 4s² 4p³",-2600,"Berüchtigt als historisches Mordgift ('Erbschaftspulver'). Heute Halbleiterelement (GaAs in Hochfrequenzelektronik, Solarzellen). Arsenkontamination des Grundwassers in Bangladesch ist eine der größten Umweltkatastrophen mit Millionen Betroffenen.","Arsen"],
+  [33,"As","Arsen",74.922,"metalloid",4,15,1090,887,2.18,"[Ar] 3d¹⁰ 4s² 4p³",-2600,"Sublimiert bei Normaldruck (geht direkt vom Feststoff in den Dampf über, ohne vorher zu schmelzen; ein flüssiger Zustand entsteht erst unter erhöhtem Druck). Berüchtigt als historisches Mordgift ('Erbschaftspulver'). Heute Halbleiterelement (GaAs in Hochfrequenzelektronik, Solarzellen). Arsenkontamination des Grundwassers in Bangladesch ist eine der größten Umweltkatastrophen mit Millionen Betroffenen.","Arsen"],
   [34,"Se","Selen",78.971,"nonmetal",4,16,494,958,2.55,"[Ar] 3d¹⁰ 4s² 4p⁴",1817,"Essentielles Spurenelement (Cofaktor der Glutathion-Peroxidase, schützt vor oxidativem Stress). Photoleitfähig: bildete die Grundlage des ersten Photokopierers (Xerographie). Mangelversorgung in Teilen Deutschlands häufig.","Selen"],
   [35,"Br","Brom",79.904,"halogen",4,17,266,332,2.96,"[Ar] 3d¹⁰ 4s² 4p⁵",1826,"Einziges flüssiges Nichtmetall bei Raumtemperatur (neben Quecksilber als einziges flüssiges Element). Rotbraun, stechend giftig. Bromhaltige Flammschutzmittel verbreitet, aber umweltbedenklich (Anreicherung in Nahrungskette).","Brom"],
   [36,"Kr","Krypton",83.798,"noble",4,18,116,120,3.00,"[Ar] 3d¹⁰ 4s² 4p⁶",1898,"Edelgas, sehr selten in der Atmosphäre. Bildet im Gegensatz zu Helium/Neon einige wenige Verbindungen (KrF₂). Wurde von 1960 bis 1983 zur Definition des Meters genutzt (Wellenlänge einer Kr-86-Spektrallinie).","Krypton_(Element)"],
@@ -1122,7 +1122,7 @@ const elements = [
   [70,"Yb","Ytterbium",173.04,"lanthanide",6,null,1097,1469,1.10,"[Xe] 4f¹⁴ 6s²",1878,"Yb-Faserlaser sind die leistungsfähigsten Industrielaser für Materialbearbeitung. Yb-Atomuhren könnten die Cs-Atomuhr als Definition der SI-Sekunde ablösen (Genauigkeit 1 s in 14 Mrd. Jahren).","Ytterbium"],
   [71,"Lu","Lutetium",174.97,"transition",6,3,1925,3675,1.27,"[Xe] 4f¹⁴ 5d¹ 6s²",1907,"Steht am Ende der Lanthanoidenreihe, wird nach IUPAC aber zu den Übergangsmetallen gerechnet (Gruppe 3, Valenzelektron im 5d-Orbital). Lutetium-Oxyorthosilikat (LSO) ist das Standardszintillator-Material in modernen PET-Scannern. ¹⁷⁷Lu-DOTATATE ist eine zugelassene Radionuklidtherapie gegen neuroendokrine Tumoren.","Lutetium"],
   [72,"Hf","Hafnium",178.49,"transition",6,4,2506,4876,1.30,"[Xe] 4f¹⁴ 5d² 6s²",1923,"Letztes stabiles Element, das auf der Erde entdeckt wurde (1923). Chemisch fast identisch mit Zirkonium (Lanthanoidenkontraktion). HfO₂ ersetzt seit ≈2007 SiO₂ als Gate-Dielektrikum in modernen Transistoren.","Hafnium"],
-  [73,"Ta","Tantal",180.95,"transition",6,5,3290,5731,1.50,"[Xe] 4f¹⁴ 5d³ 6s²",1802,"Zweithöchster Schmelzpunkt aller Metalle (3017 °C). Tantal-Elektrolytkondensatoren sind essentiell in Smartphones und Laptops (höchste Kapazität pro Volumen). Coltan-Erz: Konfliktrohstoff (DR Kongo).","Tantal"],
+  [73,"Ta","Tantal",180.95,"transition",6,5,3290,5731,1.50,"[Xe] 4f¹⁴ 5d³ 6s²",1802,"Einer der höchsten Schmelzpunkte aller Metalle (3017 °C). Tantal-Elektrolytkondensatoren sind essentiell in Smartphones und Laptops (höchste Kapazität pro Volumen). Coltan-Erz: Konfliktrohstoff (DR Kongo).","Tantal"],
   [74,"W","Wolfram",183.84,"transition",6,6,3695,5828,2.36,"[Xe] 4f¹⁴ 5d⁴ 6s²",1783,"Höchster Schmelzpunkt aller Metalle (3422 °C). Klassischer Werkstoff für Glühwendel in Glühlampen (heute durch LED verdrängt). Wolframcarbid (WC) ist nach Diamant einer der härtesten Werkstoffe, daher Hartmetall für Bohrer und Fräser.","Wolfram"],
   [75,"Re","Rhenium",186.21,"transition",6,7,3459,5869,1.90,"[Xe] 4f¹⁴ 5d⁵ 6s²",1925,"Eines der seltensten stabilen Elemente in der Erdkruste. Wichtig für Nickel-Superlegierungen in Turbinenschaufeln von Strahltriebwerken (Hochtemperatur-Kriechfestigkeit).","Rhenium"],
   [76,"Os","Osmium",190.23,"transition",6,8,3306,5285,2.20,"[Xe] 4f¹⁴ 5d⁶ 6s²",1803,"Dichtestes natürlich vorkommendes Element (22,59 g/cm³, leicht dichter als Iridium). Osmiumtetroxid (OsO₄) ist hochgiftig, aber unverzichtbar für die Färbung biologischer Präparate in der Elektronenmikroskopie.","Osmium"],
@@ -1136,10 +1136,10 @@ const elements = [
   [84,"Po","Polonium",209,"metalloid",6,16,527,1235,2.00,"[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁴",1898,"Hochradioaktiv. Von Marie Curie entdeckt und nach ihrem Heimatland Polen benannt. ²¹⁰Po als Alpha-Strahler ohne erkennbare äußere Strahlung extrem giftig (Litwinenko-Mord 2006).","Polonium"],
   [85,"At","Astat",210,"halogen",6,17,575,610,2.20,"[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁵",1940,"Seltenstes natürlich vorkommendes Element (insgesamt nur wenige Gramm in der gesamten Erdkruste). Alle Isotope radioaktiv mit kurzen Halbwertszeiten. ²¹¹At wird in der gezielten Alpha-Radioimmuntherapie gegen Krebs erforscht.","Astat"],
   [86,"Rn","Radon",222,"noble",6,18,202,211,null,"[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶",1900,"Radioaktives Edelgas, Tochterkern aus dem Uran-Zerfall. Reichert sich in Kellern und schlecht belüfteten Räumen an. Nach Tabakrauchen die zweitwichtigste Ursache von Lungenkrebs. BfS empfiehlt Messungen in Risikogebieten.","Radon"],
-  [87,"Fr","Francium",223,"alkali",7,1,300,950,0.70,"[Rn] 7s¹",1939,"Eines der seltensten natürlich vorkommenden Elemente, jederzeit existieren auf der gesamten Erde nur ≈20–30 g. Längste Halbwertszeit von Fr-223: 22 Minuten. Eigenschaften daher fast nur theoretisch zugänglich.","Francium"],
-  [88,"Ra","Radium",226,"alkaline",7,2,973,1413,0.90,"[Rn] 7s²",1898,"Von Marie und Pierre Curie entdeckt. Leuchtet im Dunkeln blass blau. Vor 1930 in Leuchtfarbe für Zifferblätter ('Radium Girls' – Skandal um Arbeiterinnen mit Mund-/Kieferkrebs).","Radium"],
+  [87,"Fr","Francium",223,"alkali",7,1,300,950,0.70,"[Rn] 7s¹",1939,"Eines der seltensten natürlich vorkommenden Elemente, jederzeit existieren auf der gesamten Erde nur ≈20 bis 30 g. Längste Halbwertszeit von Fr-223: 22 Minuten. Eigenschaften daher fast nur theoretisch zugänglich.","Francium"],
+  [88,"Ra","Radium",226,"alkaline",7,2,973,1413,0.90,"[Rn] 7s²",1898,"Von Marie und Pierre Curie entdeckt. Leuchtet im Dunkeln blass blau. Vor 1930 in Leuchtfarbe für Zifferblätter ('Radium Girls', Skandal um Arbeiterinnen mit Mund-/Kieferkrebs).","Radium"],
   [89,"Ac","Actinium",227,"actinide",7,null,1323,3471,1.10,"[Rn] 6d¹ 7s²",1899,"Namensgeber der Actinoiden. Stark radioaktiv (leuchtet bläulich). ²²⁵Ac für gezielte Alpha-Therapie (Targeted Alpha Therapy) bei Prostatakarzinom in der klinischen Forschung.","Actinium"],
-  [90,"Th","Thorium",232.04,"actinide",7,null,2115,5061,1.30,"[Rn] 6d² 7s²",1829,"Radioaktiv mit sehr langer Halbwertszeit (1,4 × 10¹⁰ Jahre). Etwa 3–4 mal häufiger als Uran. Thorium-Hochtemperatur-Reaktoren (Indien, China) gelten als sichere Alternative zur konventionellen Kerntechnik.","Thorium"],
+  [90,"Th","Thorium",232.04,"actinide",7,null,2115,5061,1.30,"[Rn] 6d² 7s²",1829,"Radioaktiv mit sehr langer Halbwertszeit (1,4 × 10¹⁰ Jahre). Etwa 3 bis 4 mal häufiger als Uran. Thorium-Hochtemperatur-Reaktoren (Indien, China) gelten als sichere Alternative zur konventionellen Kerntechnik.","Thorium"],
   [91,"Pa","Protactinium",231.04,"actinide",7,null,1841,4300,1.50,"[Rn] 5f² 6d¹ 7s²",1913,"Sehr seltenes radioaktives Metall. Zwischenglied der Zerfallsreihe von Uran zu Actinium (daher 'Proto-Actinium'). Forschungsanwendungen, sonst kaum kommerziell relevant.","Protactinium"],
   [92,"U","Uran",238.03,"actinide",7,null,1405,4404,1.38,"[Rn] 5f³ 6d¹ 7s²",1789,"Schwerstes natürlich vorkommendes Element. ²³⁵U (0,72 % natürliche Häufigkeit) ist spaltbar und Brennstoff in Kernreaktoren und Kernwaffen. ²³⁸U als Brutmaterial für Plutonium. Abgereichertes Uran (DU) als panzerbrechende Munition (umstritten).","Uran"],
   [93,"Np","Neptunium",237,"actinide",7,null,917,4175,1.36,"[Rn] 5f⁴ 6d¹ 7s²",1940,"Erstes Transuran-Element (Z > 92), 1940 in Berkeley künstlich hergestellt. Nach Planet Neptun benannt, dieser folgt auf Uranus, ebenso wie Np auf U folgt.","Neptunium"],
@@ -1152,7 +1152,7 @@ const elements = [
   [100,"Fm","Fermium",257,"actinide",7,null,1800,null,1.30,"[Rn] 5f¹² 7s²",1952,"Nach Enrico Fermi benannt, ebenfalls in Wasserstoffbombentests entdeckt. Schwerstes Element, das noch durch Neutronenbestrahlung in Kernreaktoren herstellbar ist.","Fermium"],
   [101,"Md","Mendelevium",258,"actinide",7,null,1100,null,1.30,"[Rn] 5f¹³ 7s²",1955,"Nach Dmitri Mendelejew benannt, dem Schöpfer des Periodensystems. Erstmals 1955 in Berkeley durch Beschuss von ²⁵³Es mit Alpha-Teilchen synthetisiert.","Mendelevium"],
   [102,"No","Nobelium",259,"actinide",7,null,1100,null,1.30,"[Rn] 5f¹⁴ 7s²",1966,"Nach Alfred Nobel benannt. Heute eindeutig dem JINR Dubna zugeschrieben. HWZ des stabilsten Isotops ²⁵⁹No: 58 Minuten.","Nobelium"],
-  [103,"Lr","Lawrencium",262,"transition",7,3,1900,null,1.30,"[Rn] 5f¹⁴ 7s² 7p¹",1961,"Steht am Ende der Actinoidenreihe, wird nach IUPAC aber zu den Übergangsmetallen gerechnet (Gruppe 3, Valenzelektron im 6d-Orbital — bzw. nach manchen Quellen 7p¹). Nach Ernest O. Lawrence (Erfinder des Zyklotrons) benannt.","Lawrencium"],
+  [103,"Lr","Lawrencium",262,"transition",7,3,1900,null,1.30,"[Rn] 5f¹⁴ 7s² 7p¹",1961,"Steht am Ende der Actinoidenreihe, wird nach IUPAC aber zu den Übergangsmetallen gerechnet (Gruppe 3, Valenzelektron im 6d-Orbital, bzw. nach manchen Quellen 7p¹). Nach Ernest O. Lawrence (Erfinder des Zyklotrons) benannt.","Lawrencium"],
   [104,"Rf","Rutherfordium",267,"transition",7,4,null,null,null,"[Rn] 5f¹⁴ 6d² 7s²",1964,"Erstes Transactinoid und erstes Element des 6d-Blocks. Nach Ernest Rutherford benannt. Erstmals chemische Untersuchungen in der Gasphase mit nur wenigen Atomen möglich.","Rutherfordium"],
   [105,"Db","Dubnium",268,"transition",7,5,null,null,null,"[Rn] 5f¹⁴ 6d³ 7s²",1970,"Nach Dubna (Russland) benannt, einem der weltweit führenden Zentren für Schwerelement-Forschung (JINR). Kompromiss nach langem Namensstreit mit Berkeley.","Dubnium"],
   [106,"Sg","Seaborgium",271,"transition",7,6,null,null,null,"[Rn] 5f¹⁴ 6d⁴ 7s²",1974,"Nach Glenn T. Seaborg benannt (Nobelpreis 1951). Erstes Element, das nach einer noch lebenden Person benannt wurde (sehr kontrovers in IUPAC-Diskussion).","Seaborgium"],
@@ -1181,22 +1181,22 @@ function getNFilled(z) {
   if (z <= 10)  return 2;                        // 2s, 2p
   if (z <= 18)  return 3;                        // 3s, 3p
   if (z <= 20)  return 4;                        // 4s (K, Ca)
-  if (z <= 30)  return 3;                        // 3d (Sc–Zn)
-  if (z <= 36)  return 4;                        // 4p (Ga–Kr)
+  if (z <= 30)  return 3;                        // 3d (Sc bis Zn)
+  if (z <= 36)  return 4;                        // 4p (Ga bis Kr)
   if (z <= 38)  return 5;                        // 5s (Rb, Sr)
-  if (z <= 48)  return 4;                        // 4d (Y–Cd)
-  if (z <= 54)  return 5;                        // 5p (In–Xe)
+  if (z <= 48)  return 4;                        // 4d (Y bis Cd)
+  if (z <= 54)  return 5;                        // 5p (In bis Xe)
   if (z <= 56)  return 6;                        // 6s (Cs, Ba)
-  if (z <= 70)  return 4;                        // 4f (La–Yb, Lanthanoide)
-  if (z <= 80)  return 5;                        // 5d (Lu–Hg)
-  if (z <= 86)  return 6;                        // 6p (Tl–Rn)
+  if (z <= 70)  return 4;                        // 4f (La bis Yb, Lanthanoide)
+  if (z <= 80)  return 5;                        // 5d (Lu bis Hg)
+  if (z <= 86)  return 6;                        // 6p (Tl bis Rn)
   if (z <= 88)  return 7;                        // 7s (Fr, Ra)
-  if (z <= 102) return 5;                        // 5f (Ac–No, Actinoide)
-  if (z <= 112) return 6;                        // 6d (Lr, Rf–Cn) — Lr füllt 6d¹
-  if (z <= 118) return 7;                        // 7p (Nh–Og)
+  if (z <= 102) return 5;                        // 5f (Ac bis No, Actinoide)
+  if (z <= 112) return 6;                        // 6d (Lr, Rf bis Cn), Lr füllt 6d¹
+  if (z <= 118) return 7;                        // 7p (Nh bis Og)
   return 1;
 }
-// (Historische Buchstaben K…Q werden hier nicht mehr verwendet — wir nutzen nur n-Notation)
+// (Historische Buchstaben K…Q werden hier nicht mehr verwendet, wir nutzen nur n-Notation)
 
 // FOSBOS-Positionen: Lu (71) und Lr (103) in der Haupttabelle, Lanthanoide 57-70 und Actinoide 89-102 separat
 // Grid-Offset: Header-Zeilen 1-2, Periode 1 = Grid-Row 3 ... Periode 7 = Grid-Row 9
@@ -1247,7 +1247,7 @@ const officialMass = {
   93:'[237]', 94:'[244]', 95:'[243]', 96:'[247]', 97:'[247]', 98:'[251]', 99:'[252]', 100:'[257]', 101:'[258]', 102:'[259]', 103:'[262]'
 };
 function fmtMass(z, mass) {
-  // Offizieller PSE-Wert hat Vorrang (deckt Z = 1–103 ab, inkl. eckiger Klammern).
+  // Offizieller PSE-Wert hat Vorrang (deckt Z = 1 bis 103 ab, inkl. eckiger Klammern).
   if (officialMass[z]) return officialMass[z];
   // Fallback für die schweren synthetischen Elemente (Z ≥ 104): ganzzahlig in Klammern.
   if (mass != null && Number.isInteger(mass) && (z >= 84 || z === 43 || z === 61 || z === 85)) {
@@ -1388,7 +1388,7 @@ function buildGrid() {
   });
 
   // 6) Lanthanoid/Actinoid-Platzhalter in der Haupttabelle (Periode 6 / 7, Spalte 4-17 hat schon Lu/Lr; wir benötigen aber Anzeige für 57-70 / 89-102)
-  // FOSBOS-Style: nur ein "Platzhalter" als Verweis. In dieser Version weglassen — die Reihen unten sind klar erkennbar.
+  // FOSBOS-Style: nur ein "Platzhalter" als Verweis. In dieser Version weglassen, die Reihen unten sind klar erkennbar.
 
   // 7) Elementzellen
   elements.forEach(el => {
@@ -1443,12 +1443,20 @@ function showDetail(el) {
   catEl.style.color = 'var(--cell-text)';
   document.getElementById('dpConfig').textContent = econf;
   const n = getNFilled(z);
+  // Bei Normaldruck sublimierende Elemente: Z -> Sublimationstemperatur in K.
+  // Für sie ist die getrennte Angabe von Schmelz- und Siedepunkt irreführend
+  // (kein flüssiger Zustand bei 1 atm, der Siedepunkt läge sonst unter dem Schmelzpunkt).
+  const SUBLIMIERT = { 33: 887 };
   const props = [
     { label: 'Atommasse', val: mass ? `${fmtMass(z, mass)} u` : 'n/a' },
     { label: 'Periode', val: period || 'n/a' },
     { label: 'Letzte Energiestufe', val: `n = ${n}` },
-    { label: 'Schmelzpkt.', val: mp ? `${mp} K\n(${(mp-273).toFixed(0)} °C)` : 'n/a' },
-    { label: 'Siedepkt.', val: bp ? `${bp} K\n(${(bp-273).toFixed(0)} °C)` : 'n/a' },
+    ...(SUBLIMIERT[z]
+      ? [{ label: 'Sublimiert bei', val: `${SUBLIMIERT[z]} K\n(${(SUBLIMIERT[z]-273.15).toFixed(0)} °C)` }]
+      : [
+          { label: 'Schmelzpkt.', val: mp ? `${mp} K\n(${(mp-273.15).toFixed(0)} °C)` : 'n/a' },
+          { label: 'Siedepkt.', val: bp ? `${bp} K\n(${(bp-273.15).toFixed(0)} °C)` : 'n/a' },
+        ]),
     { label: 'Elektroneg.', val: fmtEN(z) ? `${fmtEN(z)} (Pauling)` : 'n/a' },
     { label: 'Entdeckung', val: year < 0 ? `~${Math.abs(year)} v. Chr.` : String(year) },
   ];
@@ -1563,18 +1571,20 @@ document.querySelectorAll('.tab').forEach(tab => {
 // ============================================================================
 const lessons = [
   {id:1,title:"Das PSE lesen lernen",subtitle:"Orientierung: Was steht in einem Elementkästchen?",
-   intro:`<p>Jedes Element im Periodensystem hat ein <strong>Kästchen</strong> mit vier wesentlichen Angaben:</p>
+   intro:`<p>Jedes Element im Periodensystem hat ein <strong>Kästchen</strong>. Fünf Angaben liest du daraus sofort ab:</p>
           <p>· <strong>Ordnungszahl Z</strong> (klein): Anzahl der <strong>Protonen</strong> im Kern.</p>
           <p>· <strong>Symbol</strong> (groß, Mitte): Ein bis zwei Buchstaben, oft aus dem lateinischen Namen (z. B. <code>Fe</code> für ferrum = Eisen).</p>
           <p>· <strong>Name</strong>: Der deutsche Elementname.</p>
-          <p>· <strong>Atommasse</strong> (oben): Mittlere Masse eines Atoms in u.</p>`,
+          <p>· <strong>Atommasse</strong> (oben Mitte): Mittlere Masse eines Atoms in u.</p>
+          <p>· <strong>Massenzahl A</strong> (kleine ganze Zahl oben links): Anzahl der <strong>Protonen und Neutronen</strong> im Kern. Anders als die Atommasse ist sie immer eine ganze Zahl.</p>
+          <p>Unten rechts steht außerdem noch eine kleine Zahl, die <strong>Elektronegativität</strong>. Was sie bedeutet, brauchst du erst in Lektion 4.</p>`,
    questions:[
      {type:'mc',text:'Welches Element hat das Symbol <strong>Fe</strong>?',options:['Fluor','Eisen','Helium','Selen'],correct:1,
-      explainCorrect:'Richtig. <strong>Fe</strong> kommt aus dem Lateinischen <em>ferrum</em>. Viele Symbole gehen auf lateinische Namen zurück — z. B. auch Au (aurum) für Gold oder Pb (plumbum) für Blei.',
+      explainCorrect:'Richtig. <strong>Fe</strong> kommt aus dem Lateinischen <em>ferrum</em>. Viele Symbole gehen auf lateinische Namen zurück, z. B. auch Au (aurum) für Gold oder Pb (plumbum) für Blei.',
       explainWrong:[
-       'Fluor hat das Symbol <strong>F</strong> — nur <em>ein</em> Buchstabe. Das Symbol Fe besteht aus zwei Buchstaben.',
+       'Fluor hat das Symbol <strong>F</strong>, nur <em>ein</em> Buchstabe. Das Symbol Fe besteht aus zwei Buchstaben.',
        null,
-       'Helium hat das Symbol <strong>He</strong>. Beide enden auf "e", aber der erste Buchstabe entscheidet — H ist nicht F.',
+       'Helium hat das Symbol <strong>He</strong>. Beide enden auf "e", aber der erste Buchstabe entscheidet: H ist nicht F.',
        'Selen hat das Symbol <strong>Se</strong>. Die genaue Buchstabenfolge ist wichtig: Fe und Se sind verschiedene Elemente.'
       ],
       solution:'Das Symbol <strong>Fe</strong> steht für Eisen (lat. ferrum, Z = 26).'},
@@ -1594,59 +1604,59 @@ const lessons = [
       hint:'Die Atommasse steht im Kästchen oben über dem Symbol. Du kannst Cl auch anklicken.',
       correct:35.5, tolerance:0.05,
       retryHint:'Cl steht in Periode 3, VII. Hauptgruppe (Halogene). Die Zahl <em>über</em> der Ordnungszahl im Kästchen ist die Atommasse.',
-      explainCorrect:'Stimmt — 35,5 u. <strong>Fällt dir etwas auf?</strong> Diese Zahl ist <em>keine ganze Zahl</em> (eine ganze Zahl hätte keine Stelle nach dem Komma, z. B. 35 oder 36 — 35,5 liegt dazwischen). Das ist merkwürdig, denn Atome bestehen doch aus einer ganzzahligen Anzahl Protonen und Neutronen. Wir gehen dem in den nächsten Aufgaben auf den Grund.',
+      explainCorrect:'Stimmt, 35,5 u. <strong>Fällt dir etwas auf?</strong> Diese Zahl ist <em>keine ganze Zahl</em> (eine ganze Zahl hätte keine Stelle nach dem Komma, z. B. 35 oder 36; 35,5 liegt genau dazwischen). Das ist merkwürdig, denn Atome bestehen doch aus einer ganzzahligen Anzahl Protonen und Neutronen. Wir gehen dem in den nächsten Aufgaben auf den Grund.',
       solution:'Die Atommasse von Chlor ist <strong>35,5 u</strong>.'},
      {type:'mc',text:'Prüfe weitere Beispiele: <strong>Mg = 24,3 u</strong>, <strong>Cu = 63,6 u</strong>, <strong>Br = 79,9 u</strong>. Welche dieser Atommassen sind <strong>ganze Zahlen</strong> (also ohne Nachkommastelle)?',
       options:['Nur Mg','Nur Br','Mg und Cu','Keine davon'],
       correct:3,
-      explainCorrect:'Richtig — <em>keine</em> dieser Atommassen ist ganzzahlig. Du siehst: Das ist <strong>kein Einzelfall bei Chlor</strong>, sondern ein systematisches Muster im PSE. Es muss also einen Grund geben, der für viele Elemente gleichzeitig gilt.',
-      explainWrong:['Mg hat 24,3 u — keine ganze Zahl. Schau dir die anderen genauer an.','Br hat 79,9 u — auch keine ganze Zahl. Was ist mit allen dreien?','Sowohl Mg (24,3) als auch Cu (63,6) haben Nachkommastellen. Welche Antwort beschreibt das Muster?',null],
-      solution:'Keine der drei Atommassen ist ganzzahlig — das ist ein <strong>systematisches Muster</strong> im PSE.'},
+      explainCorrect:'Richtig, <em>keine</em> dieser Atommassen ist ganzzahlig. Du siehst: Das ist <strong>kein Einzelfall bei Chlor</strong>, sondern ein systematisches Muster im PSE. Es muss also einen Grund geben, der für viele Elemente gleichzeitig gilt.',
+      explainWrong:['Mg hat 24,3 u, keine ganze Zahl. Schau dir die anderen genauer an.','Br hat 79,9 u, auch keine ganze Zahl. Was ist mit allen dreien?','Sowohl Mg (24,3) als auch Cu (63,6) haben Nachkommastellen. Welche Antwort beschreibt das Muster?',null],
+      solution:'Keine der drei Atommassen ist ganzzahlig, das ist ein <strong>systematisches Muster</strong> im PSE.'},
      {type:'mc',text:`<div style="background:var(--surface);padding:12px 14px;border-radius:4px;margin-bottom:14px;border-left:3px solid var(--accent);font-weight:normal;font-size:13px;line-height:1.6;">
       <strong style="display:block;margin-bottom:6px;color:var(--accent);">Erklärung: Isotope</strong>
       Atome desselben Elements haben immer <em>gleich viele Protonen</em>, können aber <strong>unterschiedlich viele Neutronen</strong> besitzen. Solche Atomsorten heißen <strong>Isotope</strong>.
       <br><br>
-      Beispiel <strong>Chlor</strong> (Z = 17): In der Natur kommen ³⁵Cl (≈ 76 %, mit 18 Neutronen) und ³⁷Cl (≈ 24 %, mit 20 Neutronen) nebeneinander vor — beide sind Chlor, denn beide haben 17 Protonen.
+      Beispiel <strong>Chlor</strong> (Z = 17): In der Natur kommen ³⁵Cl (≈ 76 %, mit 18 Neutronen) und ³⁷Cl (≈ 24 %, mit 20 Neutronen) nebeneinander vor. Beide sind Chlor, denn beide haben 17 Protonen.
       </div>
       Was beschreibt die Atommasse <strong>35,5 u</strong> im PSE damit eigentlich?`,
       options:['Die Masse eines einzelnen Cl-Atoms','Den gewichteten Mittelwert aller natürlich vorkommenden Cl-Isotope','Protonen + Neutronen eines Cl-Atoms','Die Masse genau eines ³⁵Cl-Atoms'],
       correct:1,
-      explainCorrect:'Genau. Die Atommasse im PSE ist der <strong>gewichtete Mittelwert</strong> über alle natürlich vorkommenden Isotope eines Elements. Bei Chlor: ungefähr 0,76 · 35 + 0,24 · 37 ≈ 35,5 — passt zu 35,5 u. Deshalb sind Atommassen im PSE meist keine ganzen Zahlen.',
-      explainWrong:['Ein einzelnes Atom hat immer eine ganzzahlige Anzahl Protonen + Neutronen. Wie kommt dann eine Kommazahl zustande, wenn zwei Isotope <em>gemischt</em> in der Natur vorkommen?',null,'Das ist die <em>Massenzahl A</em> eines konkreten Isotops und immer ganzzahlig. Im PSE steht aber 35,5 — also nicht für ein einzelnes Isotop.','³⁵Cl hätte Massenzahl 35, nicht 35,5. Wir lesen 35,5 ab — was passiert wegen der <em>Mischung</em> mit ³⁷Cl?'],
+      explainCorrect:'Genau. Die Atommasse im PSE ist der <strong>gewichtete Mittelwert</strong> über alle natürlich vorkommenden Isotope eines Elements. Bei Chlor: ungefähr 0,76 · 35 + 0,24 · 37 ≈ 35,5, passt zu 35,5 u. Deshalb sind Atommassen im PSE meist keine ganzen Zahlen.',
+      explainWrong:['Ein einzelnes Atom hat immer eine ganzzahlige Anzahl Protonen + Neutronen. Wie kommt dann eine Kommazahl zustande, wenn zwei Isotope <em>gemischt</em> in der Natur vorkommen?',null,'Das ist die <em>Massenzahl A</em> eines konkreten Isotops und immer ganzzahlig. Im PSE steht aber 35,5, also nicht für ein einzelnes Isotop.','³⁵Cl hätte Massenzahl 35, nicht 35,5. Wir lesen 35,5 ab, was passiert wegen der <em>Mischung</em> mit ³⁷Cl?'],
       solution:'Die Atommasse im PSE ist der <strong>gewichtete Mittelwert</strong> aller natürlich vorkommenden Isotope. Cl: ~76 % ³⁵Cl + ~24 % ³⁷Cl → ≈ 35,5 u.'}
    ]},
   {id:2,title:"Perioden und Gruppen",subtitle:"Die Ordnung hinter dem Periodensystem",
    intro:`<p>Das Periodensystem zeigt eine doppelte Ordnung:</p>
-          <p>· <strong>Perioden</strong> = <strong>Zeilen</strong> (1–7). Die Periodennummer gibt die höchste besetzte <strong>Hauptenergiestufe</strong> n an.</p>
+          <p>· <strong>Perioden</strong> = <strong>Zeilen</strong> (1 bis 7). Die Periodennummer gibt die höchste besetzte <strong>Hauptenergiestufe</strong> n an.</p>
           <p>· <strong>Hauptgruppen</strong> = <strong>äußere Spalten</strong>, römisch nummeriert von I. bis VIII. (siehe Spaltenüberschriften am PSE).</p>
           <p>· Dazwischen liegen die <strong>Nebengruppen</strong> (Übergangsmetalle). Mit ihnen beschäftigen wir uns in dieser Lektion noch nicht im Detail.</p>
-          <p><strong>Auffällige Beobachtung:</strong> Elemente derselben Hauptgruppe reagieren chemisch <strong>ähnlich</strong> — z. B. reagieren alle Alkalimetalle der I. Hauptgruppe (Li, Na, K …) heftig mit Wasser. <em>Warum</em> das so ist — was im Inneren der Atome steckt — klären wir in der nächsten Lektion (Atombau).</p>`,
+          <p><strong>Auffällige Beobachtung:</strong> Elemente derselben Hauptgruppe reagieren chemisch <strong>ähnlich</strong>, z. B. reagieren alle Alkalimetalle der I. Hauptgruppe (Li, Na, K …) heftig mit Wasser. <em>Warum</em> das so ist, was im Inneren der Atome steckt, klären wir in der nächsten Lektion (Atombau).</p>`,
    questions:[
      {type:'mc',text:'In welcher <strong>Periode</strong> steht Magnesium (Mg)?',options:['Periode 2','Periode 3','Periode 4','II. Hauptgruppe'],correct:1,
-      explainCorrect:'Richtig. Mg steht in <strong>Periode 3</strong> — also drei besetzte Hauptenergiestufen (n = 1, 2, 3).',
+      explainCorrect:'Richtig. Mg steht in <strong>Periode 3</strong>, also drei besetzte Hauptenergiestufen (n = 1, 2, 3).',
       explainWrong:[
-       'Periode 2 endet bei Neon (Z = 10). Mg hat Z = 12 — schau in der nächsten Zeile.',
+       'Periode 2 endet bei Neon (Z = 10). Mg hat Z = 12, schau in der nächsten Zeile.',
        null,
        'Periode 4 beginnt erst mit Kalium (Z = 19). Mg liegt eine Zeile darüber.',
        'Aufpassen: Eine <em>Hauptgruppe</em> ist eine <em>Spalte</em>, eine <em>Periode</em> ist eine <em>Zeile</em>. Mg steht zwar in der II. Hauptgruppe, aber die Frage zielt auf die Periode.'
       ],
       solution:'Mg steht in <strong>Periode 3</strong> (zweite Spalte von links, dritte Zeile).'},
      {type:'mc',text:'In welcher <strong>Hauptgruppe</strong> stehen die <strong>Edelgase</strong>?',options:['I. Hauptgruppe','III. Hauptgruppe','VII. Hauptgruppe','VIII. Hauptgruppe'],correct:3,
-      explainCorrect:'Korrekt. Edelgase stehen in der <strong>VIII. Hauptgruppe</strong> — der äußersten rechten Spalte des PSE. Sie sind chemisch besonders <strong>reaktionsträge</strong> und gehen kaum Verbindungen ein. Den Grund dafür lernst du in der nächsten Lektion kennen.',
+      explainCorrect:'Korrekt. Edelgase stehen in der <strong>VIII. Hauptgruppe</strong>, der äußersten rechten Spalte des PSE. Sie sind chemisch besonders <strong>reaktionsträge</strong> und gehen kaum Verbindungen ein. Den Grund dafür lernst du in der nächsten Lektion kennen.',
       explainWrong:[
-       'Die I. Hauptgruppe enthält die Alkalimetalle (Li, Na, K …) — diese reagieren extrem heftig mit Wasser, das Gegenteil eines reaktionsträgen Edelgases. Such ganz rechts im PSE.',
-       'Die III. Hauptgruppe enthält Bor, Aluminium etc. — typische Hauptgruppe links der Mitte. Edelgase stehen aber ganz rechts.',
-       'Die VII. Hauptgruppe sind die Halogene (F, Cl, Br, I) — sehr reaktiv. Edelgase stehen noch eine Spalte weiter rechts.',
+       'Die I. Hauptgruppe enthält die Alkalimetalle (Li, Na, K …), diese reagieren extrem heftig mit Wasser, das Gegenteil eines reaktionsträgen Edelgases. Such ganz rechts im PSE.',
+       'Die III. Hauptgruppe enthält Bor, Aluminium etc., typische Hauptgruppe links der Mitte. Edelgase stehen aber ganz rechts.',
+       'Die VII. Hauptgruppe sind die Halogene (F, Cl, Br, I), sehr reaktiv. Edelgase stehen noch eine Spalte weiter rechts.',
        null
       ],
-      solution:'Edelgase: <strong>VIII. Hauptgruppe</strong> — die äußerste rechte Spalte im PSE.'},
+      solution:'Edelgase: <strong>VIII. Hauptgruppe</strong>, die äußerste rechte Spalte im PSE.'},
      {type:'mc',text:'In welcher <strong>Hauptgruppe</strong> steht Schwefel (S)? Schau im PSE auf die römische Spaltenüberschrift.',options:['IV. Hauptgruppe','V. Hauptgruppe','VI. Hauptgruppe','VII. Hauptgruppe'],correct:2,
-      explainCorrect:'Richtig. S steht in der <strong>VI. Hauptgruppe</strong>. In derselben Spalte stehen darüber Sauerstoff (O) und darunter Selen (Se) — alle reagieren chemisch ähnlich.',
+      explainCorrect:'Richtig. S steht in der <strong>VI. Hauptgruppe</strong>. In derselben Spalte stehen darüber Sauerstoff (O) und darunter Selen (Se), alle reagieren chemisch ähnlich.',
       explainWrong:[
-       'In der IV. Hauptgruppe stehen C, Si, Ge … — eine Spalte weiter links. Zähl die römischen Spaltenüberschriften genau ab.',
-       'In der V. Hauptgruppe stehen N, P, As … — eine Spalte links von Schwefel. Schau genau auf die Überschrift direkt über S.',
+       'In der IV. Hauptgruppe stehen C, Si, Ge …, eine Spalte weiter links. Zähl die römischen Spaltenüberschriften genau ab.',
+       'In der V. Hauptgruppe stehen N, P, As …, eine Spalte links von Schwefel. Schau genau auf die Überschrift direkt über S.',
        null,
-       'Die VII. Hauptgruppe sind die Halogene (F, Cl, Br …) — eine Spalte rechts von Schwefel.'
+       'Die VII. Hauptgruppe sind die Halogene (F, Cl, Br …), eine Spalte rechts von Schwefel.'
       ],
       solution:'Schwefel (S) steht in der <strong>VI. Hauptgruppe</strong> (gleiche Spalte wie O und Se).'},
      {type:'mc',text:'Warum reagieren <strong>Na und K</strong> chemisch ähnlich?',
@@ -1657,14 +1667,14 @@ const lessons = [
        'Sie haben gleiche Schmelzpunkte.'
       ],
       correct:2,
-      explainCorrect:'Genau. Na und K stehen beide in der <strong>I. Hauptgruppe</strong> — derselben Spalte. Elemente einer Hauptgruppe reagieren chemisch ähnlich (beide z. B. heftig mit Wasser). <em>Warum</em> die Spalte das chemische Verhalten bestimmt, klären wir in der nächsten Lektion.',
+      explainCorrect:'Genau. Na und K stehen beide in der <strong>I. Hauptgruppe</strong>, derselben Spalte. Elemente einer Hauptgruppe reagieren chemisch ähnlich (beide z. B. heftig mit Wasser). <em>Warum</em> die Spalte das chemische Verhalten bestimmt, klären wir in der nächsten Lektion.',
       explainWrong:[
-       'Na hat 23,0 u, K hat 39,1 u — die Atommassen unterscheiden sich deutlich. Außerdem bestimmt die Atommasse nicht das chemische Verhalten. Was haben beide gemeinsam?',
-       'Schau ins PSE: Na ist in Periode 3, K in Periode 4 — sie sind <em>nicht</em> in derselben Periode (Zeile). Worin stehen sie gleich?',
+       'Na hat 23,0 u, K hat 39,1 u, die Atommassen unterscheiden sich deutlich. Außerdem bestimmt die Atommasse nicht das chemische Verhalten. Was haben beide gemeinsam?',
+       'Schau ins PSE: Na ist in Periode 3, K in Periode 4, sie sind <em>nicht</em> in derselben Periode (Zeile). Worin stehen sie gleich?',
        null,
        'Schmelzpunkte sind eine <em>Folge</em> der Atomstruktur, nicht der Grund für ähnliches chemisches Verhalten. Welche gemeinsame Position im PSE ist entscheidend?'
       ],
-      solution:'Na und K stehen beide in der <strong>I. Hauptgruppe</strong> (gleiche Spalte) — deshalb reagieren sie chemisch ähnlich.'},
+      solution:'Na und K stehen beide in der <strong>I. Hauptgruppe</strong> (gleiche Spalte), deshalb reagieren sie chemisch ähnlich.'},
      {type:'compare',text:'Welches Element steht in einer <strong>höheren Periode</strong>?',a:{z:17,label:'Chlor (Cl)'},b:{z:35,label:'Brom (Br)'},correct:'b',
       explainCorrect:'Korrekt. <strong>Br (Periode 4)</strong> unter Cl (Periode 3).',
       retryHint:'Höhere Periode = weiter unten.',
@@ -1676,7 +1686,7 @@ const lessons = [
           <p>· <strong>Elektronen</strong> (beim ungeladenen Atom) = Z</p>
           <p>· <strong>Neutronen</strong> = A − Z</p>
           <p>· Die Elektronen verteilen sich auf <strong>Hauptenergiestufen</strong> (auch Schalen genannt). Jede Stufe fasst nur begrenzt viele: 1. Stufe max. 2, 2. Stufe max. 8, 3. Stufe max. 8 (vereinfacht). Die Periodennummer gibt an, wie viele Stufen besetzt sind (Periode 3 → drei besetzte Stufen n = 1, 2, 3).</p>
-          <p>· Die Elektronen auf der <strong>äußersten</strong> besetzten Stufe heißen <strong>Valenzelektronen</strong> (= Außenelektronen). Bei Hauptgruppen-Elementen gilt die einfache Regel: <strong>römische Hauptgruppennummer = Anzahl der Valenzelektronen</strong>. Diese Valenzelektronen bestimmen das chemische Verhalten — <em>deshalb</em> reagieren Elemente derselben Hauptgruppe ähnlich (das beobachtete Muster aus Lektion 2).</p>`,
+          <p>· Die Elektronen auf der <strong>äußersten</strong> besetzten Stufe heißen <strong>Valenzelektronen</strong> (= Außenelektronen). Bei Hauptgruppen-Elementen gilt die einfache Regel: <strong>römische Hauptgruppennummer = Anzahl der Valenzelektronen</strong>. Diese Valenzelektronen bestimmen das chemische Verhalten, <em>deshalb</em> reagieren Elemente derselben Hauptgruppe ähnlich (das beobachtete Muster aus Lektion 2).</p>`,
    questions:[
      {type:'input-num',text:'Wie viele <strong>Protonen</strong> hat ein Fluor-Atom?',correct:9,
       retryHint:'Protonenzahl = Z. Schau bei Fluor (F).',
@@ -1688,7 +1698,7 @@ const lessons = [
       solution:'C: Z=6, A=12. N = 12-6 = <strong>6</strong>.'},
      {type:'mc',text:'Verteilung der Elektronen auf die Energiestufen für <strong>Calcium (Ca, Z = 20)</strong>?',options:['2, 8, 10','2, 8, 8, 2','2, 8, 6, 4','2, 18'],correct:1,
       explainCorrect:'Korrekt. Ca steht in Periode 4 → vier besetzte Energiestufen. Verteilung: n=1: 2, n=2: 8, n=3: 8, n=4: 2. Die <strong>letzten 2 Elektronen</strong> auf der äußersten Stufe sind die <strong>Valenzelektronen</strong> (Ca steht in der II. Hauptgruppe).',
-      explainWrong:['Nur drei Energiestufen besetzt — aber Ca steht in Periode 4, also müssen es vier sein.',null,'Die Anzahl der Valenzelektronen müsste 2 sein (II. Hauptgruppe → 2 Valenzelektronen).','Nur zwei Energiestufen besetzt — Ca steht aber in Periode 4.'],
+      explainWrong:['Nur drei Energiestufen besetzt, aber Ca steht in Periode 4, also müssen es vier sein.',null,'Die Anzahl der Valenzelektronen müsste 2 sein (II. Hauptgruppe → 2 Valenzelektronen).','Nur zwei Energiestufen besetzt, Ca steht aber in Periode 4.'],
       solution:'Ca, Periode 4: Verteilung auf vier Energiestufen <strong>2, 8, 8, 2</strong> (n = 1 bis n = 4). Die 2 äußersten sind die Valenzelektronen.'},
      {type:'input-text',text:'<strong>Jetzt selbst, ohne Auswahl:</strong> Gib die Verteilung der Elektronen auf die Energiestufen für <strong>Aluminium (Al, Z = 13)</strong> an. Schreibe die Besetzung von innen nach außen, durch Kommas getrennt (z. B. 2,8,1).',
       hint:'Al steht in Periode 3 (drei besetzte Stufen) und in der III. Hauptgruppe.',
@@ -1700,71 +1710,71 @@ const lessons = [
       hint:'O steht in der VI. Hauptgruppe. Erinnere dich an die Regel aus der Einführung.',
       correct:6,
       retryHint:'Bei Hauptgruppen-Elementen gilt: römische Hauptgruppennummer = Anzahl Valenzelektronen. O ist in der VI. Hauptgruppe.',
-      explainCorrect:'Korrekt. O hat <strong>6 Valenzelektronen</strong> — es steht in der VI. Hauptgruppe.',
+      explainCorrect:'Korrekt. O hat <strong>6 Valenzelektronen</strong>, es steht in der VI. Hauptgruppe.',
       solution:'O steht in der VI. Hauptgruppe → <strong>6 Valenzelektronen</strong>.'},
      {type:'input-num',text:'Schau dir die Valenzelektronen-Zahl der <strong>Edelgase</strong> im PSE an: Ne, Ar, Kr, Xe (du kannst sie anklicken). Wie viele Valenzelektronen haben diese Edelgase jeweils?',
       hint:'Edelgase stehen ganz rechts (VIII. Hauptgruppe). Erinnere dich: Hauptgruppennummer = Anzahl Valenzelektronen.',
       correct:8,
       retryHint:'Edelgase (außer He) stehen in der VIII. Hauptgruppe. Wie viele Valenzelektronen entspricht das?',
-      explainCorrect:'Richtig — <strong>8 Valenzelektronen</strong>. (Helium ist eine Ausnahme mit nur 2.) Diese vollständig gefüllte äußerste Energiestufe macht Edelgase besonders <strong>stabil</strong> und chemisch <strong>reaktionsträge</strong> — sie gehen kaum Verbindungen ein. Dieser besonders stabile Zustand heißt <strong>Edelgaskonfiguration</strong>.',
-      solution:'Edelgase (außer He) haben <strong>8 Valenzelektronen</strong> — diese stabile Konfiguration heißt Edelgaskonfiguration.'},
+      explainCorrect:'Richtig, <strong>8 Valenzelektronen</strong>. (Helium ist eine Ausnahme mit nur 2.) Diese vollständig gefüllte äußerste Energiestufe macht Edelgase besonders <strong>stabil</strong> und chemisch <strong>reaktionsträge</strong>, sie gehen kaum Verbindungen ein. Dieser besonders stabile Zustand heißt <strong>Edelgaskonfiguration</strong>.',
+      solution:'Edelgase (außer He) haben <strong>8 Valenzelektronen</strong>, diese stabile Konfiguration heißt Edelgaskonfiguration.'},
      {type:'mc',text:`<div style="background:var(--surface);padding:12px 14px;border-radius:4px;margin-bottom:14px;border-left:3px solid var(--accent);font-weight:normal;font-size:13px;line-height:1.6;">
       <strong style="display:block;margin-bottom:6px;color:var(--accent);">Konzept: Edelgaskonfiguration als energetisch günstiger Zustand</strong>
-      Edelgase sind chemisch besonders stabil — wegen ihrer voll besetzten äußeren Energiestufe (8 Valenzelektronen). Atome anderer Elemente erreichen denselben energetisch günstigen Zustand durch <strong>Abgabe</strong> oder <strong>Aufnahme</strong> von Elektronen. Chemische Reaktionen verlaufen bevorzugt in Richtung dieser stabilen Konfiguration.
+      Edelgase sind chemisch besonders stabil, wegen ihrer voll besetzten äußeren Energiestufe (8 Valenzelektronen). Atome anderer Elemente erreichen denselben energetisch günstigen Zustand durch <strong>Abgabe</strong> oder <strong>Aufnahme</strong> von Elektronen. Chemische Reaktionen verlaufen bevorzugt in Richtung dieser stabilen Konfiguration.
       </div>
       <strong>Natrium (Na, Z = 11)</strong> hat 1 Valenzelektron. Wie kann es am einfachsten Edelgaskonfiguration erreichen?`,
       options:[
        'Es nimmt 7 weitere Elektronen auf, um auf 8 Valenzelektronen zu kommen',
-       'Es gibt sein einziges Valenzelektron ab — übrig bleibt die Elektronenverteilung von Neon',
+       'Es gibt sein einziges Valenzelektron ab, übrig bleibt die Elektronenverteilung von Neon',
        'Es entfernt ein Proton aus seinem Kern',
        'Natrium kann gar keine Edelgaskonfiguration erreichen'
       ],
       correct:1,
-      explainCorrect:'Genau. Es ist energetisch <em>viel einfacher</em>, <strong>ein</strong> Elektron loszuwerden, als <em>sieben</em> aufzunehmen. Nach der Abgabe hat Na nur noch 10 Elektronen mit der Verteilung 2, 8 — also genau wie Neon (Edelgaskonfiguration!). Wichtig: Die <strong>11 Protonen</strong> im Kern bleiben aber unverändert — das Teilchen ist immer noch Natrium.',
+      explainCorrect:'Genau. Es ist energetisch <em>viel einfacher</em>, <strong>ein</strong> Elektron loszuwerden, als <em>sieben</em> aufzunehmen. Nach der Abgabe hat Na nur noch 10 Elektronen mit der Verteilung 2, 8, also genau wie Neon (Edelgaskonfiguration!). Wichtig: Die <strong>11 Protonen</strong> im Kern bleiben aber unverändert, das Teilchen ist immer noch Natrium.',
       explainWrong:[
        '7 zusätzliche Elektronen aufzunehmen wäre energetisch sehr ungünstig. Es geht <em>einfacher</em>: Was hat Na nur <em>einzeln</em>, das es leicht loswerden kann?',
        null,
        'Die Anzahl der Protonen ist die Identität eines Elements und bleibt immer gleich. Es geht hier ausschließlich um die <em>Elektronen</em>.',
-       'Doch — über die Elektronen. Welche Valenzelektronen könnte Na abgeben oder aufnehmen, um auf 8 (oder 0) zu kommen?'
+       'Doch, über die Elektronen. Welche Valenzelektronen könnte Na abgeben oder aufnehmen, um auf 8 (oder 0) zu kommen?'
       ],
-      solution:'Na gibt sein 1 Valenzelektron ab. Es bleiben 10 Elektronen — Verteilung 2, 8 — wie bei Neon. Die 11 Protonen im Kern bleiben unverändert.'},
+      solution:'Na gibt sein 1 Valenzelektron ab. Es bleiben 10 Elektronen, Verteilung 2, 8, wie bei Neon. Die 11 Protonen im Kern bleiben unverändert.'},
      {type:'mc',text:`<div style="background:var(--surface);padding:12px 14px;border-radius:4px;margin-bottom:14px;border-left:3px solid var(--accent);font-weight:normal;font-size:13px;line-height:1.6;">
       <strong style="display:block;margin-bottom:6px;color:var(--accent);">Konzept: Ion</strong>
-      Wenn ein Atom Elektronen abgibt oder aufnimmt, sind <strong>Protonen</strong> und <strong>Elektronen</strong> nicht mehr gleich viele — das Teilchen ist nicht mehr ungeladen.
+      Wenn ein Atom Elektronen abgibt oder aufnimmt, sind <strong>Protonen</strong> und <strong>Elektronen</strong> nicht mehr gleich viele, das Teilchen ist nicht mehr ungeladen.
       <br><br>
       Bei Natrium nach Elektronenabgabe: <strong>11 Protonen</strong> (positiv) stehen nur noch <strong>10 Elektronen</strong> (negativ) gegenüber.
       <br><br>
       Solche <strong>geladenen Atome</strong> heißen <strong>Ionen</strong>. Die Ladung wird mit der Zahl und dem Vorzeichen als Hochzahl rechts neben dem Symbol geschrieben.
       </div>
-      Welche <strong>Gesamtladung</strong> hat das Natrium-Teilchen nach der Abgabe von 1 Elektron — und wie schreibt man es?`,
+      Welche <strong>Gesamtladung</strong> hat das Natrium-Teilchen nach der Abgabe von 1 Elektron, und wie schreibt man es?`,
       options:[
-       'Einfach negativ — Schreibweise Na⁻',
-       'Es bleibt ungeladen — Schreibweise Na',
-       'Einfach positiv — Schreibweise Na⁺',
-       'Doppelt positiv — Schreibweise Na²⁺'
+       'Einfach negativ, Schreibweise Na⁻',
+       'Es bleibt ungeladen, Schreibweise Na',
+       'Einfach positiv, Schreibweise Na⁺',
+       'Doppelt positiv, Schreibweise Na²⁺'
       ],
       correct:2,
-      explainCorrect:'Korrekt. 11 Protonen (+) stehen 10 Elektronen (−) gegenüber → Gesamtladung <strong>+1</strong>. Schreibweise: <strong>Na⁺</strong>. Wichtig zu merken: Die <em>Anzahl der Protonen</em> bleibt 11 — das Teilchen ist also immer noch Natrium, jetzt aber als Ion mit Edelgaskonfiguration. Dieses Prinzip wird uns später bei den <strong>Salzen</strong> wieder begegnen.',
+      explainCorrect:'Korrekt. 11 Protonen (+) stehen 10 Elektronen (−) gegenüber → Gesamtladung <strong>+1</strong>. Schreibweise: <strong>Na⁺</strong>. Wichtig zu merken: Die <em>Anzahl der Protonen</em> bleibt 11, das Teilchen ist also immer noch Natrium, jetzt aber als Ion mit Edelgaskonfiguration. Dieses Prinzip wird uns später bei den <strong>Salzen</strong> wieder begegnen.',
       explainWrong:[
        'Negativ wäre die Ladung nur, wenn Elektronen <em>aufgenommen</em> würden (mehr Elektronen als Protonen). Hier wurden aber Elektronen <em>abgegeben</em>. In welche Richtung verschiebt sich die Bilanz?',
-       'Beim ungeladenen Na waren Protonen und Elektronen gleich viele (je 11). Jetzt ist 1 Elektron weg — die Bilanz ist nicht mehr ausgeglichen. Was bedeutet das für die Ladung?',
+       'Beim ungeladenen Na waren Protonen und Elektronen gleich viele (je 11). Jetzt ist 1 Elektron weg, die Bilanz ist nicht mehr ausgeglichen. Was bedeutet das für die Ladung?',
        null,
-       'Doppelt positiv (2+) entstünde nur, wenn <em>zwei</em> Elektronen abgegeben würden. Na hat aber nur <em>ein</em> Valenzelektron — mehr abgeben wäre energetisch unsinnig.'
+       'Doppelt positiv (2+) entstünde nur, wenn <em>zwei</em> Elektronen abgegeben würden. Na hat aber nur <em>ein</em> Valenzelektron, mehr abgeben wäre energetisch unsinnig.'
       ],
       solution:'Na hat 11 Protonen, jetzt nur 10 Elektronen → Gesamtladung +1 → <strong>Na⁺</strong>. Solche geladenen Atome heißen Ionen.'}
    ]},
   {id:4,title:"Periodische Trends",subtitle:"Wie sich Eigenschaften im PSE systematisch verändern",
    intro:`<p>In dieser Lektion entdeckst du, wie sich bestimmte Eigenschaften von Atomen <strong>systematisch</strong> verändern, wenn man durchs PSE läuft. Solche Muster heißen <strong>periodische Trends</strong>.</p>
           <p>Wir schauen uns drei wichtige Eigenschaften an:</p>
-          <p>· <strong>Atomradius</strong> — wie groß ein Atom ist</p>
-          <p>· <strong>Elektronegativität (EN)</strong> — wie stark ein Atom in einer Bindung Elektronen zu sich zieht</p>
-          <p>· <strong>Metallcharakter</strong> — wie metallisch ein Element ist</p>
+          <p>· <strong>Atomradius</strong>, wie groß ein Atom ist</p>
+          <p>· <strong>Elektronegativität (EN)</strong>, wie stark ein Atom in einer Bindung Elektronen zu sich zieht</p>
+          <p>· <strong>Metallcharakter</strong>, wie metallisch ein Element ist</p>
           <p>Jede Eigenschaft lernst du Schritt für Schritt kennen: Erst wird der <em>Begriff</em> eingeführt, dann erkunden wir den <em>Trend</em> selbst an konkreten Beispielen.</p>`,
    questions:[
      // ===== BLOCK 1: ATOMRADIUS =====
      {type:'mc',text:`<div style="background:var(--surface);padding:14px 16px;border-radius:4px;margin-bottom:14px;border-left:3px solid var(--accent);font-weight:normal;font-size:13px;line-height:1.6;">
       <strong style="display:block;margin-bottom:8px;color:var(--accent);">Begriff: Atomradius</strong>
-      Ein Atom kann man sich vereinfacht als <em>Kugel</em> vorstellen — innen der Atomkern, drumherum die Elektronen in ihren Energiestufen. Der <strong>Atomradius</strong> ist der Abstand vom Atomkern bis zur äußersten besetzten Energiestufe — also die <strong>Größe des Atoms</strong>. <em>(Modellhinweis: Real hat die Elektronenhülle keine scharfe Grenze; gemessene Atomradien werden über Abstände gebundener Atome bestimmt. Für unsere Zwecke reicht das Kugelmodell.)</em>
+      Ein Atom kann man sich vereinfacht als <em>Kugel</em> vorstellen, innen der Atomkern, drumherum die Elektronen in ihren Energiestufen. Der <strong>Atomradius</strong> ist der Abstand vom Atomkern bis zur äußersten besetzten Energiestufe, also die <strong>Größe des Atoms</strong>. <em>(Modellhinweis: Real hat die Elektronenhülle keine scharfe Grenze; gemessene Atomradien werden über Abstände gebundener Atome bestimmt. Für unsere Zwecke reicht das Kugelmodell.)</em>
       <svg width="300" height="120" viewBox="0 0 300 120" style="display:block;margin:10px auto 4px;background:rgba(0,0,0,0.03);border-radius:4px;">
         <circle cx="70" cy="60" r="22" fill="var(--c-n3)" stroke="currentColor" stroke-width="1.2" opacity="0.85"/>
         <circle cx="70" cy="60" r="3" fill="currentColor"/>
@@ -1781,24 +1791,24 @@ const lessons = [
       Welche Aussage beschreibt den Atomradius am besten?`,
       options:[
        'Die Masse des Atoms (in u)',
-       'Der Abstand vom Kern bis zur äußersten besetzten Energiestufe — also die Größe des Atoms',
+       'Der Abstand vom Kern bis zur äußersten besetzten Energiestufe, also die Größe des Atoms',
        'Die Anzahl der Protonen im Kern',
        'Die Ladung des Atoms'
       ],
       correct:1,
-      explainCorrect:'Korrekt. Der Atomradius beschreibt die <strong>Größe</strong> eines Atoms — den Abstand vom Kern bis zur Valenzelektronenwolke. Jetzt schauen wir, wie sich dieser Radius im PSE systematisch ändert.',
+      explainCorrect:'Korrekt. Der Atomradius beschreibt die <strong>Größe</strong> eines Atoms, den Abstand vom Kern bis zur Valenzelektronenwolke. Jetzt schauen wir, wie sich dieser Radius im PSE systematisch ändert.',
       explainWrong:[
        'Das ist die Atommasse (steht oben im PSE-Kästchen). Der Radius beschreibt etwas Räumliches.',
        null,
        'Das ist die Ordnungszahl Z. Hier geht es um die räumliche Ausdehnung.',
        'Atome sind im Grundzustand ungeladen. Der Radius ist eine Größenangabe.'
       ],
-      solution:'Der <strong>Atomradius</strong> ist der Abstand vom Atomkern bis zur äußersten besetzten Energiestufe — also die Größe des Atoms.'},
+      solution:'Der <strong>Atomradius</strong> ist der Abstand vom Atomkern bis zur äußersten besetzten Energiestufe, also die Größe des Atoms.'},
      {type:'mc',text:`<div style="background:var(--surface);padding:14px 16px;border-radius:4px;margin-bottom:14px;border-left:3px solid var(--accent);font-weight:normal;font-size:13px;line-height:1.6;">
       <strong style="display:block;margin-bottom:8px;color:var(--accent);">Begriff: Kernladung und Anziehung</strong>
-      Im Atomkern sitzen die <strong>Protonen</strong> — alle <em>positiv</em> geladen. Die Elektronen in der Hülle sind <em>negativ</em> geladen. Positive und negative Ladungen <strong>ziehen einander an</strong>.
+      Im Atomkern sitzen die <strong>Protonen</strong>, alle <em>positiv</em> geladen. Die Elektronen in der Hülle sind <em>negativ</em> geladen. Positive und negative Ladungen <strong>ziehen einander an</strong>.
       <br><br>
-      Je <em>mehr</em> Protonen im Kern (also je größer die <strong>Kernladung</strong>), desto stärker zieht der Kern die Elektronen an sich heran. Bei gleich vielen besetzten Energiestufen wird die Elektronenhülle dadurch <em>enger</em> an den Kern gezogen — das Atom wird kleiner.
+      Je <em>mehr</em> Protonen im Kern (also je größer die <strong>Kernladung</strong>), desto stärker zieht der Kern die Elektronen an sich heran. Bei gleich vielen besetzten Energiestufen wird die Elektronenhülle dadurch <em>enger</em> an den Kern gezogen, das Atom wird kleiner.
       <svg width="350" height="210" viewBox="0 0 350 210" style="display:block;margin:12px auto 4px;background:rgba(0,0,0,0.04);border-radius:4px;">
         <defs>
           <marker id="ar-pull" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
@@ -1831,7 +1841,7 @@ const lessons = [
         <text x="260" y="200" text-anchor="middle" font-size="10" font-style="italic" fill="currentColor" opacity="0.75">→ kleiner Atomradius</text>
       </svg>
       </div>
-      Was passiert mit dem <strong>Atomradius</strong>, wenn die Kernladung (Anzahl Protonen) wächst — die Anzahl besetzter Energiestufen aber gleich bleibt?`,
+      Was passiert mit dem <strong>Atomradius</strong>, wenn die Kernladung (Anzahl Protonen) wächst, die Anzahl besetzter Energiestufen aber gleich bleibt?`,
       options:[
        'Der Atomradius wird größer, weil mehr Teilchen mehr Platz brauchen',
        'Der Atomradius wird kleiner, weil die stärkere Kernladung die Elektronenhülle stärker zum Kern zieht',
@@ -1843,18 +1853,18 @@ const lessons = [
       explainWrong:[
        'Mehr Teilchen heißt hier nicht automatisch mehr Platz. Im Gegenteil: Die zusätzlichen Protonen <em>ziehen</em> die Elektronen <em>stärker</em> an sich heran. Welche Folge hat das für die Größe?',
        null,
-       'Die <em>Gesamtladung</em> eines ungeladenen Atoms ist zwar ausgeglichen (Protonen = Elektronen). Die <em>Anziehungskraft</em> zwischen Kern und Hülle hängt aber von der Anzahl Protonen ab — je mehr, desto stärker zieht der Kern.',
+       'Die <em>Gesamtladung</em> eines ungeladenen Atoms ist zwar ausgeglichen (Protonen = Elektronen). Die <em>Anziehungskraft</em> zwischen Kern und Hülle hängt aber von der Anzahl Protonen ab, je mehr, desto stärker zieht der Kern.',
        'Die Atommasse spielt hier keine direkte Rolle. Entscheidend ist die Anziehung zwischen positiver Kernladung und negativen Elektronen.'
       ],
       solution:'Mehr Protonen = stärkere Kernladung = stärkere Anziehung der negativen Elektronen = <strong>kleinerer Atomradius</strong> (bei gleicher Anzahl Energiestufen).'},
-     {type:'compare',text:'<strong>Erkundung Atomradius — Trend innerhalb einer Periode:</strong><br>Beide Elemente stehen in <strong>Periode 2</strong> — also gleich viele besetzte Energiestufen. Welches Atom ist größer?',
+     {type:'compare',text:'<strong>Erkundung Atomradius, Trend innerhalb einer Periode:</strong><br>Beide Elemente stehen in <strong>Periode 2</strong>, also gleich viele besetzte Energiestufen. Welches Atom ist größer?',
       a:{z:3,label:'Lithium (Li, 3 Protonen)'},b:{z:9,label:'Fluor (F, 9 Protonen)'},correct:'a',
-      explainCorrect:'Richtig — <strong>Li ist größer</strong>. Beide haben 2 besetzte Energiestufen. Aber F hat 9 Protonen im Kern, Li nur 3. Wie eben gelernt: Die <em>höhere Kernladung</em> von F zieht die Elektronenhülle stärker zusammen → F ist kleiner. <br><br><strong>Merken:</strong> Innerhalb einer Periode (von links nach rechts) nimmt der Atomradius <em>ab</em>, weil die Kernladung wächst, die Anzahl der Energiestufen aber gleich bleibt.',
-      retryHint:'Beide haben gleich viele Energiestufen (Periode 2). Wer hat mehr Protonen — und welche Folge hat das laut der vorherigen Aufgabe für die Elektronenhülle?',
+      explainCorrect:'Richtig, <strong>Li ist größer</strong>. Beide haben 2 besetzte Energiestufen. Aber F hat 9 Protonen im Kern, Li nur 3. Wie eben gelernt: Die <em>höhere Kernladung</em> von F zieht die Elektronenhülle stärker zusammen → F ist kleiner. <br><br><strong>Merken:</strong> Innerhalb einer Periode (von links nach rechts) nimmt der Atomradius <em>ab</em>, weil die Kernladung wächst, die Anzahl der Energiestufen aber gleich bleibt.',
+      retryHint:'Beide haben gleich viele Energiestufen (Periode 2). Wer hat mehr Protonen, und welche Folge hat das laut der vorherigen Aufgabe für die Elektronenhülle?',
       solution:'Li > F. In einer Periode nimmt der Atomradius nach rechts ab (höhere Kernladung zieht die Elektronenhülle näher zum Kern).'},
-     {type:'compare',text:'<strong>Erkundung Atomradius — Trend innerhalb einer Hauptgruppe:</strong><br>Beide Elemente stehen in der <strong>VII. Hauptgruppe (Halogene)</strong> — also mit gleicher Anzahl Valenzelektronen. Welches Atom ist größer?',
+     {type:'compare',text:'<strong>Erkundung Atomradius, Trend innerhalb einer Hauptgruppe:</strong><br>Beide Elemente stehen in der <strong>VII. Hauptgruppe (Halogene)</strong>, also mit gleicher Anzahl Valenzelektronen. Welches Atom ist größer?',
       a:{z:9,label:'Fluor (F, Periode 2)'},b:{z:53,label:'Iod (I, Periode 5)'},correct:'b',
-      explainCorrect:'Korrekt — <strong>I ist deutlich größer</strong>. Beide gehören zu den Halogenen, aber I hat 5 besetzte Energiestufen, F nur 2. Mehr Energiestufen = weiter ausgedehnte Elektronenhülle. <br><br><strong>Merken:</strong> Innerhalb einer Hauptgruppe (von oben nach unten) nimmt der Atomradius <em>zu</em>, weil jede neue Periode eine weitere Energiestufe hinzufügt.',
+      explainCorrect:'Korrekt, <strong>I ist deutlich größer</strong>. Beide gehören zu den Halogenen, aber I hat 5 besetzte Energiestufen, F nur 2. Mehr Energiestufen = weiter ausgedehnte Elektronenhülle. <br><br><strong>Merken:</strong> Innerhalb einer Hauptgruppe (von oben nach unten) nimmt der Atomradius <em>zu</em>, weil jede neue Periode eine weitere Energiestufe hinzufügt.',
       retryHint:'Schau auf die Periodennummern: F in Periode 2, I in Periode 5. Wie viele Energiestufen sind jeweils besetzt?',
       solution:'I > F. In einer Hauptgruppe nimmt der Atomradius nach unten zu (mehr besetzte Energiestufen).'},
      // ===== BLOCK 2: ELEKTRONEGATIVITÄT =====
@@ -1864,8 +1874,8 @@ const lessons = [
       <br><br>
       Treffen zwei Atome in einer Verbindung aufeinander, entscheidet dieser Wert mit, was mit den beteiligten Elektronen passiert (genaues lernst du später):
       <br>
-      · Sind die EN-Werte <em>ähnlich</em> (kleiner Unterschied), bleiben die Elektronen <strong>zwischen beiden Atomen</strong> und werden gemeinsam genutzt — typisch zwischen Nichtmetallen.<br>
-      · Ist der Unterschied <em>sehr groß</em> (Faustregel: ΔEN > etwa 1,7), zieht das stärker ziehende Atom die Elektronen <strong>ganz an sich</strong>. Das andere Atom gibt ab — dabei entstehen Ionen, wie du sie in Lektion 3 schon kennengelernt hast. Typisch zwischen Metall und Nichtmetall (z. B. bei Salzen).
+      · Sind die EN-Werte <em>ähnlich</em> (kleiner Unterschied), bleiben die Elektronen <strong>zwischen beiden Atomen</strong> und werden gemeinsam genutzt, typisch zwischen Nichtmetallen.<br>
+      · Ist der Unterschied <em>sehr groß</em> (Faustregel: ΔEN > etwa 1,7), zieht das stärker ziehende Atom die Elektronen <strong>ganz an sich</strong>. Das andere Atom gibt ab, dabei entstehen Ionen, wie du sie in Lektion 3 schon kennengelernt hast. Typisch zwischen Metall und Nichtmetall (z. B. bei Salzen).
       <br><br>
       In beiden Fällen ist die EN die zentrale Größe. Sie wird auf der Pauling-Skala angegeben (0,7 bis 4,0) und steht im PSE unten rechts im Elementkästchen (klein gedruckt).
       </div>
@@ -1877,29 +1887,29 @@ const lessons = [
        'Die Ladung des Atomkerns'
       ],
       correct:0,
-      explainCorrect:'Genau. Die EN ist die <em>Anziehungsstärke</em> eines Atoms auf Elektronen. Je höher die EN, desto stärker zieht das Atom an Elektronen — egal, ob es um gemeinsame Bindungselektronen oder um die vollständige Übernahme eines Elektrons (Ionenbildung) geht. Jetzt erkunden wir, wo im PSE die höchsten und niedrigsten EN-Werte stehen.',
+      explainCorrect:'Genau. Die EN ist die <em>Anziehungsstärke</em> eines Atoms auf Elektronen. Je höher die EN, desto stärker zieht das Atom an Elektronen, egal, ob es um gemeinsame Bindungselektronen oder um die vollständige Übernahme eines Elektrons (Ionenbildung) geht. Jetzt erkunden wir, wo im PSE die höchsten und niedrigsten EN-Werte stehen.',
       explainWrong:[
        null,
-       'Das wäre die Anzahl Elektronen = Ordnungszahl Z (bei ungeladenen Atomen). EN ist etwas anderes — eine Eigenschaft, die das Anziehungsverhalten beschreibt.',
+       'Das wäre die Anzahl Elektronen = Ordnungszahl Z (bei ungeladenen Atomen). EN ist etwas anderes, eine Eigenschaft, die das Anziehungsverhalten beschreibt.',
        'Die Bewegung der Elektronen wird in EN nicht beschrieben. EN ist eine Eigenschaft, die sich auf die <em>Anziehung</em> bezieht.',
        'Die Kernladung entspricht der Ordnungszahl Z. EN ist eine eigenständige Größe, die zwar mit der Kernladung zusammenhängt, aber etwas anderes beschreibt.'
       ],
       solution:'EN = Maß dafür, wie stark ein Atom Elektronen an sich ziehen kann (Pauling-Skala 0,7 bis 4,0).'},
-     {type:'input-text',text:'<strong>Erkundung Elektronegativität — wo liegt das Maximum?</strong><br>Schau dir im Periodensystem die <strong>EN-Werte</strong> aller Elemente an (die kleine Zahl unten rechts in jedem Kästchen). Suche das Element, welches die <em>höchste</em> Elektronegativität hat. Gib das Symbol ein.',
-      hint:'Du musst nichts anklicken — die EN-Werte stehen direkt im Kästchen. Verschaff dir einen Überblick: In welchem Bereich des PSE liegen die höchsten Werte?',
+     {type:'input-text',text:'<strong>Erkundung Elektronegativität, wo liegt das Maximum?</strong><br>Schau dir im Periodensystem die <strong>EN-Werte</strong> aller Elemente an (die kleine Zahl unten rechts in jedem Kästchen). Suche das Element, welches die <em>höchste</em> Elektronegativität hat. Gib das Symbol ein.',
+      hint:'Du musst nichts anklicken, die EN-Werte stehen direkt im Kästchen. Verschaff dir einen Überblick: In welchem Bereich des PSE liegen die höchsten Werte?',
       correctVariants:['F','f','Fluor','fluor'],
       retryHint:'Tipp: Vergleiche die EN-Werte systematisch. Geh die obere rechte Hälfte des PSE durch und merk dir den höchsten Wert, den du siehst.',
-      explainCorrect:'Richtig — <strong>Fluor (F)</strong> mit EN = 4,0 ist das elektronegativste Element überhaupt. F steht <em>oben rechts</em> im PSE (Periode 2, VII. Hauptgruppe). Ganz unten links (Cs mit 0,8) liegen die niedrigsten Werte. <br><br><strong>Merken:</strong> EN nimmt im PSE nach <em>rechts oben</em> zu (Edelgase außen rechts ausgenommen, sie tragen meist keinen EN-Wert).',
-      solution:'<strong>Fluor (F)</strong> mit EN = 4,0 — oben rechts im PSE. Trend: EN nimmt nach rechts oben zu.'},
+      explainCorrect:'Richtig, <strong>Fluor (F)</strong> mit EN = 4,0 ist das elektronegativste Element überhaupt. F steht <em>oben rechts</em> im PSE (Periode 2, VII. Hauptgruppe). Ganz unten links (Cs mit 0,8) liegen die niedrigsten Werte. <br><br><strong>Merken:</strong> EN nimmt im PSE nach <em>rechts oben</em> zu (Edelgase außen rechts ausgenommen, sie tragen meist keinen EN-Wert).',
+      solution:'<strong>Fluor (F)</strong> mit EN = 4,0, oben rechts im PSE. Trend: EN nimmt nach rechts oben zu.'},
      {type:'compare',text:'<strong>Erkundung EN, Trend innerhalb einer Periode:</strong><br>Beide Elemente stehen in <strong>Periode 3</strong>. Welches hat die höhere EN?',
       a:{z:11,label:'Natrium (Na, 11 Protonen)'},b:{z:17,label:'Chlor (Cl, 17 Protonen)'},correct:'b',
       explainCorrect:'Korrekt, <strong>Cl hat die höhere EN</strong> (3,2 gegenüber 0,9 bei Na). Beide haben drei besetzte Energiestufen, aber Cl hat die deutlich höhere Kernladung und zieht Elektronen darum stärker an.<br><br><strong>Merken:</strong> Innerhalb einer Periode nimmt die EN von links nach rechts <em>zu</em> (gleiche Stufenzahl, wachsende Kernladung). Zusammen mit dem Gruppentrend ergibt sich das EN-Maximum rechts oben.',
       retryHint:'Gleiche Periode heißt gleich viele Energiestufen. Welcher Kern zieht stärker, der mit 11 oder der mit 17 Protonen?',
       solution:'Cl > Na. In einer Periode nimmt die EN nach rechts zu (höhere Kernladung bei gleicher Stufenzahl).'},
-     {type:'compare',text:'<strong>Erkundung EN — Trend innerhalb einer Hauptgruppe:</strong><br>Beide Elemente stehen in der <strong>VI. Hauptgruppe</strong>. Welches hat die höhere EN?',
+     {type:'compare',text:'<strong>Erkundung EN, Trend innerhalb einer Hauptgruppe:</strong><br>Beide Elemente stehen in der <strong>VI. Hauptgruppe</strong>. Welches hat die höhere EN?',
       a:{z:8,label:'Sauerstoff (O, Periode 2)'},b:{z:16,label:'Schwefel (S, Periode 3)'},correct:'a',
-      explainCorrect:'Korrekt — <strong>O hat die höhere EN</strong> (3,4 gegen 2,6 bei S). O hat weniger Energiestufen, die Valenzelektronen sitzen näher am Kern — die Anziehung auf Bindungselektronen ist stärker.<br><br><strong>Merken:</strong> Innerhalb einer Hauptgruppe nimmt die EN von oben nach unten <em>ab</em> (Valenzelektronen weiter weg → schwächere Anziehung).',
-      retryHint:'Beide haben gleich viele Valenzelektronen (VI. Hauptgruppe). Welches Atom ist kleiner — und kann damit die Elektronen näher an sich heranziehen?',
+      explainCorrect:'Korrekt, <strong>O hat die höhere EN</strong> (3,4 gegen 2,6 bei S). O hat weniger Energiestufen, die Valenzelektronen sitzen näher am Kern, die Anziehung auf Bindungselektronen ist stärker.<br><br><strong>Merken:</strong> Innerhalb einer Hauptgruppe nimmt die EN von oben nach unten <em>ab</em> (Valenzelektronen weiter weg → schwächere Anziehung).',
+      retryHint:'Beide haben gleich viele Valenzelektronen (VI. Hauptgruppe). Welches Atom ist kleiner, und kann damit die Elektronen näher an sich heranziehen?',
       solution:'O > S. EN sinkt in einer Hauptgruppe nach unten (mehr Energiestufen = Valenzelektronen weiter vom Kern weg).'},
      // ===== BLOCK 3: METALLCHARAKTER =====
      {type:'mc',text:`<div style="background:var(--surface);padding:14px 16px;border-radius:4px;margin-bottom:14px;border-left:3px solid var(--accent);font-weight:normal;font-size:13px;line-height:1.6;">
@@ -1909,7 +1919,7 @@ const lessons = [
       <strong>Metalle</strong>: glänzend, leiten Strom und Wärme, lassen sich verformen, geben in chemischen Reaktionen <em>leicht Elektronen ab</em>.<br>
       <strong>Nichtmetalle</strong>: meist matt oder gasförmig, schlechte Leiter, nehmen in chemischen Reaktionen Elektronen <em>auf</em>.
       <br><br>
-      Der <strong>Metallcharakter</strong> beschreibt, wie ausgeprägt diese metallischen Eigenschaften sind — insbesondere, wie leicht ein Atom seine Valenzelektronen abgibt.
+      Der <strong>Metallcharakter</strong> beschreibt, wie ausgeprägt diese metallischen Eigenschaften sind, insbesondere, wie leicht ein Atom seine Valenzelektronen abgibt.
       </div>
       Welche Aussage charakterisiert <strong>Metalle</strong> am besten?`,
       options:[
@@ -1919,15 +1929,15 @@ const lessons = [
        'Metalle haben eine besonders hohe Elektronegativität.'
       ],
       correct:1,
-      explainCorrect:'Richtig. Metalle <strong>geben Elektronen leicht ab</strong> (niedrige EN, große Atomradien) — das erklärt direkt ihre gute Leitfähigkeit (frei bewegliche Elektronen) und ihre Reaktivität als "Elektronenspender".',
+      explainCorrect:'Richtig. Metalle <strong>geben Elektronen leicht ab</strong> (niedrige EN, große Atomradien), das erklärt direkt ihre gute Leitfähigkeit (frei bewegliche Elektronen) und ihre Reaktivität als "Elektronenspender".',
       explainWrong:[
-       'Das beschreibt eher Nichtmetalle — die nehmen Elektronen auf und leiten den Strom nicht. Metalle verhalten sich umgekehrt.',
+       'Das beschreibt eher Nichtmetalle, die nehmen Elektronen auf und leiten den Strom nicht. Metalle verhalten sich umgekehrt.',
        null,
        'Nur Quecksilber ist bei Raumtemperatur flüssig, die meisten Metalle sind fest. Gasförmig sind sie nicht.',
        'Hohe EN haben Nichtmetalle (sie nehmen in Reaktionen Elektronen <em>auf</em>). Metalle haben <em>niedrige</em> EN.'
       ],
       solution:'Metalle: <strong>geben leicht Elektronen ab</strong>, leiten Strom und Wärme, sind verformbar. Niedrige EN.'},
-     {type:'mc',text:'<strong>Erkundung Metallcharakter — wo stehen die typischsten Metalle?</strong><br>Welches der folgenden Elemente ist das <em>metallischste</em> — gibt also sein Valenzelektron am leichtesten ab? Vergleiche im PSE und nutze die EN-Werte als Kriterium.',
+     {type:'mc',text:'<strong>Erkundung Metallcharakter, wo stehen die typischsten Metalle?</strong><br>Welches der folgenden Elemente ist das <em>metallischste</em>, gibt also sein Valenzelektron am leichtesten ab? Vergleiche im PSE und nutze die EN-Werte als Kriterium.',
       options:[
        'Sauerstoff (O)',
        'Argon (Ar)',
@@ -1935,12 +1945,12 @@ const lessons = [
        'Lithium (Li)'
       ],
       correct:2,
-      explainCorrect:'Korrekt. <strong>Caesium (Cs)</strong> ist das metallischste der vier Elemente. Vergleich der Alkalimetalle Cs und Li: Beide stehen in der I. Hauptgruppe (1 Valenzelektron), aber Cs hat eine <strong>niedrigere EN (0,8)</strong> als Li (1,0). Niedrigere EN bedeutet: Das Valenzelektron wird schwächer ans Atom gebunden und kann leichter abgegeben werden. Außerdem hat Cs einen größeren Atomradius (Periode 6 vs Periode 2 bei Li), das Valenzelektron sitzt also weiter vom Kern entfernt. <br><br><strong>Merken:</strong> Der Metallcharakter nimmt im PSE nach <em>links unten</em> zu — also genau entgegengesetzt zur EN.',
+      explainCorrect:'Korrekt. <strong>Caesium (Cs)</strong> ist das metallischste der vier Elemente. Vergleich der Alkalimetalle Cs und Li: Beide stehen in der I. Hauptgruppe (1 Valenzelektron), aber Cs hat eine <strong>niedrigere EN (0,8)</strong> als Li (1,0). Niedrigere EN bedeutet: Das Valenzelektron wird schwächer ans Atom gebunden und kann leichter abgegeben werden. Außerdem hat Cs einen größeren Atomradius (Periode 6 vs Periode 2 bei Li), das Valenzelektron sitzt also weiter vom Kern entfernt. <br><br><strong>Merken:</strong> Der Metallcharakter nimmt im PSE nach <em>links unten</em> zu, also genau entgegengesetzt zur EN.',
       explainWrong:[
-       'O ist ein <em>Nichtmetall</em> (rechts oben im PSE, hohe EN von 3,4) — es nimmt Elektronen auf, statt sie abzugeben. Such ein Element mit <em>niedriger</em> EN.',
+       'O ist ein <em>Nichtmetall</em> (rechts oben im PSE, hohe EN von 3,4), es nimmt Elektronen auf, statt sie abzugeben. Such ein Element mit <em>niedriger</em> EN.',
        'Edelgase sind chemisch reaktionsträge und Nichtmetalle. Sie geben weder Elektronen ab noch nehmen sie welche auf.',
        null,
-       'Li ist zwar ein Metall (I. Hauptgruppe), aber nicht das metallischste der Auswahl. Vergleiche die EN-Werte von Li und Cs — welches Element gibt sein Valenzelektron leichter ab?'
+       'Li ist zwar ein Metall (I. Hauptgruppe), aber nicht das metallischste der Auswahl. Vergleiche die EN-Werte von Li und Cs, welches Element gibt sein Valenzelektron leichter ab?'
       ],
       solution:'Cs (EN = 0,8) ist metallischer als Li (EN = 1,0). Trend: Metallcharakter nimmt im PSE nach <em>links unten</em> zu (= entgegengesetzt zur EN).'}
    ]},
@@ -1948,11 +1958,11 @@ const lessons = [
    intro:`<p>In dieser Abschlusslektion ziehst du das bisher Gelernte zusammen und sagst chemisches Verhalten <strong>vorher</strong>:</p>
           <p>· Welche <strong>Ionenladung</strong> nimmt ein Atom an, wenn es Edelgaskonfiguration erreicht?</p>
           <p>· Welches Element ist <strong>reaktiver</strong> als ein anderes?</p>
-          <p>Beide Konzepte werden hier Schritt für Schritt eingeführt — Begriff zuerst, dann Anwendung. Du kannst auf alles zurückgreifen, was du in den Lektionen 1–4 entdeckt hast.</p>`,
+          <p>Beide Konzepte werden hier Schritt für Schritt eingeführt, Begriff zuerst, dann Anwendung. Du kannst auf alles zurückgreifen, was du in den Lektionen 1 bis 4 entdeckt hast.</p>`,
    questions:[
      // ===== BLOCK 1: IONENLADUNG VON METALLEN =====
      {type:'mc',text:`<div style="background:var(--surface);padding:14px 16px;border-radius:4px;margin-bottom:14px;border-left:3px solid var(--accent);font-weight:normal;font-size:13px;line-height:1.6;">
-      <strong style="display:block;margin-bottom:8px;color:var(--accent);">Vom Atom zum Ion — Regel für Metalle</strong>
+      <strong style="display:block;margin-bottom:8px;color:var(--accent);">Vom Atom zum Ion, Regel für Metalle</strong>
       In Lektion 3 hast du gesehen: <strong>Na</strong> gibt sein einziges Valenzelektron ab → es bleibt Na mit 10 Elektronen und Edelgaskonfiguration wie Neon. Da 1 Elektron weg ist, trägt das Teilchen die Ladung <strong>+1</strong> → <strong>Na⁺</strong>.
       <br><br>
       Das funktioniert genauso für andere Metalle. Sie geben <em>alle</em> ihre Valenzelektronen ab:
@@ -1967,9 +1977,9 @@ const lessons = [
       correct:1,
       explainCorrect:'Richtig. Ca steht in der II. Hauptgruppe und hat 2 Valenzelektronen. Es gibt beide ab → Ladung +2 → <strong>Ca²⁺</strong>. Dann hat Ca die Elektronenkonfiguration von Argon (Edelgas).',
       explainWrong:[
-       'Ca hat 2 Valenzelektronen — wenn es nur 1 abgäbe, hätte es immer noch 1 Valenzelektron, also keine Edelgaskonfiguration. Wie viele muss es abgeben?',
+       'Ca hat 2 Valenzelektronen, wenn es nur 1 abgäbe, hätte es immer noch 1 Valenzelektron, also keine Edelgaskonfiguration. Wie viele muss es abgeben?',
        null,
-       'Ca ist ein Metall (links im PSE, niedrige EN). Metalle <em>geben</em> Elektronen ab, sie nehmen sie nicht auf — die Ladung wird also positiv, nicht negativ.',
+       'Ca ist ein Metall (links im PSE, niedrige EN). Metalle <em>geben</em> Elektronen ab, sie nehmen sie nicht auf, die Ladung wird also positiv, nicht negativ.',
        'Genau verkehrt: Metalle geben Elektronen ab, das ergibt eine <em>positive</em> Ladung. Negative Ladungen treten bei Nichtmetallen auf.'
       ],
       solution:'Ca, II. Hauptgruppe → 2 Valenzelektronen abgeben → <strong>Ca²⁺</strong>.'},
@@ -1978,9 +1988,9 @@ const lessons = [
       correct:3,
       explainCorrect:'Korrekt. Al steht in der III. Hauptgruppe → 3 Valenzelektronen → gibt alle 3 ab → <strong>Al³⁺</strong>. Es erreicht damit die Elektronenkonfiguration von Neon.',
       explainWrong:[
-       'Al ist ein Metall — Metalle <em>geben</em> Elektronen ab und werden positiv geladen.',
-       'Al hätte nach Abgabe von 1 Elektron immer noch 2 Valenzelektronen — keine Edelgaskonfiguration. Es muss <em>alle</em> Valenzelektronen abgeben.',
-       'Bei 2 abgegebenen Elektronen wäre noch 1 Valenzelektron da — auch keine Edelgaskonfiguration. Wie viele Valenzelektronen hat Al insgesamt?',
+       'Al ist ein Metall, Metalle <em>geben</em> Elektronen ab und werden positiv geladen.',
+       'Al hätte nach Abgabe von 1 Elektron immer noch 2 Valenzelektronen, keine Edelgaskonfiguration. Es muss <em>alle</em> Valenzelektronen abgeben.',
+       'Bei 2 abgegebenen Elektronen wäre noch 1 Valenzelektron da, auch keine Edelgaskonfiguration. Wie viele Valenzelektronen hat Al insgesamt?',
        null
       ],
       solution:'Al, III. Hauptgruppe → alle 3 Valenzelektronen abgeben → <strong>Al³⁺</strong>.'},
@@ -1993,7 +2003,7 @@ const lessons = [
      // ===== BLOCK 2: IONENLADUNG VON NICHTMETALLEN =====
      {type:'mc',text:`<div style="background:var(--surface);padding:14px 16px;border-radius:4px;margin-bottom:14px;border-left:3px solid var(--accent);font-weight:normal;font-size:13px;line-height:1.6;">
       <strong style="display:block;margin-bottom:8px;color:var(--accent);">Regel für Nichtmetalle</strong>
-      Nichtmetalle stehen rechts oben im PSE und haben <em>hohe</em> Elektronegativität. Auch sie erreichen Edelgaskonfiguration — aber statt wenige Elektronen <em>abzugeben</em>, ist es energetisch günstiger, die fehlenden Elektronen bis zu <strong>8 Valenzelektronen aufzunehmen</strong>.
+      Nichtmetalle stehen rechts oben im PSE und haben <em>hohe</em> Elektronegativität. Auch sie erreichen Edelgaskonfiguration, aber statt wenige Elektronen <em>abzugeben</em>, ist es energetisch günstiger, die fehlenden Elektronen bis zu <strong>8 Valenzelektronen aufzunehmen</strong>.
       <br><br>
       Beispiel <strong>Chlor (Cl)</strong>: VII. Hauptgruppe → 7 Valenzelektronen → braucht nur <strong>1 mehr</strong> für Edelgaskonfiguration → nimmt 1 Elektron auf → Ladung <strong>−1</strong> → <strong>Cl⁻</strong>.
       <br><br>
@@ -2002,11 +2012,11 @@ const lessons = [
       Welche Ionenladung trägt <strong>Sauerstoff (O)</strong>? O steht in der VI. Hauptgruppe.`,
       options:['O⁻','O²⁻','O²⁺','O⁺'],
       correct:1,
-      explainCorrect:'Richtig. O hat 6 Valenzelektronen — braucht also 2 mehr für 8 Valenzelektronen. Es nimmt <strong>2 Elektronen auf</strong> → Ladung −2 → <strong>O²⁻</strong>. Damit hat O die Elektronenkonfiguration von Neon erreicht.',
+      explainCorrect:'Richtig. O hat 6 Valenzelektronen, braucht also 2 mehr für 8 Valenzelektronen. Es nimmt <strong>2 Elektronen auf</strong> → Ladung −2 → <strong>O²⁻</strong>. Damit hat O die Elektronenkonfiguration von Neon erreicht.',
       explainWrong:[
-       'Bei nur 1 aufgenommenen Elektron hätte O 7 Valenzelektronen — noch keine 8, also noch keine Edelgaskonfiguration. Wie viele muss es aufnehmen?',
+       'Bei nur 1 aufgenommenen Elektron hätte O 7 Valenzelektronen, noch keine 8, also noch keine Edelgaskonfiguration. Wie viele muss es aufnehmen?',
        null,
-       'O ist ein Nichtmetall (rechts oben im PSE, hohe EN) — Nichtmetalle <em>nehmen</em> Elektronen auf, sie geben sie nicht ab. Die Ladung wird also <em>negativ</em>.',
+       'O ist ein Nichtmetall (rechts oben im PSE, hohe EN), Nichtmetalle <em>nehmen</em> Elektronen auf, sie geben sie nicht ab. Die Ladung wird also <em>negativ</em>.',
        'Genau verkehrt: Nichtmetalle nehmen Elektronen auf und werden <em>negativ</em>.'
       ],
       solution:'O, VI. Hauptgruppe → braucht 8 − 6 = 2 Elektronen → <strong>O²⁻</strong>.'},
@@ -2016,22 +2026,22 @@ const lessons = [
       retryHint:'Nichtmetall der VI. Hauptgruppe: 6 Valenzelektronen, es fehlen 2 bis zur 8. Aufnehmen heißt negative Ladung.',
       explainCorrect:'Richtig. S nimmt 2 Elektronen auf und wird zu <strong>S²⁻</strong> (Elektronenkonfiguration von Argon). Gleiche Hauptgruppe wie O, gleiches Muster, gleiche Ionenladung.',
       solution:'S, VI. Hauptgruppe → nimmt 2 Elektronen auf → <strong>S²⁻</strong>.'},
-     {type:'mc',text:'<strong>Ausblick — bei Salzen wirst du das wiedersehen:</strong> Im Kochsalz (NaCl) sitzen Na⁺ und Cl⁻ als Ionen nebeneinander. Was haben diese beiden Ionen in ihrer Elektronenhülle <em>gemeinsam</em>?',
+     {type:'mc',text:'<strong>Ausblick, bei Salzen wirst du das wiedersehen:</strong> Im Kochsalz (NaCl) sitzen Na⁺ und Cl⁻ als Ionen nebeneinander. Was haben diese beiden Ionen in ihrer Elektronenhülle <em>gemeinsam</em>?',
       options:[
        'Beide haben dieselbe Anzahl Protonen',
-       'Beide haben jetzt 8 Valenzelektronen — Edelgaskonfiguration',
+       'Beide haben jetzt 8 Valenzelektronen, Edelgaskonfiguration',
        'Beide haben dieselbe Ladung',
        'Sie haben gar nichts gemeinsam'
       ],
       correct:1,
-      explainCorrect:'Genau. Na⁺ hat 10 Elektronen — Konfiguration wie Neon. Cl⁻ hat 18 Elektronen — Konfiguration wie Argon. Beide haben damit <strong>8 Valenzelektronen</strong> (Edelgaskonfiguration). Das ist der Grund, warum Salze überhaupt zustande kommen: Beide Partner erreichen den stabilen Zustand. Wie das im Detail abläuft, lernst du später bei den Salzen.',
+      explainCorrect:'Genau. Na⁺ hat 10 Elektronen, Konfiguration wie Neon. Cl⁻ hat 18 Elektronen, Konfiguration wie Argon. Beide haben damit <strong>8 Valenzelektronen</strong> (Edelgaskonfiguration). Das ist der Grund, warum Salze überhaupt zustande kommen: Beide Partner erreichen den stabilen Zustand. Wie das im Detail abläuft, lernst du später bei den Salzen.',
       explainWrong:[
-       'Nein — Na hat 11 Protonen, Cl hat 17 Protonen. Die Protonenzahl ändert sich nie. Was haben Na⁺ und Cl⁻ in ihrer <em>Elektronenhülle</em> gemeinsam?',
+       'Nein, Na hat 11 Protonen, Cl hat 17 Protonen. Die Protonenzahl ändert sich nie. Was haben Na⁺ und Cl⁻ in ihrer <em>Elektronenhülle</em> gemeinsam?',
        null,
-       'Nein — Na⁺ ist +1 geladen, Cl⁻ ist −1 geladen. Das sind <em>verschiedene</em> Ladungen, sogar entgegengesetzt. Schau auf die Elektronenanzahl.',
-       'Doch — sie haben etwas Zentrales gemeinsam. Beide haben Elektronen aufgenommen oder abgegeben, um zu einem ganz bestimmten Zustand zu kommen. Welcher?'
+       'Nein, Na⁺ ist +1 geladen, Cl⁻ ist −1 geladen. Das sind <em>verschiedene</em> Ladungen, sogar entgegengesetzt. Schau auf die Elektronenanzahl.',
+       'Doch, sie haben etwas Zentrales gemeinsam. Beide haben Elektronen aufgenommen oder abgegeben, um zu einem ganz bestimmten Zustand zu kommen. Welcher?'
       ],
-      solution:'Beide haben 8 Valenzelektronen — <strong>Edelgaskonfiguration</strong>. Na⁺ wie Ne, Cl⁻ wie Ar.'},
+      solution:'Beide haben 8 Valenzelektronen, <strong>Edelgaskonfiguration</strong>. Na⁺ wie Ne, Cl⁻ wie Ar.'},
      // ===== BLOCK 3: REAKTIVITÄT =====
      {type:'mc',text:`<div style="background:var(--surface);padding:14px 16px;border-radius:4px;margin-bottom:14px;border-left:3px solid var(--accent);font-weight:normal;font-size:13px;line-height:1.6;">
       <strong style="display:block;margin-bottom:8px;color:var(--accent);">Begriff: Reaktivität</strong>
@@ -2046,7 +2056,7 @@ const lessons = [
       <br>
       · <strong>Lagerung &amp; Sicherheit:</strong> Alkalimetalle wie Natrium und Kalium bewahrt man unter Petroleum auf, weil sie mit Luft und Wasser heftig reagieren.<br>
       · <strong>Schutz durch Reaktionsträgheit:</strong> Beim Schweißen leitet man das reaktionsträge Edelgas Argon über die Naht, damit der glühende Stahl nicht mit dem Luftsauerstoff reagiert.<br>
-      · <strong>Beständige Werkstoffe:</strong> Gold reagiert kaum — deshalb läuft es nicht an und eignet sich für Schmuck und elektrische Kontakte.
+      · <strong>Beständige Werkstoffe:</strong> Gold reagiert kaum, deshalb läuft es nicht an und eignet sich für Schmuck und elektrische Kontakte.
       </div>
       Welche Aussage über Reaktivität ist <strong>richtig</strong>?`,
       options:[
@@ -2058,40 +2068,40 @@ const lessons = [
       correct:2,
       explainCorrect:'Richtig. Reaktivität ist im Kern eine Frage des Elektronenwechsels: <strong>Metalle</strong> sind reaktiv, wenn sie Valenzelektronen <em>leicht abgeben</em> können. <strong>Nichtmetalle</strong> sind reaktiv, wenn sie Elektronen <em>stark anziehen</em> (= hohe EN). Atomradius und EN aus Lektion 4 helfen also direkt, Reaktivität abzuschätzen.',
       explainWrong:[
-       'Genau das Gegenteil — Edelgase haben bereits Edelgaskonfiguration und brauchen keine Elektronen aufzunehmen oder abzugeben. Sie sind die <em>reaktionsträgsten</em> Elemente.',
-       'Nein — die Reaktivität unterscheidet sich stark. Caesium ist viel reaktiver als z. B. Eisen. Was bestimmt diesen Unterschied?',
+       'Genau das Gegenteil, Edelgase haben bereits Edelgaskonfiguration und brauchen keine Elektronen aufzunehmen oder abzugeben. Sie sind die <em>reaktionsträgsten</em> Elemente.',
+       'Nein, die Reaktivität unterscheidet sich stark. Caesium ist viel reaktiver als z. B. Eisen. Was bestimmt diesen Unterschied?',
        null,
        'Atommasse spielt keine zentrale Rolle. Was bestimmt das Reaktivitätsverhalten direkter?'
       ],
-      solution:'Reaktivität = wie leicht ein Atom Elektronen abgibt (Metalle) oder aufnimmt (Nichtmetalle) — entscheidend für chemische Reaktionen.'},
-     {type:'compare',text:'<strong>Vorhersage Alkalimetalle:</strong> Welches Element reagiert wahrscheinlich heftiger mit Wasser?<br>(Beide stehen in der I. Hauptgruppe — je 1 Valenzelektron.)',
+      solution:'Reaktivität = wie leicht ein Atom Elektronen abgibt (Metalle) oder aufnimmt (Nichtmetalle), entscheidend für chemische Reaktionen.'},
+     {type:'compare',text:'<strong>Vorhersage Alkalimetalle:</strong> Welches Element reagiert wahrscheinlich heftiger mit Wasser?<br>(Beide stehen in der I. Hauptgruppe, je 1 Valenzelektron.)',
       a:{z:11,label:'Natrium (Na, Periode 3)'},b:{z:19,label:'Kalium (K, Periode 4)'},
       correct:'b',
-      explainCorrect:'Richtig — <strong>K reagiert heftiger</strong>. Beide haben 1 Valenzelektron, aber K hat einen größeren Atomradius (4 besetzte Energiestufen statt 3 bei Na). Das Valenzelektron sitzt weiter vom Kern weg und wird leichter abgegeben. <br><br><strong>Merken:</strong> Bei Alkalimetallen nimmt die Reaktivität von oben nach unten <em>zu</em> (Cs ist das reaktivste stabile Alkalimetall).',
+      explainCorrect:'Richtig, <strong>K reagiert heftiger</strong>. Beide haben 1 Valenzelektron, aber K hat einen größeren Atomradius (4 besetzte Energiestufen statt 3 bei Na). Das Valenzelektron sitzt weiter vom Kern weg und wird leichter abgegeben. <br><br><strong>Merken:</strong> Bei Alkalimetallen nimmt die Reaktivität von oben nach unten <em>zu</em> (Cs ist das reaktivste stabile Alkalimetall).',
       retryHint:'Beide haben gleich viele Valenzelektronen. Welches gibt sein Valenzelektron leichter ab? Schau auf Atomradius und EN (aus Lektion 4).',
       solution:'K > Na bei der Reaktivität. Bei Alkalimetallen nimmt die Reaktivität nach unten zu (größerer Atomradius → Valenzelektron leichter abgegeben).'},
-     {type:'compare',text:'<strong>Vorhersage Halogene:</strong> Welches Element ist reaktiver?<br>(Beide stehen in der VII. Hauptgruppe — je 7 Valenzelektronen, beide können 1 Elektron aufnehmen, um Edelgaskonfiguration zu erreichen.)',
+     {type:'compare',text:'<strong>Vorhersage Halogene:</strong> Welches Element ist reaktiver?<br>(Beide stehen in der VII. Hauptgruppe, je 7 Valenzelektronen, beide können 1 Elektron aufnehmen, um Edelgaskonfiguration zu erreichen.)',
       a:{z:9,label:'Fluor (F, Periode 2)'},b:{z:53,label:'Iod (I, Periode 5)'},
       correct:'a',
-      explainCorrect:'Richtig — <strong>F ist deutlich reaktiver</strong>. Halogene <em>nehmen</em> Elektronen auf. F hat den kleinsten Atomradius und die höchste EN aller Halogene — es zieht zusätzliche Elektronen am stärksten an. <br><br><strong>Merken:</strong> Bei Halogenen nimmt die Reaktivität von oben nach unten <em>ab</em> — also genau <strong>umgekehrt</strong> zu den Alkalimetallen. Das liegt daran, dass Alkalimetalle Elektronen <em>abgeben</em>, Halogene sie aber <em>aufnehmen</em>.',
-      retryHint:'Halogene nehmen ein Elektron auf, um Edelgaskonfiguration zu erreichen. Welches Atom kann das hinzukommende Elektron stärker an sich binden — das mit kleinerem oder größerem Atomradius?',
+      explainCorrect:'Richtig, <strong>F ist deutlich reaktiver</strong>. Halogene <em>nehmen</em> Elektronen auf. F hat den kleinsten Atomradius und die höchste EN aller Halogene, es zieht zusätzliche Elektronen am stärksten an. <br><br><strong>Merken:</strong> Bei Halogenen nimmt die Reaktivität von oben nach unten <em>ab</em>, also genau <strong>umgekehrt</strong> zu den Alkalimetallen. Das liegt daran, dass Alkalimetalle Elektronen <em>abgeben</em>, Halogene sie aber <em>aufnehmen</em>.',
+      retryHint:'Halogene nehmen ein Elektron auf, um Edelgaskonfiguration zu erreichen. Welches Atom kann das hinzukommende Elektron stärker an sich binden, das mit kleinerem oder größerem Atomradius?',
       solution:'F > I bei der Reaktivität. Bei Halogenen nimmt die Reaktivität nach unten ab (kleinerer Atomradius oben → fremdes Elektron stärker angezogen).'},
      {type:'mc',text:'<strong>Synthese:</strong> Welches der folgenden Elemente ist mit Abstand <em>am wenigsten</em> reaktiv?',
       options:[
-       'Natrium (Na) — Alkalimetall',
-       'Helium (He) — Edelgas',
-       'Chlor (Cl) — Halogen',
-       'Caesium (Cs) — Alkalimetall'
+       'Natrium (Na), Alkalimetall',
+       'Helium (He), Edelgas',
+       'Chlor (Cl), Halogen',
+       'Caesium (Cs), Alkalimetall'
       ],
       correct:1,
-      explainCorrect:'Korrekt. <strong>He ist ein Edelgas</strong> — es hat bereits Edelgaskonfiguration (2 Valenzelektronen, voll besetzte erste Energiestufe). Es muss weder Elektronen abgeben noch aufnehmen und reagiert deshalb so gut wie gar nicht. <br><br>Die anderen drei sind allesamt hochreaktiv: Na und Cs (Alkalimetalle, geben leicht ab), Cl (Halogen, nimmt leicht auf). Cs ist sogar das reaktivste stabile Metall überhaupt.',
+      explainCorrect:'Korrekt. <strong>He ist ein Edelgas</strong>, es hat bereits Edelgaskonfiguration (2 Valenzelektronen, voll besetzte erste Energiestufe). Es muss weder Elektronen abgeben noch aufnehmen und reagiert deshalb so gut wie gar nicht. <br><br>Die anderen drei sind allesamt hochreaktiv: Na und Cs (Alkalimetalle, geben leicht ab), Cl (Halogen, nimmt leicht auf). Cs ist sogar das reaktivste stabile Metall überhaupt.',
       explainWrong:[
-       'Na ist ein hochreaktives Alkalimetall — es reagiert spontan mit Wasser (heftig). Such ein Element, das <em>schon</em> Edelgaskonfiguration hat.',
+       'Na ist ein hochreaktives Alkalimetall, es reagiert spontan mit Wasser (heftig). Such ein Element, das <em>schon</em> Edelgaskonfiguration hat.',
        null,
-       'Cl ist ein hochreaktives Halogen — es nimmt in Reaktionen leicht Elektronen auf (hohe EN). Such ein Element, das chemisch <em>reaktionsträge</em> ist.',
-       'Cs ist sogar das reaktivste der stabilen Alkalimetalle — explosionsartig mit Wasser. Such genau das Gegenteil.'
+       'Cl ist ein hochreaktives Halogen, es nimmt in Reaktionen leicht Elektronen auf (hohe EN). Such ein Element, das chemisch <em>reaktionsträge</em> ist.',
+       'Cs ist sogar das reaktivste der stabilen Alkalimetalle, explosionsartig mit Wasser. Such genau das Gegenteil.'
       ],
-      solution:'He (Edelgas) — bereits Edelgaskonfiguration, daher chemisch reaktionsträge.'}
+      solution:'He (Edelgas), bereits Edelgaskonfiguration, daher chemisch reaktionsträge.'}
    ]}
 ];
 
@@ -2199,7 +2209,7 @@ function isLessonAccessible(id) {
 }
 
 // ============================================================================
-// BEWERTUNGS-STUFEN (5 Tiers) — basierend auf % im ersten Versuch
+// BEWERTUNGS-STUFEN (5 Tiers), basierend auf % im ersten Versuch
 // ============================================================================
 function getTier(pct) {
   if (pct < 40)  return { key:'fail', label:'Wiederholen empfohlen',           icon:'🔴' };
@@ -2209,15 +2219,15 @@ function getTier(pct) {
   return           { key:'top',  label:'Hervorragend',                         icon:'⭐' };
 }
 function getGreeting(pct) {
-  if (pct >= 90) return '🎉 Hervorragend — du hast das PSE souverän erschlossen!';
-  if (pct >= 75) return '🎉 Gut gemacht — du hast das PSE sicher verstanden.';
-  if (pct >= 60) return '✓ Bestanden — du hast die wichtigsten Konzepte verstanden.';
-  if (pct >= 40) return 'Bestanden mit Lücken — schau dir die markierten Lektionen nochmal an.';
-  return 'Du hast den Lernpfad durchgearbeitet — bitte starte ihn von vorn, damit das PSE wirklich sitzt.';
+  if (pct >= 90) return '🎉 Hervorragend, du hast das PSE souverän erschlossen!';
+  if (pct >= 75) return '🎉 Gut gemacht, du hast das PSE sicher verstanden.';
+  if (pct >= 60) return '✓ Bestanden, du hast die wichtigsten Konzepte verstanden.';
+  if (pct >= 40) return 'Bestanden mit Lücken, schau dir die markierten Lektionen nochmal an.';
+  return 'Du hast den Lernpfad durchgearbeitet, bitte starte ihn von vorn, damit das PSE wirklich sitzt.';
 }
 // Lektions-spezifische Lerntipps (für „schwächste Lektion")
 const lessonTips = {
-  1: 'Geh die vier Bestandteile eines Elementkästchens (Ordnungszahl Z, Symbol, Name, Atommasse) nochmal durch. Besonders die 3-Schritt-Sequenz zu Isotopen am Ende lohnt sich.',
+  1: 'Geh die fünf Bestandteile eines Elementkästchens (Ordnungszahl Z, Symbol, Name, Atommasse, Massenzahl A) nochmal durch. Besonders die 3-Schritt-Sequenz zu Isotopen am Ende lohnt sich.',
   2: 'Schlüssel: <strong>Periode = Zeile</strong>, <strong>Hauptgruppe = Spalte</strong>. Übe das Ablesen der römischen Hauptgruppennummer und merke dir: Elemente derselben Hauptgruppe reagieren chemisch ähnlich (das <em>Warum</em> kommt in Lektion 3).',
   3: 'Schlüssel-Begriffe: <strong>Valenzelektronen</strong> (Hauptgruppennummer = Anzahl), <strong>Edelgaskonfiguration</strong> und <strong>Ion</strong>. Sie sind die Basis für die nächste Lektion und alles, was später bei Salzen kommt. Geh die Schritt-für-Schritt-Sequenz am Ende der Lektion in Ruhe nochmal durch.',
   4: 'Die Begriffe <strong>Atomradius</strong>, <strong>Elektronegativität</strong> und <strong>Metallcharakter</strong> sind Pflicht-Werkzeuge für Lektion 5. Lies die Begriffsblöcke in Ruhe und schau dir die Trends an konkreten Element-Paaren an.',
@@ -2534,7 +2544,7 @@ function renderLessonDone() {
   renderLessonProgress();
 }
 
-// Konfetti-Regen — bei Abschluss des gesamten Lernpfads
+// Konfetti-Regen, bei Abschluss des gesamten Lernpfads
 function spawnConfetti() {
   if (document.querySelector('.confetti-container')) return; // schon aktiv
   // Konfetti-Farben = die Hauptenergiestufen-Farben (thematisch passend)
@@ -2596,14 +2606,14 @@ function renderFinalReport() {
   const criticalHTML = overallPct < 40 ? `
     <div class="report-box critical">
       <strong>🔄 Bitte den ganzen Lernpfad noch einmal durcharbeiten</strong>
-      <p>Mit unter 40 % fehlt eine solide Grundlage, um sicher mit dem PSE umzugehen — und um in den nächsten Stunden bei Salzen, Reaktionen usw. mitzukommen. Wenn du den Lernpfad jetzt nochmal von vorn machst, wird vieles deutlich klarer. Versprochen.</p>
+      <p>Mit unter 40 % fehlt eine solide Grundlage, um sicher mit dem PSE umzugehen, und um in den nächsten Stunden bei Salzen, Reaktionen usw. mitzukommen. Wenn du den Lernpfad jetzt nochmal von vorn machst, wird vieles deutlich klarer. Versprochen.</p>
       <button class="restart-btn" id="restartAllBtn">🔄 Ganzen Lernpfad neu starten</button>
     </div>` : '';
 
   // Stärken-Box (nur wenn >= 60%)
   const strengthHTML = (best && best.pct >= 60) ? `
     <div class="report-box strength">
-      <strong>⭐ Deine stärkste Lektion: Lektion ${best.id} — ${best.title} (${best.pct} %)</strong>
+      <strong>⭐ Deine stärkste Lektion: Lektion ${best.id}, ${best.title} (${best.pct} %)</strong>
       <p>Hier hast du am sichersten geantwortet. Top!</p>
     </div>` : '';
 
@@ -2611,7 +2621,7 @@ function renderFinalReport() {
   const showWeakness = weakest && weakest.pct < 75 && weakest.id !== (best && best.id);
   const weaknessHTML = showWeakness ? `
     <div class="report-box weakness">
-      <strong>💡 Schwerpunkt zum Üben: Lektion ${weakest.id} — ${weakest.title} (${weakest.pct} %)</strong>
+      <strong>💡 Schwerpunkt zum Üben: Lektion ${weakest.id}, ${weakest.title} (${weakest.pct} %)</strong>
       <p>${lessonTips[weakest.id] || ''}</p>
     </div>` : '';
 
@@ -2619,7 +2629,7 @@ function renderFinalReport() {
   const barsHTML = data.map(d => {
     const tier = getTier(d.pct);
     const legacyNote = d.legacy ? '<small>vor Update absolviert · keine Detailauswertung möglich</small>' : '';
-    const numbers = d.legacy ? '— / —' : `${fmtPts(d.pts)} / ${d.total} P`;
+    const numbers = d.legacy ? 'k. A.' : `${fmtPts(d.pts)} / ${d.total} P`;
     const pctText = d.legacy ? '' : `${d.pct} %`;
     const fillTier = d.legacy ? 'pass' : tier.key;
     const fillWidth = d.legacy ? 100 : d.pct;
@@ -2654,9 +2664,9 @@ function renderFinalReport() {
         <div class="report-legend-title">Bewertungsmaßstab</div>
         <div class="legend-items">
           <div class="legend-item"><span class="dot" data-tier="fail"></span><strong>&lt; 40 %</strong> Wiederholen empfohlen</div>
-          <div class="legend-item"><span class="dot" data-tier="min"></span><strong>40–59 %</strong> Bestanden, mit Lücken</div>
-          <div class="legend-item"><span class="dot" data-tier="pass"></span><strong>60–74 %</strong> Bestanden, verstanden</div>
-          <div class="legend-item"><span class="dot" data-tier="good"></span><strong>75–89 %</strong> Gut bestanden, sicher verstanden</div>
+          <div class="legend-item"><span class="dot" data-tier="min"></span><strong>40 bis 59 %</strong> Bestanden, mit Lücken</div>
+          <div class="legend-item"><span class="dot" data-tier="pass"></span><strong>60 bis 74 %</strong> Bestanden, verstanden</div>
+          <div class="legend-item"><span class="dot" data-tier="good"></span><strong>75 bis 89 %</strong> Gut bestanden, sicher verstanden</div>
           <div class="legend-item"><span class="dot" data-tier="top"></span><strong>≥ 90 %</strong> Hervorragend</div>
         </div>
       </div>
