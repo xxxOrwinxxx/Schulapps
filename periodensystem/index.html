@@ -251,8 +251,15 @@
     color: var(--text-dim);
     font-size: 11px;
   }
-  /* Positions-Hinweis, nur auf kleinen Bildschirmen sichtbar (dort fehlen die Pfeile) */
-  .legend-anno .la-pos { display: none; }
+  /* Schlüssel-Badges (a bis f): verbinden Kästchen und Beschriftung, nur auf kleinen
+     Bildschirmen sichtbar (dort fehlen die Pfeile). Auf dem Desktop zeigen die Pfeile. */
+  .lc-key, .la-key {
+    display: none;
+    align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: var(--accent); color: var(--on-accent);
+    font-style: normal; font-weight: 800; line-height: 1; text-transform: none;
+  }
   /* Obere Reihe, drei Bezeichnungen über dem Kästchen */
   .la-a    { top: 24px;  left: 30px;     width: 180px; text-align: right; }
   .la-mass { top: 24px;  left: 50%; transform: translateX(-50%); width: 200px; text-align: center; }
@@ -281,17 +288,23 @@
       transform: none;
       width: 100%;
       text-align: left;
-      margin-top: 10px;
-      padding-left: 12px;
-      border-left: 2px solid var(--accent);
+      margin-top: 12px;
     }
-    .legend-anno .la-pos {
-      display: block;
+    .legend-anno strong { display: inline; }
+    .legend-anno span { display: block; margin-top: 2px; }
+    .la-key {
+      display: inline-flex;
+      width: 16px; height: 16px;
       font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      color: var(--accent);
-      margin: 1px 0 3px;
+      margin-right: 7px;
+      vertical-align: middle;
+    }
+    .lc-key {
+      display: inline-flex;
+      width: 13px; height: 13px;
+      font-size: 8px;
+      margin-right: 2px;
+      vertical-align: middle;
     }
   }
 
@@ -796,7 +809,7 @@
     .shell-lbl { font-size: 8px; }
     .estate { font-size: 9px; }
     .pse-legend { grid-template-columns: 1fr; gap: 20px; padding: 16px 0 4px; }
-    .legend-cell-sample { width: 120px; height: 130px; }
+    .legend-cell-sample { width: 140px; height: 150px; }
     .detail-panel { width: auto; max-width: 100%; margin: 12px; position: static; max-height: none; }
     .main-area { flex-direction: column; }
     .learn-wrap { padding: 16px 14px; }
@@ -894,42 +907,42 @@
           </svg>
           <div class="legend-cell-anchor">
             <div class="legend-cell-sample" aria-label="Beispiel-Elementkästchen Natrium">
-              <span class="lc-mass">23,0</span>
-              <span class="lc-mn">23</span>
-              <span class="lc-num">11</span>
-              <span class="lc-sym">Na</span>
-              <span class="lc-name">Natrium</span>
-              <span class="lc-en">0,9</span>
+              <span class="lc-mass"><i class="lc-key">a</i>23,0</span>
+              <span class="lc-mn"><i class="lc-key">b</i>23</span>
+              <span class="lc-num"><i class="lc-key">c</i>11</span>
+              <span class="lc-sym"><i class="lc-key">d</i>Na</span>
+              <span class="lc-name"><i class="lc-key">e</i>Natrium</span>
+              <span class="lc-en"><i class="lc-key">f</i>0,9</span>
             </div>
           </div>
           <div class="legend-anno la-mass">
+            <i class="la-key">a</i>
             <strong>Atommasse</strong>
-            <span class="la-pos">oben Mitte</span>
             <span>gewichteter Mittelwert in u über alle natürlichen Isotope</span>
           </div>
           <div class="legend-anno la-a">
+            <i class="la-key">b</i>
             <strong>Massenzahl A</strong>
-            <span class="la-pos">oben links</span>
             <span>Protonen + Neutronen (häufigstes Isotop)</span>
           </div>
           <div class="legend-anno la-z">
+            <i class="la-key">c</i>
             <strong>Ordnungszahl Z</strong>
-            <span class="la-pos">links, unter der Massenzahl</span>
             <span>Anzahl der Protonen im Kern</span>
           </div>
           <div class="legend-anno la-sym">
+            <i class="la-key">d</i>
             <strong>Elementsymbol</strong>
-            <span class="la-pos">groß in der Mitte</span>
             <span>ein bis zwei Buchstaben, oft aus dem lateinischen Namen</span>
           </div>
           <div class="legend-anno la-name">
+            <i class="la-key">e</i>
             <strong>Elementname</strong>
-            <span class="la-pos">unter dem Symbol</span>
             <span>deutscher Name des Elements</span>
           </div>
           <div class="legend-anno la-en">
+            <i class="la-key">f</i>
             <strong>Elektronegativität</strong>
-            <span class="la-pos">unten rechts</span>
             <span>Pauling-Skala, 0,7 bis 4,0</span>
           </div>
         </div>
