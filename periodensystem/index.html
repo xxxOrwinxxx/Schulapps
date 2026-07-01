@@ -1465,12 +1465,10 @@ function showDetail(el) {
   ).join('');
   document.getElementById('dpDesc').textContent = desc;
   const wikiUrl = `https://de.wikipedia.org/wiki/${wikiSlug || encodeURIComponent(name)}`;
-  const ptableUrl = `https://www.internetchemie.info/chemische-elemente/${name.toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss')}.php`;
   const ico = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
   document.getElementById('dpLinks').innerHTML = `
-    <span class="dp-links-label">Externe Quellen</span>
+    <span class="dp-links-label">Externe Quelle</span>
     <a href="${wikiUrl}" target="_blank" rel="noopener" class="dp-link">${ico} Wikipedia (de)</a>
-    <a href="${ptableUrl}" target="_blank" rel="noopener" class="dp-link">${ico} Internetchemie</a>
   `;
   document.getElementById('detailPanel').classList.add('visible');
 }
