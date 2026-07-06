@@ -2650,20 +2650,29 @@ function handleCompareAnswer(q, choice) {
   if (currentSolutionRevealed) return;
   currentAttempts++; updateAttemptCounter(q);
   const buttons = document.querySelectorAll('.compare-btn');
-  if (choice === q.correct) {
-    buttons.forEach(b => b.disabled = true);
-    document.querySelector(`.compare-btn[data-choice="${choice}"]`).classList.add('correct');
-    lessonResults.push(resultForAttempt(currentAttempts));
-    showFeedback('correct', q.explainCorrect);
-    renderLessonProgress();
+  const choiceCorrect = (choice === q.correct);
+  // Vergleichsfragen haben nur 2 Optionen und einen Versuch: sofort auflösen.
+  buttons.forEach(b => b.disabled = true);
+  document.querySelector(`.compare-btn[data-choice="${choice}"]`).classList.add(choiceCorrect ? 'correct' : 'wrong');
+  if (!choiceCorrect) document.querySelector(`.compare-btn[data-choice="${q.correct}"]`).classList.add('revealed');
+  currentSolutionRevealed = true;
+  if (q.reflect) {
+    // Punktwirksam: Endergebnis erst nach dem Warum-Check (renderCompareReflection),
+    // die Mechanik-Erklärung erscheint dort erst nach der Begründung.
+    const correctLabel = q.correct === 'a' ? q.a.label : q.b.label;
+    showFeedback(choiceCorrect ? 'correct' : 'solution',
+      choiceCorrect ? 'Deine Wahl stimmt. Jetzt noch die Begründung:'
+                    : `Nicht ganz, richtig ist <strong>${correctLabel}</strong>. Begründe trotzdem:`,
+      true);
     showSolutionBtn(false);
-    renderCompareReflection(q);
+    renderCompareReflection(q, choiceCorrect);
   } else {
-    // Vergleichsfragen haben nur 2 Optionen: ein Fehlversuch löst direkt auf,
-    // sonst wäre der zweite Versuch zwangsläufig richtig (Ratepunkte).
-    document.querySelector(`.compare-btn[data-choice="${choice}"]`).classList.add('wrong');
-    document.querySelector(`.compare-btn[data-choice="${choice}"]`).disabled = true;
-    revealSolution(q, true);
+    // Vergleichsaufgaben ohne Warum-Check (z. B. Ablese-Vergleich): sofort werten.
+    lessonResults.push(choiceCorrect ? resultForAttempt(currentAttempts) : 'wrong');
+    renderLessonProgress();
+    showFeedback(choiceCorrect ? 'correct' : 'solution',
+      choiceCorrect ? q.explainCorrect : ('<em>Leider nicht gelöst. Hier die Lösung:</em><br>' + (q.solution || 'Hier ist die Lösung.')));
+    showSolutionBtn(false);
   }
 }
 function revealSolution(q, auto = false) {
@@ -2681,43 +2690,58 @@ function revealSolution(q, auto = false) {
   }
   showFeedback('solution', (auto ? '<em>Leider nicht gelöst. Hier die Lösung:</em><br>' : '') + (q.solution || 'Hier ist die Lösung.'));
   showSolutionBtn(false);
-  if (q.type === 'compare') renderCompareReflection(q);
 }
-// Punktneutraler "Warum?"-Kurzcheck nach Vergleichsaufgaben (ändert die Note NICHT)
-function renderCompareReflection(q) {
+// "Warum?"-Check nach Vergleichsaufgaben, PUNKTWIRKSAM: Wahl UND Begründung
+// zusammen bestimmen die Wertung (beide richtig = 1, genau eines = ½, keines = 0).
+// Die Mechanik-Erklärung (explainCorrect) kommt bewusst erst NACH der Begründung,
+// damit der Check nicht zum Abschreiben wird.
+function renderCompareReflection(q, choiceCorrect) {
   if (!q.reflect) return;
   const fb = document.getElementById('feedback');
   if (!fb || fb.querySelector('.reflect-box')) return;
   const r = q.reflect;
   const box = document.createElement('div');
   box.className = 'reflect-box';
-  box.innerHTML = `<div class="reflect-q">🤔 Kurzcheck (zählt nicht): ${r.q}</div>`
+  box.innerHTML = `<div class="reflect-q">🤔 Und warum? (zählt zur Bewertung): ${r.q}</div>`
     + `<div class="reflect-opts">${r.options.map((o, i) => `<button class="reflect-opt" data-i="${i}">${o}</button>`).join('')}</div>`
     + `<div class="reflect-fb" hidden></div>`;
   fb.appendChild(box);
   box.querySelectorAll('.reflect-opt').forEach(btn => btn.addEventListener('click', () => {
     box.querySelectorAll('.reflect-opt').forEach(b => b.disabled = true);
     const i = parseInt(btn.dataset.i);
-    const ok = i === r.correct;
-    btn.classList.add(ok ? 'correct' : 'wrong');
-    if (!ok) box.querySelector(`.reflect-opt[data-i="${r.correct}"]`).classList.add('correct');
+    const reflectCorrect = (i === r.correct);
+    btn.classList.add(reflectCorrect ? 'correct' : 'wrong');
+    if (!reflectCorrect) box.querySelector(`.reflect-opt[data-i="${r.correct}"]`).classList.add('correct');
+    const combined = (choiceCorrect && reflectCorrect) ? 'done' : (choiceCorrect || reflectCorrect) ? 'partial' : 'wrong';
+    const ptLabel = combined === 'done' ? '1 Punkt' : combined === 'partial' ? '½ Punkt' : '0 Punkte';
     const fbEl = box.querySelector('.reflect-fb');
     fbEl.hidden = false;
-    fbEl.innerHTML = (ok ? '✓ ' : '') + r.explain;
+    fbEl.innerHTML = `<div>${(reflectCorrect ? '✓ ' : '✗ ') + r.explain}</div>`
+      + `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border-soft);">${q.explainCorrect}</div>`
+      + `<div style="margin-top:6px;font-weight:700;">Bewertung: ${ptLabel} (Wahl ${choiceCorrect ? 'richtig' : 'falsch'}, Begründung ${reflectCorrect ? 'richtig' : 'falsch'}).</div>`;
+    lessonResults.push(combined);
+    renderLessonProgress();
+    revealNextBtn();
   }));
 }
-function showFeedback(type, text) {
+function showFeedback(type, text, withholdNext) {
   const fb = document.getElementById('feedback');
   fb.className = 'feedback ' + type + ' show';
   const lbl = { correct: '✓ Richtig', hint: '⚠ Hinweis - nochmal versuchen', solution: 'Lösung' };
   fb.innerHTML = `<span class="label">${lbl[type]}</span><div>${text}</div>`;
   const nextBtn = document.getElementById('nextBtn');
-  if (type === 'correct' || type === 'solution') {
+  if ((type === 'correct' || type === 'solution') && !withholdNext) {
     nextBtn.classList.add('show');
     nextBtn.onclick = () => { currentQIndex++; renderQuestion(); };
   } else {
     nextBtn.classList.remove('show');
   }
+}
+function revealNextBtn() {
+  const nextBtn = document.getElementById('nextBtn');
+  if (!nextBtn) return;
+  nextBtn.classList.add('show');
+  nextBtn.onclick = () => { currentQIndex++; renderQuestion(); };
 }
 function showSolutionBtn(show) {
   const btn = document.getElementById('showSolutionBtn');
