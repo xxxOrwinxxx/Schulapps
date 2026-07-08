@@ -133,6 +133,7 @@
   .filter-btn[data-cat="noble"]           { --dot: #ff7eb3; }
   .filter-btn[data-cat="lanthanide"]      { --dot: #4acff0; }
   .filter-btn[data-cat="actinide"]        { --dot: #f07a4a; }
+  .filter-btn[data-cat="metal"]           { --dot: #9099a2; }
   .filter-row-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-right: 4px; align-self: center; font-weight: 600; }
   .search-wrap { margin-left: auto; }
   .search-wrap input { background: var(--panel-bg); border: 1px solid var(--border-soft); color: var(--text); font: inherit; font-size: 12px; padding: 5px 10px; border-radius: 3px; width: 200px; outline: none; }
@@ -886,6 +887,7 @@
   </div>
   <div class="filter-bar" id="filterBar2" style="padding-top:6px;padding-bottom:10px;">
     <span class="filter-row-label">Kategorie</span>
+    <button class="filter-btn" data-cat="metal">Metalle (gesamt)</button>
     <button class="filter-btn" data-cat="alkali">Alkalimetalle</button>
     <button class="filter-btn" data-cat="alkaline">Erdalkalimetalle</button>
     <button class="filter-btn" data-cat="transition">Übergangsmetalle</button>
@@ -1582,6 +1584,9 @@ function applyFilter() {
     else if (activeFilter.type === 'cat') {
       // "Nichtmetalle" umfasst auch Halogene (Halogene = Untergruppe der Nichtmetalle)
       if (activeFilter.value === 'nonmetal') match = cat === 'nonmetal' || cat === 'halogen';
+      // "Metalle (gesamt)" = alle Metall-Unterkategorien (Alkali, Erdalkali, Übergangs-,
+      // weitere Metalle wie Al/Ga/In/Sn/Pb, Lanthanoide, Actinoide), NICHT Halbmetalle.
+      else if (activeFilter.value === 'metal') match = ['alkali','alkaline','transition','post-transition','lanthanide','actinide'].includes(cat);
       else match = cat === activeFilter.value;
     }
     const searchMatch = !search || sym.toLowerCase().includes(search) || name.toLowerCase().includes(search) || String(z).includes(search);
