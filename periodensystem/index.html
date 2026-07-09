@@ -3022,10 +3022,31 @@ function backToOverview() {
 }
 document.getElementById('lessonBack').addEventListener('click', backToOverview);
 // ============================================================================
-// ERGEBNIS-EXPORT: Fortschritt als kopierbarer Code (Base64-JSON, Präfix PSE2-).
-// Enthält ausschließlich den Lernpfad-Fortschritt, keine personenbezogenen Daten.
+// ERGEBNIS-EXPORT: Fortschritt als kopierbarer Code (Base64-JSON, Präfix SC1-).
+// Gemeinsames Schnellcheck-Format der Auswertungs-App: flache Aufgabenliste über alle
+// Lektionen, je Aufgabe done/partial/wrong, plus der vom Schüler eingegebene Name.
 // ============================================================================
 const STUDENT_NAME_KEY = 'pse-student-name';
+
+// Baut den Ergebnis-Code im SC1-Format. Jede Frage jeder Lektion wird eine Aufgabe;
+// nicht bearbeitete Lektionen liefern Aufgaben ohne Ergebnis (in der Auswertung: nicht bearbeitet).
+function buildResultCode(name) {
+  const aufgaben = [];
+  lessons.forEach(l => {
+    const res = (progress[l.id] && Array.isArray(progress[l.id].results)) ? progress[l.id].results : [];
+    l.questions.forEach((q, i) => {
+      const eintrag = { id: 'L' + l.id + 'A' + (i + 1), titel: 'L' + l.id + '.' + (i + 1), block: l.title };
+      if (res[i]) eintrag.ergebnis = res[i];   // 'done' | 'partial' | 'wrong'; sonst nicht bearbeitet
+      aufgaben.push(eintrag);
+    });
+  });
+  const payload = {
+    v: 1, testId: 'pse-lernpfad', titel: 'PSE-Lernpfad', fach: 'CH', stufe: '10',
+    erstellt: new Date().toISOString().slice(0, 16), name: name, sid: null, aufgaben
+  };
+  if (progress.placementPassed) payload.meta = { placementPassed: true };
+  return 'SC1-' + btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+}
 function exportProgress() {
   let name = '';
   try { name = localStorage.getItem(STUDENT_NAME_KEY) || ''; } catch {}
@@ -3043,8 +3064,7 @@ function exportProgress() {
     name = entered.trim();
   }
   try { localStorage.setItem(STUDENT_NAME_KEY, name); } catch {}
-  const payload = { v: 2, datum: new Date().toISOString().slice(0, 10), name: name, fortschritt: progress };
-  const code = 'PSE2-' + btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+  const code = buildResultCode(name);
   const fallback = () => { prompt('Code bitte manuell kopieren (Strg+C):', code); };
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(code)
