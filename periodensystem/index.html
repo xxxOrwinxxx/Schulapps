@@ -3015,13 +3015,20 @@ document.getElementById('lessonBack').addEventListener('click', backToOverview);
 // ERGEBNIS-EXPORT: Fortschritt als kopierbarer Code (Base64-JSON, Präfix PSE2-).
 // Enthält ausschließlich den Lernpfad-Fortschritt, keine personenbezogenen Daten.
 // ============================================================================
+const STUDENT_NAME_KEY = 'pse-student-name';
 function exportProgress() {
-  const payload = { v: 2, datum: new Date().toISOString().slice(0, 10), fortschritt: progress };
+  let name = '';
+  try { name = localStorage.getItem(STUDENT_NAME_KEY) || ''; } catch {}
+  const entered = prompt('Dein Name (freiwillig, damit die Lehrkraft den Code zuordnen kann):', name);
+  if (entered === null) return;   // Abbruch: kein Code erzeugen
+  name = entered.trim();
+  try { localStorage.setItem(STUDENT_NAME_KEY, name); } catch {}
+  const payload = { v: 2, datum: new Date().toISOString().slice(0, 10), name: name, fortschritt: progress };
   const code = 'PSE2-' + btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
   const fallback = () => { prompt('Code bitte manuell kopieren (Strg+C):', code); };
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(code)
-      .then(() => alert('Ergebnis-Code kopiert. Er kann z. B. der Lehrkraft geschickt werden und enthält nur den Lernpfad-Fortschritt.'))
+      .then(() => alert('Ergebnis-Code kopiert' + (name ? ' (' + name + ')' : '') + '. Er enthält deinen Namen (falls angegeben) und den Lernpfad-Fortschritt, sonst nichts.'))
       .catch(fallback);
   } else { fallback(); }
 }
