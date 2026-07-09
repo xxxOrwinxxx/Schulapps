@@ -57,6 +57,8 @@
   .tbl-scroll{overflow-x:auto}
   .summary{font-size:.88rem; color:var(--muted); margin:4px 2px 12px}
   .summary b{color:var(--text)}
+  .colhelp{font-size:.78rem; color:var(--muted); margin:12px 2px 0; line-height:1.55}
+  .colhelp strong{color:var(--text)}
   .empty{color:var(--muted); font-size:.9rem; padding:20px 4px}
   footer{max-width:1000px; margin:28px auto 0; color:var(--muted); font-size:.78rem; text-align:center}
   @media print{
@@ -172,7 +174,7 @@ function render(){
       ${LESSON_IDS.map(id => `<th data-k="L${id}">L${id}</th>`).join('')}
       <th data-k="gesamt">Gesamt</th>
       <th>Bewertung</th>
-      <th>Einstufung</th>
+      <th>Einstufungstest</th>
     </tr></thead>`;
   const body = view.map(({ r, i }) => {
     const nameCell = r.name
@@ -185,7 +187,8 @@ function render(){
     const placeCell = `<td>${r.placement ? 'bestanden' : '<span class="cell-na">–</span>'}</td>`;
     return `<tr>${nameCell}<td>${r.datum || '<span class="cell-na">–</span>'}</td>${lessonCells}${gesamtCell}${tierCell}${placeCell}</tr>`;
   }).join('');
-  wrap.innerHTML = `<table>${head}<tbody>${body}</tbody></table>`;
+  wrap.innerHTML = `<table>${head}<tbody>${body}</tbody></table>`
+    + `<div class="colhelp"><strong>Spalten:</strong> L1 bis L5 = Prozent je Lektion · Gesamt = Ergebnis über alle Lektionen · Bewertung = Stufe (wie im Schülerbericht) · Einstufungstest = optionaler Vortest bestanden (nur bei Schülern, die ihn genutzt haben, sonst „–")</div>`;
 
   // Namensfelder an rows binden
   wrap.querySelectorAll('td.name input').forEach(inp => {
@@ -232,7 +235,7 @@ function parseInput(){
 function downloadCsv(){
   if(rows.length === 0){ alert('Erst Codes auswerten.'); return; }
   const sep = ';';
-  const head = ['Name','Datum','L1 %','L2 %','L3 %','L4 %','L5 %','Punkte','von','Gesamt %','Bewertung','Einstufung'];
+  const head = ['Name','Datum','L1 %','L2 %','L3 %','L4 %','L5 %','Punkte','von','Gesamt %','Bewertung','Einstufungstest'];
   const lines = [head.join(sep)];
   rows.forEach(r => {
     const t = r.gesamt == null ? '' : tierFor(r.gesamt).l;

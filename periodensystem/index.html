@@ -756,6 +756,10 @@
   .report-actions button { background: var(--surface); border: 1px solid var(--border-soft); color: var(--text); font: inherit; font-weight: 600; font-size: 12px; padding: 9px 18px; border-radius: 3px; cursor: pointer; }
   .report-actions button.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
   .report-actions button:hover { transform: translateY(-1px); }
+  .report-name { background: var(--tint-info); border: 1px solid var(--border-soft); border-radius: 8px; padding: 12px 14px; margin: 18px 0 4px; }
+  .report-name label { display: block; font-size: 13px; line-height: 1.5; margin-bottom: 8px; color: var(--text); }
+  .report-name input { width: 100%; max-width: 340px; font: inherit; font-size: 14px; padding: 9px 12px; border: 1px solid var(--accent); border-radius: 6px; background: var(--panel-bg); color: var(--text); }
+  .report-name input:focus { outline: none; box-shadow: 0 0 0 2px var(--accent); }
 
   /* Druck-Ansicht: einfach + sw-tauglich */
   @media print {
@@ -2974,6 +2978,10 @@ function renderFinalReport() {
       <div class="lesson-bars">${barsHTML}</div>
       ${strengthHTML}
       ${weaknessHTML}
+      <div class="report-name">
+        <label for="reportNameInput">Bitte gib deinen Namen ein. So kann ich dein Ergebnis dir zuordnen, dir gezielt Rückmeldung geben und dich im Lerngespräch besser unterstützen.</label>
+        <input type="text" id="reportNameInput" placeholder="Vor- und Nachname" autocomplete="name">
+      </div>
       <div class="report-actions">
         <button onclick="window.print()">🖨 Bericht drucken</button>
         <button id="reportExportBtn">📋 Ergebnis-Code kopieren</button>
@@ -2984,6 +2992,8 @@ function renderFinalReport() {
   // Event-Listener
   document.getElementById('reportBack').addEventListener('click', backToOverview);
   document.getElementById('reportExportBtn').addEventListener('click', exportProgress);
+  const reportNameField = document.getElementById('reportNameInput');
+  if (reportNameField) { try { reportNameField.value = localStorage.getItem('pse-student-name') || ''; } catch {} }
   const reportTrainingBtn = document.getElementById('reportTraining');
   if (reportTrainingBtn) reportTrainingBtn.addEventListener('click', startTraining);
   const restartBtn = document.getElementById('restartAllBtn');
@@ -3019,16 +3029,26 @@ const STUDENT_NAME_KEY = 'pse-student-name';
 function exportProgress() {
   let name = '';
   try { name = localStorage.getItem(STUDENT_NAME_KEY) || ''; } catch {}
-  const entered = prompt('Dein Name (freiwillig, damit die Lehrkraft den Code zuordnen kann):', name);
-  if (entered === null) return;   // Abbruch: kein Code erzeugen
-  name = entered.trim();
+  const field = document.getElementById('reportNameInput');
+  if (field) {
+    name = field.value.trim();
+    if (!name) {
+      alert('Bitte trag noch deinen Namen ein, dann kann ich dir dein Ergebnis zuordnen.');
+      field.focus();
+      return;
+    }
+  } else {
+    const entered = prompt('Bitte gib deinen Namen ein. So kann ich dein Ergebnis dir zuordnen und dir gezielt Rückmeldung geben.', name);
+    if (entered === null) return;
+    name = entered.trim();
+  }
   try { localStorage.setItem(STUDENT_NAME_KEY, name); } catch {}
   const payload = { v: 2, datum: new Date().toISOString().slice(0, 10), name: name, fortschritt: progress };
   const code = 'PSE2-' + btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
   const fallback = () => { prompt('Code bitte manuell kopieren (Strg+C):', code); };
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(code)
-      .then(() => alert('Ergebnis-Code kopiert' + (name ? ' (' + name + ')' : '') + '. Er enthält deinen Namen (falls angegeben) und den Lernpfad-Fortschritt, sonst nichts.'))
+      .then(() => alert((name ? 'Danke, ' + name + '! ' : '') + 'Dein Ergebnis-Code ist kopiert. Schick ihn wie besprochen an mich.'))
       .catch(fallback);
   } else { fallback(); }
 }
