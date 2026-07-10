@@ -1,0 +1,959 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Schnellcheck-Auswertung</title>
+<!--
+  Schnellcheck-Auswertung (Nachfolger der pse-auswertung).
+  Liest Ergebnis-Codes interaktiver Schnellchecks aus, verwaltet mehrere Klassen und
+  datierte Erhebungen, wertet je Aufgabe aus (geschafft / halb / nicht).
+  Alles rein lokal im Browser: keine externen Ressourcen, kein Upload, noindex.
+  Speicher-Technik (localStorage-Cache + File System Access API + IndexedDB-Handle)
+  aus der Kompetenzstand-App uebernommen.
+
+  Ampel am FOS-Notenschluessel orientiert: gruen ab Note 3 (55%), gelb Note 4 (40%),
+  rot Note 5/6 (unter 40%).
+
+  Stand: Bau-Happen 1 (Grundgeruest): Persistenz, Klassen-/Check-Verwaltung,
+  Code-Import (neues Format), Demo-Daten, Ergebnistabelle. Grafiken und Verlauf folgen.
+-->
+<style>
+  :root{
+    --bg:#f6f5f2; --card:#ffffff; --ink:#232019; --mut:#6b655c; --line:#e2ddd4;
+    --accent:#2f6d7a; --accent-ink:#ffffff;
+    --green:#3a7d44; --yellow:#d4920a; --red:#c84b2f; --grey:#9e9890;
+    --green-bg:#e6f0e6; --yellow-bg:#f8eecf; --red-bg:#f6e0d9; --grey-bg:#eeece8;
+    --radius:10px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+    font-size:15px; line-height:1.45;
+  }
+  .wrap{max-width:1400px; margin:0 auto; padding:16px}
+  header{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:6px}
+  h1{font-size:20px; margin:0; font-weight:650}
+  .sub{color:var(--mut); font-size:13px}
+  .grow{flex:1}
+  button{
+    font:inherit; cursor:pointer; border:1px solid var(--line); background:var(--card);
+    color:var(--ink); padding:6px 11px; border-radius:8px;
+  }
+  button:hover{border-color:var(--accent)}
+  button.primary{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+  button.small{padding:3px 8px; font-size:13px}
+  select,input,textarea{font:inherit; color:var(--ink); background:var(--card);
+    border:1px solid var(--line); border-radius:8px; padding:6px 9px}
+  textarea{width:100%; min-height:90px; resize:vertical}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px; margin:12px 0}
+  .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .label{font-size:13px; color:var(--mut)}
+  .dsgvo{font-size:12px; color:var(--mut); background:var(--grey-bg);
+    border:1px solid var(--line); border-radius:8px; padding:8px 11px}
+  .status-dot{display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--grey); margin-right:5px}
+  .status-dot.on{background:var(--green)}
+  .msg{font-size:13px; margin-top:8px; min-height:18px}
+  .msg.ok{color:var(--green)} .msg.warn{color:var(--red)}
+
+  /* Kennzahlen */
+  .tiles{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px}
+  .tile{flex:1; min-width:120px; background:var(--card); border:1px solid var(--line);
+    border-radius:var(--radius); padding:10px 12px}
+  .tile .big{font-size:22px; font-weight:650}
+  .tile .cap{font-size:12px; color:var(--mut)}
+
+  /* Tabelle */
+  .tablewrap{overflow-x:auto}
+  table{border-collapse:collapse; width:100%; font-size:14px}
+  th,td{border-bottom:1px solid var(--line); padding:6px 8px; text-align:left; vertical-align:middle}
+  /* Name und Ergebnis schrumpfen auf ihren Inhalt; die Aufgaben-Spalten teilen den freien Rest gleichmaessig */
+  th.namehead, td.name{position:sticky; left:0; background:var(--card); width:1%; white-space:nowrap}
+  th.reshead, td.rescell{width:1%; white-space:nowrap}
+  /* Aufgaben-Spalten: keine feste Breite (fuellen die freie Flaeche), Kopf und Zelle zentriert -> buendig */
+  th.aufg{padding:6px 4px; text-align:center; vertical-align:bottom; height:135px;
+    min-width:30px; font-weight:500; color:var(--mut)}
+  th.aufg span{writing-mode:vertical-rl; transform:rotate(180deg); display:inline-block; white-space:nowrap}
+  td.aufgcell{padding:6px 4px; text-align:center; min-width:30px}
+  th.sortable{cursor:pointer; white-space:nowrap}
+  .cell{display:inline-block; width:20px; height:20px; border-radius:5px; text-align:center;
+    line-height:20px; font-size:12px; color:#fff}
+  .c-done{background:var(--green)} .c-partial{background:var(--yellow)}
+  .c-wrong{background:var(--red)} .c-none{background:var(--grey); opacity:.4}
+  .badge{display:inline-block; padding:1px 8px; border-radius:20px; font-size:12px; font-weight:600}
+  .badge-green{background:var(--green-bg); color:var(--green)}
+  .badge-yellow{background:var(--yellow-bg); color:#a06a00}
+  .badge-red{background:var(--red-bg); color:var(--red)}
+  .badge-grey{background:var(--grey-bg); color:var(--mut)}
+  .pct{font-variant-numeric:tabular-nums; font-weight:600}
+  .empty{color:var(--mut); padding:20px; text-align:center}
+  .legend{display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--mut); margin-top:10px}
+  .legend span{display:inline-flex; align-items:center; gap:5px}
+  .sw{width:12px; height:12px; border-radius:3px; display:inline-block}
+  /* Themen-Ansicht */
+  th.themehead{cursor:pointer; text-align:center; vertical-align:middle; white-space:normal;
+    font-weight:600; color:var(--ink); padding:8px 10px; min-width:72px; line-height:1.25}
+  th.themehead:hover{color:var(--accent)}
+  th.themehead.open{background:var(--grey-bg); border-bottom:1px solid var(--line)}
+  td.themecell{text-align:center; padding:6px 6px}
+  .tpill{display:inline-block; min-width:44px; padding:3px 9px; border-radius:6px;
+    font-weight:600; font-size:13px; font-variant-numeric:tabular-nums; color:#fff}
+  .tpill-green{background:var(--green)} .tpill-yellow{background:var(--yellow)} .tpill-red{background:var(--red)}
+  .tpill-grey{background:var(--grey-bg); color:var(--mut)}
+  /* Ansicht-Umschalter (Erhebung / Verlauf) */
+  .viewtabs{display:flex; gap:8px; margin:12px 0 0}
+  .vtab{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:7px 14px;
+    cursor:pointer; color:var(--mut); font-weight:600}
+  .vtab:hover{border-color:var(--accent)}
+  .vtab.active{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+  /* Schuelerprofil (Happen 5) */
+  .prof-head{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:8px}
+  .prof-head h2{font-size:19px; margin:0; font-weight:650}
+  .prof-head .meta{color:var(--mut); font-size:13px}
+  .prof-theme{font-weight:600; margin:14px 0 4px; color:var(--ink)}
+  .prof-theme .tpill{margin-left:6px; font-size:12px}
+  .prof-list{list-style:none; margin:0; padding:0}
+  .prof-list li{display:flex; align-items:center; gap:10px; padding:5px 0; border-bottom:1px solid var(--line)}
+  .prof-list li:last-child{border-bottom:none}
+  .prof-list .taskname{flex:1}
+  .prof-list .restext{font-size:12.5px; color:var(--mut); min-width:96px; text-align:right}
+  .namelink{cursor:pointer; border-bottom:1px dotted var(--accent); color:var(--accent)}
+  .namelink:hover{color:var(--ink)}
+  /* Gemeinsames Lernstand-Blatt + zweispaltiges Profil-Layout (Grafik praesenter als Text) */
+  .prof-cols{display:flex; gap:14px; flex-wrap:wrap; align-items:stretch}
+  .prof-cols > .card{min-width:0}
+  .prof-cols > .prof-graf{flex:1.5 1 460px}
+  .prof-cols > .lf{flex:1 1 360px}
+  .lf h3{margin:0 0 6px}
+  .lf-hint{font-weight:400; color:var(--mut); font-size:12px}
+  .lf-sec{margin:14px 0}
+  .lf-sec h4{margin:0 0 4px; font-size:15px; color:var(--ink)}
+  .lf-sec ul{margin:4px 0 0; padding-left:20px}
+  .lf-sec li{margin:6px 0; font-size:14.5px; line-height:1.5}
+  .lf-recall{background:var(--grey-bg); border:1px solid var(--line); border-radius:8px;
+    padding:8px 10px; font-size:13px; margin:6px 0 10px; color:var(--ink)}
+  .lf-write{width:100%; min-height:80px; margin-top:8px; border:1px solid var(--line);
+    border-radius:8px; padding:8px; resize:vertical; font:inherit; color:var(--ink); background:var(--card)}
+  @media print{
+    .noprint{display:none !important}
+    #viewtabs,#analysis,#verlauf{display:none !important}
+    body{background:#fff; color:#000; font-size:13px}
+    .wrap{max-width:none; padding:0; margin:0}
+    .card{margin:0 0 10px; border:1px solid #bbb; break-inside:avoid}
+    #profil{display:block !important}
+    a[href]:after{content:""}
+    /* Farbmarker auch auf Papier zeigen (Chrome laesst Hintergruende sonst weg) */
+    .cell,.tpill,.badge{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  }
+</style>
+
+<div class="wrap">
+  <header class="noprint">
+    <div>
+      <h1>Schnellcheck-Auswertung</h1>
+      <div class="sub">Ergebnis-Codes einlesen, je Aufgabe auswerten, lokal gespeichert</div>
+    </div>
+    <div class="grow"></div>
+    <div class="row">
+      <span class="label"><span id="connDot" class="status-dot"></span><span id="connText">nur im Browser</span></span>
+      <button id="btnConnect" class="small">Auto-Speichern einrichten</button>
+      <button id="btnExport" class="small">Sicherung (.json)</button>
+      <button id="btnImportBackup" class="small">Sicherung laden</button>
+    </div>
+  </header>
+
+  <div class="dsgvo noprint">
+    Alle Daten bleiben rein lokal in diesem Browser (kein Upload, kein Server). Auto-Speichern in eine
+    eigene Datei geht nur in Chrome oder Edge. Es bleibt ein unbeaufsichtigter Selbsttest: ein Signal für
+    das Lerngespräch, kein sicherer Leistungsnachweis.
+  </div>
+
+  <!-- Kontext: Klasse + Check -->
+  <div class="card noprint">
+    <div class="row">
+      <span class="label">Klasse</span>
+      <select id="selClass"></select>
+      <button class="small" id="btnClassNew">Neu</button>
+      <button class="small" id="btnClassRename">Umbenennen</button>
+      <button class="small" id="btnClassDel">Löschen</button>
+      <span style="width:16px"></span>
+      <span class="label">Erhebung</span>
+      <select id="selCheck"></select>
+      <button class="small" id="btnCheckDel">Löschen</button>
+      <div class="grow"></div>
+      <button class="small" id="btnDemo">Demo-Klasse laden</button>
+    </div>
+  </div>
+
+  <!-- Code-Import -->
+  <div class="card noprint">
+    <div class="label" style="margin-bottom:6px">Ergebnis-Codes einfügen (ein Code pro Zeile, umliegender Text egal)</div>
+    <textarea id="codeInput" placeholder="SC1-..."></textarea>
+    <div class="row" style="margin-top:8px">
+      <button class="primary" id="btnRead">Codes einlesen</button>
+      <span class="label">werden zu einer neuen Erhebung in der gewählten Klasse</span>
+    </div>
+    <div id="readMsg" class="msg"></div>
+  </div>
+
+  <!-- Auswertung -->
+  <div id="viewtabs" class="noprint"></div>
+  <div id="analysis"></div>
+  <div id="verlauf" style="display:none"></div>
+  <div id="profil" style="display:none"></div>
+</div>
+
+<script>
+// ============================================================
+// FORMAT: Ergebnis-Code (der "Zettel")
+//   SC1-<Base64(JSON)>  mit JSON:
+//   { v, testId, titel, fach, stufe, erstellt, name, sid,
+//     aufgaben:[ {id, titel, ergebnis:'done'|'partial'|'wrong'} ] }
+// ============================================================
+const PREFIX = 'SC1-';
+const CODE_RE = /SC1-[A-Za-z0-9+/=]+/g;
+
+function encodeCode(payload){
+  return PREFIX + btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+}
+function decodeCode(raw){
+  const s = raw.trim();
+  if(!s.startsWith(PREFIX)) return null;
+  try{
+    const json = JSON.parse(decodeURIComponent(escape(atob(s.slice(PREFIX.length)))));
+    if(json && json.v && Array.isArray(json.aufgaben)) return json;
+  }catch(e){}
+  return null;
+}
+
+// ============================================================
+// STORE (einzige Wahrheitsquelle)
+//   store = { version, activeClassId, activeCheckId, savedAt, settings,
+//     classes:[ { id, name, checks:[
+//        { id, testId, titel, datum, aufgaben:[{id,titel}],
+//          students:[ {name, sid, results:{aufgId:'done'|'partial'|'wrong'}} ] } ] } ] }
+// ============================================================
+let store = null;
+let fileHandle = null, connected = false, saveTimer = null;
+
+const STORE_KEY = 'schnellcheck_auswertung_v1';
+const DB_NAME = 'schnellcheck_auswertung';
+const DB_STORE = 'handles';
+function uid(){ return Math.random().toString(36).slice(2,8) + Date.now().toString(36); }
+
+function ensureStore(){
+  if(!store) store = { version:1, activeClassId:null, activeCheckId:null,
+    settings:{ weightPartial:0.5, thrGruen:55, thrGelb:40, anon:false }, classes:[] };
+  if(!store.settings) store.settings = { weightPartial:0.5, thrGruen:55, thrGelb:40, anon:false };
+}
+function activeClass(){ return store ? store.classes.find(c=>c.id===store.activeClassId) || null : null; }
+function activeCheck(){
+  const c = activeClass(); if(!c) return null;
+  return c.checks.find(t=>t.id===store.activeCheckId) || c.checks[c.checks.length-1] || null;
+}
+
+// ============================================================
+// HELFER: Bewertung
+//   Ampel am FOS-Notenschluessel: gruen ab Note 3 (55%), gelb Note 4 (40%),
+//   rot Note 5/6 (unter 40%). Labels bedeutungsbasiert, keine Notenziffern.
+// ============================================================
+function getSettings(){
+  ensureStore(); const s = store.settings || {};
+  return {
+    weightPartial: typeof s.weightPartial==='number' ? s.weightPartial : 0.5,
+    thrGruen: typeof s.thrGruen==='number' ? s.thrGruen : 55,
+    thrGelb: typeof s.thrGelb==='number' ? s.thrGelb : 40,
+    anon: !!s.anon
+  };
+}
+// Score 0..1: Nenner = ALLE Aufgaben des Checks (itemGesamt). done=1, partial=Gewicht, wrong/fehlt=0.
+function scoreOfStudent(student, aufgaben){
+  if(!aufgaben.length) return null;
+  const w = getSettings().weightPartial;
+  let pts = 0;
+  aufgaben.forEach(a=>{
+    const r = student.results[a.id];
+    if(r==='done') pts += 1; else if(r==='partial') pts += w;
+  });
+  return pts / aufgaben.length;
+}
+function pctOf(score){ return score===null ? null : Math.round(score*100); }
+function statusOf(pct){
+  if(pct===null||pct===undefined) return {badge:'badge-grey', text:'keine Daten'};
+  const {thrGruen,thrGelb} = getSettings();
+  if(pct>=thrGruen) return {badge:'badge-green', text:'verstanden'};
+  if(pct>=thrGelb) return {badge:'badge-yellow', text:'knapp bestanden'};
+  return {badge:'badge-red', text:'Förderbedarf'};
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ============================================================
+// PERSISTENZ: localStorage-Cache + Datei (File System Access API)
+// ============================================================
+function persist(){
+  ensureStore(); store.savedAt = Date.now();
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(store)); }catch(e){}
+  scheduleFileSave();
+}
+function scheduleFileSave(){ if(!connected||!fileHandle) return; clearTimeout(saveTimer); saveTimer=setTimeout(writeFile,500); }
+async function writeFile(){
+  if(!connected||!fileHandle) return;
+  try{ const w=await fileHandle.createWritable(); await w.write(JSON.stringify(store,null,2)); await w.close(); updateConnUI(); }
+  catch(e){ connected=false; updateConnUI(); }
+}
+function loadCache(){
+  try{ const raw=localStorage.getItem(STORE_KEY);
+    if(raw){ const d=JSON.parse(raw); if(d && Array.isArray(d.classes)){ store=d; return true; } } }catch(e){}
+  return false;
+}
+// Datei-Handle in IndexedDB (nur der Zeiger, keine Schuelerdaten)
+function idb(){ return new Promise((res,rej)=>{ const r=indexedDB.open(DB_NAME,1);
+  r.onupgradeneeded=()=>r.result.createObjectStore(DB_STORE); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); }
+async function saveHandle(h){ try{ const db=await idb(); db.transaction(DB_STORE,'readwrite').objectStore(DB_STORE).put(h,'file'); }catch(e){} }
+async function loadHandle(){ try{ const db=await idb(); return await new Promise(res=>{
+  const rq=db.transaction(DB_STORE,'readonly').objectStore(DB_STORE).get('file'); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>res(null); }); }catch(e){ return null; } }
+
+const FS_SUPPORTED = ('showSaveFilePicker' in window);
+async function setupFile(){
+  if(!FS_SUPPORTED){ alert('Dieser Browser kann nicht automatisch in eine Datei speichern. Bitte Chrome oder Edge nutzen, oder regelmäßig Sicherung (.json) exportieren.'); return; }
+  try{
+    fileHandle = await window.showSaveFilePicker({ suggestedName:'schnellcheck-auswertung.json',
+      types:[{description:'Auswertungs-Datei', accept:{'application/json':['.json']}}] });
+    await saveHandle(fileHandle); connected=true; ensureStore(); await writeFile(); updateConnUI();
+  }catch(e){ if(e.name!=='AbortError') alert('Datei konnte nicht eingerichtet werden: '+e.message); }
+}
+async function connectFile(){
+  if(!fileHandle) fileHandle = await loadHandle();
+  if(!fileHandle) return setupFile();
+  try{
+    let p = await fileHandle.queryPermission({mode:'readwrite'});
+    if(p!=='granted') p = await fileHandle.requestPermission({mode:'readwrite'});
+    if(p!=='granted'){ alert('Zugriff auf die Datei wurde nicht erteilt.'); return; }
+    connected=true;
+    const f=await fileHandle.getFile(); const fs=JSON.parse(await f.text());
+    if(fs && Array.isArray(fs.classes) && (fs.savedAt||0)>=(store?.savedAt||0)){ store=fs; afterStoreChanged(); }
+    else updateConnUI();
+  }catch(e){ alert('Verbinden fehlgeschlagen: '+e.message); }
+}
+
+// Manuelle Sicherung
+function exportBackup(){
+  ensureStore();
+  const blob=new Blob([JSON.stringify(store,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='schnellcheck-auswertung_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function importBackupFile(file){
+  const r=new FileReader();
+  r.onload=e=>{ try{ const d=JSON.parse(e.target.result);
+    if(d && Array.isArray(d.classes)){ store=d; persist(); afterStoreChanged(); }
+    else alert('Diese Datei passt nicht (keine Klassen gefunden).'); }
+    catch(err){ alert('Datei konnte nicht gelesen werden: '+err.message); } };
+  r.readAsText(file);
+}
+
+// ============================================================
+// KLASSEN / CHECKS verwalten
+// ============================================================
+function newClass(){
+  const name=prompt('Name der Klasse (z.B. 10a Chemie):','');
+  if(!name) return;
+  const c={ id:uid(), name:name.trim(), checks:[] };
+  ensureStore(); store.classes.push(c); store.activeClassId=c.id; store.activeCheckId=null;
+  persist(); afterStoreChanged();
+}
+function renameClass(){
+  const c=activeClass(); if(!c) return;
+  const name=prompt('Klasse umbenennen:', c.name); if(!name) return;
+  c.name=name.trim(); persist(); afterStoreChanged();
+}
+function deleteClass(){
+  const c=activeClass(); if(!c) return;
+  if(!confirm('Klasse "'+c.name+'" mit allen Erhebungen löschen?')) return;
+  store.classes=store.classes.filter(x=>x.id!==c.id);
+  store.activeClassId=store.classes[0]?.id||null; store.activeCheckId=null;
+  persist(); afterStoreChanged();
+}
+function deleteCheck(){
+  const c=activeClass(), t=activeCheck(); if(!c||!t) return;
+  if(!confirm('Erhebung "'+t.titel+'" ('+t.datum.slice(0,10)+') löschen?')) return;
+  c.checks=c.checks.filter(x=>x.id!==t.id);
+  store.activeCheckId=c.checks[c.checks.length-1]?.id||null;
+  persist(); afterStoreChanged();
+}
+
+// ============================================================
+// IMPORT: eingefuegte Codes -> eine neue Erhebung
+// ============================================================
+function readCodes(){
+  const c=activeClass();
+  const msg=document.getElementById('readMsg');
+  if(!c){ msg.className='msg warn'; msg.textContent='Bitte zuerst eine Klasse anlegen oder wählen.'; return; }
+  const text=document.getElementById('codeInput').value;
+  const matches=text.match(CODE_RE)||[];
+  if(!matches.length){ msg.className='msg warn'; msg.textContent='Keine Codes gefunden (erwartet: SC1-...).'; return; }
+
+  let ok=0, bad=0;
+  const students=[]; const aufgMap=new Map(); // id -> titel (Vereinigung ueber alle Codes)
+  let titel='Schnellcheck', testId='', datum=new Date().toISOString().slice(0,16);
+  matches.forEach(m=>{
+    const p=decodeCode(m);
+    if(!p){ bad++; return; }
+    ok++;
+    if(ok===1){ titel=p.titel||titel; testId=p.testId||''; if(p.erstellt) datum=p.erstellt; }
+    p.aufgaben.forEach(a=>{ if(a.id && !aufgMap.has(a.id)) aufgMap.set(a.id, {titel:a.titel||a.id, block:a.block||''}); });
+    const results={}; p.aufgaben.forEach(a=>{ if(a.id) results[a.id]=a.ergebnis; });
+    students.push({ name:(p.name||'').trim(), sid:p.sid||null, results });
+  });
+  if(!ok){ msg.className='msg warn'; msg.textContent='Kein Code lesbar ('+bad+' fehlerhaft).'; return; }
+
+  const aufgaben=[...aufgMap.entries()].map(([id,d])=>({id, titel:d.titel, block:d.block}));
+  const check={ id:uid(), testId, titel, datum, aufgaben, students };
+  c.checks.push(check);
+  store.activeCheckId=check.id;
+  persist(); afterStoreChanged();
+  document.getElementById('codeInput').value='';
+  msg.className='msg ok'; msg.textContent=ok+' Code(s) eingelesen'+(bad?(', '+bad+' fehlerhaft'):'')+'. Neue Erhebung "'+titel+'" angelegt.';
+}
+
+// ============================================================
+// UI: Kontext-Leisten fuellen
+// ============================================================
+function fillControls(){
+  ensureStore();
+  const sc=document.getElementById('selClass');
+  sc.innerHTML = store.classes.length
+    ? store.classes.map(c=>`<option value="${c.id}" ${c.id===store.activeClassId?'selected':''}>${escapeHtml(c.name)}</option>`).join('')
+    : '<option value="">(keine Klasse)</option>';
+  const c=activeClass();
+  const st=document.getElementById('selCheck');
+  if(c && c.checks.length){
+    const sorted=[...c.checks].sort((a,b)=>a.datum.localeCompare(b.datum));
+    st.innerHTML=sorted.map(t=>`<option value="${t.id}" ${t.id===(activeCheck()?.id)?'selected':''}>${escapeHtml(t.datum.slice(0,10)+'  ·  '+t.titel)}</option>`).join('');
+    st.disabled=false;
+  }else{ st.innerHTML='<option value="">(keine Erhebung)</option>'; st.disabled=true; }
+}
+
+// ============================================================
+// UI: Auswertung (Kennzahlen + Tabelle)
+// ============================================================
+let sortKey='name', sortDir=1;
+let expandedBlocks=new Set();   // aufgeklappte Themen (block-Namen)
+let lastGroups=[];              // Gruppen des letzten Renders (fuer Klick-Toggle per Index)
+
+// Aufgaben nach Thema (block) gruppieren, Reihenfolge des ersten Vorkommens.
+function groupAufgaben(aufgaben){
+  const groups=[], idx={};
+  aufgaben.forEach(a=>{ const b=a.block||''; if(!(b in idx)){ idx[b]=groups.length; groups.push({block:b, aufgaben:[]}); } groups[idx[b]].aufgaben.push(a); });
+  return groups;
+}
+// Score 0..1 eines Schuelers ueber eine Teilmenge von Aufgaben (Nenner = alle Aufgaben der Teilmenge).
+function scoreOverAufgaben(student, aufgaben){
+  if(!aufgaben.length) return null;
+  const w=getSettings().weightPartial; let pts=0;
+  aufgaben.forEach(a=>{ const r=student.results[a.id]; if(r==='done')pts+=1; else if(r==='partial')pts+=w; });
+  return pts/aufgaben.length;
+}
+function toggleBlock(i){
+  const g=lastGroups[i]; if(!g||!g.block) return;
+  if(expandedBlocks.has(g.block)) expandedBlocks.delete(g.block); else expandedBlocks.add(g.block);
+  renderAnalysis();
+}
+// Farbiges Kaestchen fuer eine Einzelaufgabe.
+function aufgCellHtml(student, a){
+  const v=student.results[a.id];
+  const cls=v==='done'?'c-done':v==='partial'?'c-partial':v==='wrong'?'c-wrong':'c-none';
+  const sym=v==='done'?'✓':v==='partial'?'~':v==='wrong'?'✗':'';
+  return `<td class="aufgcell"><span class="cell ${cls}" title="${escapeHtml(a.titel)}">${sym}</span></td>`;
+}
+// Themen-Kachel: Prozent in Ampelfarbe.
+function themePill(pct){
+  if(pct===null) return '<span class="tpill tpill-grey">–</span>';
+  const {thrGruen,thrGelb}=getSettings();
+  const c=pct>=thrGruen?'green':pct>=thrGelb?'yellow':'red';
+  return `<span class="tpill tpill-${c}">${pct}%</span>`;
+}
+
+function renderAnalysis(){
+  const box=document.getElementById('analysis');
+  const t=activeCheck();
+  if(!t){ box.innerHTML='<div class="card empty">Noch keine Erhebung. Codes einfügen oder Demo-Klasse laden.</div>'; return; }
+
+  const auf=t.aufgaben;
+  const groups=groupAufgaben(auf); lastGroups=groups;
+  const themed=groups.filter(g=>g.block).length>=2;        // Themen-Ansicht nur bei mind. zwei echten Themen
+  const anyOpen=groups.some(g=>expandedBlocks.has(g.block));
+
+  const rows=t.students.map(s=>{ const sc=scoreOfStudent(s,auf); return {s, score:sc, pct:pctOf(sc)}; });
+  const withPct=rows.filter(r=>r.pct!==null);
+  const schnitt=withPct.length ? Math.round(withPct.reduce((a,r)=>a+r.pct,0)/withPct.length) : null;
+
+  rows.sort((A,B)=>{
+    if(sortKey==='name') return sortDir*A.s.name.localeCompare(B.s.name);
+    if(sortKey==='score') return sortDir*((A.pct??-1)-(B.pct??-1));
+    return 0;
+  });
+
+  // Staerkste / schwaechste Einheit (Thema wenn gruppiert, sonst Aufgabe)
+  const einheiten=themed ? groups.map(g=>({label:g.block, aufgaben:g.aufgaben})) : auf.map(a=>({label:a.titel, aufgaben:[a]}));
+  const eStats=einheiten.map(e=>{
+    let done=0,part=0,wrong=0;
+    t.students.forEach(s=>e.aufgaben.forEach(a=>{ const r=s.results[a.id]; if(r==='done')done++; else if(r==='partial')part++; else if(r==='wrong')wrong++; }));
+    const n=done+part+wrong;
+    return {label:e.label, pct:n?Math.round((done+part*0.5)/n*100):null};
+  });
+  const g2=eStats.filter(x=>x.pct!==null);
+  const stark=g2.length? g2.reduce((m,x)=>x.pct>m.pct?x:m):null;
+  const schwach=g2.length? g2.reduce((m,x)=>x.pct<m.pct?x:m):null;
+
+  const st=getSettings();
+  let html='';
+  html+='<div class="tiles">';
+  html+=tile(t.students.length,'Schüler');
+  html+=tile(schnitt===null?'–':schnitt+'%','Klassenschnitt');
+  html+=tile(themed?groups.length:auf.length, themed?'Themen':'Aufgaben');
+  const ew=themed?'Thema':'Aufgabe';
+  if(stark) html+=tile(stark.pct+'%','stärkstes '+ew+': '+escapeHtml(shorten(stark.label,18)));
+  if(schwach) html+=tile(schwach.pct+'%','schwächstes '+ew+': '+escapeHtml(shorten(schwach.label,18)));
+  html+='</div>';
+
+  html+='<div class="card"><div class="tablewrap"><table><thead>';
+  if(themed && anyOpen){
+    html+='<tr>';
+    html+=`<th rowspan="2" class="sortable namehead" onclick="setSort('name')">Name ${sortArrow('name')}</th>`;
+    groups.forEach((g,i)=>{
+      if(expandedBlocks.has(g.block)) html+=`<th class="themehead open" colspan="${g.aufgaben.length}" onclick="toggleBlock(${i})" title="zuklappen">▾ ${escapeHtml(g.block)}</th>`;
+      else html+=`<th rowspan="2" class="themehead" onclick="toggleBlock(${i})" title="aufklappen">▸ ${escapeHtml(g.block)}</th>`;
+    });
+    html+=`<th rowspan="2" class="sortable reshead" onclick="setSort('score')">Ergebnis ${sortArrow('score')}</th>`;
+    html+='</tr><tr>';
+    groups.forEach(g=>{ if(expandedBlocks.has(g.block)) g.aufgaben.forEach(a=>{ html+=`<th class="aufg" title="${escapeHtml(a.titel)}"><span>${escapeHtml(shorten(a.titel,22))}</span></th>`; }); });
+    html+='</tr>';
+  }else if(themed){
+    html+='<tr>';
+    html+=`<th class="sortable namehead" onclick="setSort('name')">Name ${sortArrow('name')}</th>`;
+    groups.forEach((g,i)=>{ html+=`<th class="themehead" onclick="toggleBlock(${i})" title="aufklappen">▸ ${escapeHtml(g.block)}</th>`; });
+    html+=`<th class="sortable reshead" onclick="setSort('score')">Ergebnis ${sortArrow('score')}</th>`;
+    html+='</tr>';
+  }else{
+    html+='<tr>';
+    html+=`<th class="sortable namehead" onclick="setSort('name')">Name ${sortArrow('name')}</th>`;
+    auf.forEach(a=>{ html+=`<th class="aufg" title="${escapeHtml(a.titel)}"><span>${escapeHtml(shorten(a.titel,22))}</span></th>`; });
+    html+=`<th class="sortable reshead" onclick="setSort('score')">Ergebnis ${sortArrow('score')}</th>`;
+    html+='</tr>';
+  }
+  html+='</thead><tbody>';
+  rows.forEach(r=>{
+    html+='<tr>';
+    html+=`<td class="name"><span class="namelink" data-name="${escapeHtml(r.s.name)}" onclick="openProfil(this.dataset.name)" title="Profil öffnen">${escapeHtml(r.s.name||'(ohne Name)')}</span></td>`;
+    if(themed){
+      groups.forEach(g=>{
+        if(expandedBlocks.has(g.block)) g.aufgaben.forEach(a=>{ html+=aufgCellHtml(r.s,a); });
+        else html+=`<td class="themecell">${themePill(pctOf(scoreOverAufgaben(r.s,g.aufgaben)))}</td>`;
+      });
+    }else{
+      auf.forEach(a=>{ html+=aufgCellHtml(r.s,a); });
+    }
+    const stt=statusOf(r.pct);
+    html+=`<td class="rescell"><span class="pct">${r.pct===null?'–':r.pct+'%'}</span> <span class="badge ${stt.badge}">${stt.text}</span></td>`;
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+  html+='<div class="legend">'+
+    (themed?'<span>Klick auf ein Thema klappt seine Einzelaufgaben auf</span>':'')+
+    '<span><span class="sw c-done"></span>geschafft</span>'+
+    '<span><span class="sw c-partial"></span>halb</span>'+
+    '<span><span class="sw c-wrong"></span>nicht</span>'+
+    '<span><span class="sw c-none" style="opacity:.4"></span>nicht bearbeitet</span>'+
+    `<span>Ampel: verstanden ab ${st.thrGruen}%, knapp bestanden ab ${st.thrGelb}%, darunter Förderbedarf</span></div>`;
+  html+='</div>';
+  box.innerHTML=html;
+}
+function tile(big,cap){ return `<div class="tile"><div class="big">${big}</div><div class="cap">${cap}</div></div>`; }
+function shorten(s,n){ s=String(s); return s.length>n? s.slice(0,n)+'…':s; }
+function sortArrow(k){ return sortKey===k? (sortDir>0?'▲':'▼'):''; }
+function setSort(k){ if(sortKey===k) sortDir*=-1; else{ sortKey=k; sortDir=1; } renderAnalysis(); }
+
+// ============================================================
+// ANSICHT-UMSCHALTER + VERLAUF (eigenes SVG, keine Bibliothek)
+// ============================================================
+let activeView='tabelle';   // 'tabelle' (aktive Erhebung) | 'verlauf' (ueber das Jahr) | 'profil' (Schuelerprofil)
+let verlaufStudent='';       // hervorgehobener Schueler (Name), '' = nur Klassenschnitt
+let profilStudent='';        // im Schuelerprofil ausgewaehlter Schueler (Name)
+
+function classAvgAt(check){
+  const scs=check.students.map(s=>pctOf(scoreOfStudent(s,check.aufgaben))).filter(p=>p!==null);
+  return scs.length? scs.reduce((a,b)=>a+b,0)/scs.length : null;
+}
+function studentPctAt(name, check){
+  const s=check.students.find(x=>x.name===name);
+  return s? pctOf(scoreOfStudent(s,check.aufgaben)) : null;
+}
+function setView(v){ activeView=v; renderView(); }
+function setVerlaufStudent(nm){ verlaufStudent=nm; const c=activeClass(); renderVerlauf(c, [...c.checks].sort((a,b)=>a.datum.localeCompare(b.datum))); }
+
+function vtabBtn(v,label){ return `<button class="vtab ${activeView===v?'active':''}" onclick="setView('${v}')">${label}</button>`; }
+// Dispatcher: Umschalter bauen, dann Tabelle / Verlauf / Profil zeigen.
+function renderView(){
+  const c=activeClass();
+  const checks=c?[...c.checks].sort((a,b)=>a.datum.localeCompare(b.datum)):[];
+  const t=activeCheck();
+  const canVerlauf=checks.length>=2;
+  const canProfil=!!(t && t.students.length);
+  // Auf gueltige Ansicht zurueckfallen, wenn die gewaehlte gerade nicht verfuegbar ist
+  if(activeView==='verlauf' && !canVerlauf) activeView='tabelle';
+  if(activeView==='profil' && !canProfil) activeView='tabelle';
+  const tabs=document.getElementById('viewtabs');
+  if(canVerlauf || canProfil){
+    tabs.innerHTML='<div class="viewtabs">'+vtabBtn('tabelle','Diese Erhebung')+
+      (canVerlauf?vtabBtn('verlauf','Verlauf über das Jahr'):'')+
+      (canProfil?vtabBtn('profil','Schülerprofil'):'')+'</div>';
+  }else tabs.innerHTML='';
+  const showV=activeView==='verlauf', showP=activeView==='profil';
+  document.getElementById('analysis').style.display=(showV||showP)?'none':'';
+  document.getElementById('verlauf').style.display=showV?'':'none';
+  document.getElementById('profil').style.display=showP?'':'none';
+  if(showV) renderVerlauf(c, checks);
+  else if(showP) renderProfil(c, checks);
+  else renderAnalysis();
+}
+
+// Verlauf: Klassenschnitt-Linie ueber die datierten Erhebungen plus w 	aehlbare Schuelerlinie.
+// SVG-Grafik des Jahresverlaufs: Klassenschnitt-Linie + optional EINE hervorgehobene Schuelerlinie.
+// Von der Verlauf-Ansicht und vom Schuelerprofil (Happen 5) gemeinsam genutzt.
+function buildVerlaufSvg(checks, highlightName){
+  const COL={red:'#c84b2f',yellow:'#d4920a',green:'#3a7d44',grey:'#9e9890',ink:'#232019',accent:'#2f6d7a',line:'#e2ddd4',mut:'#6b655c'};
+  const st=getSettings();
+  const W=760,H=360,padL=44,padR=108,padT=18,padB=54;
+  const plotW=W-padL-padR, plotH=H-padT-padB, n=checks.length;
+  const X=i=> n===1? padL+plotW/2 : padL + i*(plotW/(n-1));
+  const Y=p=> padT + (1-p/100)*plotH;
+  const zone=(p1,p2,col)=>`<rect x="${padL}" y="${Y(p2)}" width="${plotW}" height="${Y(p1)-Y(p2)}" fill="${col}" opacity="0.22"/>`;
+  const zoneLabel=(pMid,txt,col)=>`<text x="${W-padR+8}" y="${Y(pMid)+3}" text-anchor="start" font-size="10.5" font-weight="700" fill="${col}">${txt}</text>`;
+  let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:860px" role="img" aria-label="Verlauf über das Schuljahr">`;
+  svg+=zone(0,st.thrGelb,COL.red)+zone(st.thrGelb,st.thrGruen,COL.yellow)+zone(st.thrGruen,100,COL.green);
+  svg+=`<line x1="${padL}" y1="${Y(st.thrGruen)}" x2="${W-padR}" y2="${Y(st.thrGruen)}" stroke="${COL.green}" stroke-width="1" stroke-dasharray="4 3" opacity="0.6"/>`;
+  svg+=`<line x1="${padL}" y1="${Y(st.thrGelb)}" x2="${W-padR}" y2="${Y(st.thrGelb)}" stroke="${COL.red}" stroke-width="1" stroke-dasharray="4 3" opacity="0.6"/>`;
+  svg+=zoneLabel((st.thrGruen+100)/2,'verstanden',COL.green)+zoneLabel((st.thrGelb+st.thrGruen)/2,'knapp bestanden','#9a6400')+zoneLabel(st.thrGelb/2,'Förderbedarf',COL.red);
+  [0,25,50,75,100].forEach(p=>{ svg+=`<line x1="${padL}" y1="${Y(p)}" x2="${W-padR}" y2="${Y(p)}" stroke="${COL.line}" stroke-width="1"/>`;
+    svg+=`<text x="${padL-6}" y="${Y(p)+3}" text-anchor="end" font-size="10" fill="${COL.mut}">${p}</text>`; });
+  checks.forEach((ch,i)=>{ svg+=`<text x="${X(i)}" y="${H-padB+16}" text-anchor="middle" font-size="10" fill="${COL.mut}">${ch.datum.slice(5,10)}</text>`;
+    svg+=`<text x="${X(i)}" y="${H-padB+30}" text-anchor="middle" font-size="9" fill="${COL.mut}">${escapeHtml(shorten(ch.titel,12))}</text>`; });
+  const avg=[]; checks.forEach((ch,i)=>{ const a=classAvgAt(ch); if(a!==null) avg.push([X(i),Y(a),ch.id]); });
+  if(avg.length>=2) svg+=`<polyline points="${avg.map(q=>q[0]+','+q[1]).join(' ')}" fill="none" stroke="${COL.ink}" stroke-width="2.5"/>`;
+  avg.forEach(q=>{ svg+=`<circle cx="${q[0]}" cy="${q[1]}" r="4" fill="${COL.ink}" style="cursor:pointer" onclick="openErhebung('${q[2]}')"><title>Erhebung öffnen</title></circle>`; });
+  if(highlightName){
+    const pts=[]; checks.forEach((ch,i)=>{ const p=studentPctAt(highlightName,ch); if(p!==null) pts.push([X(i),Y(p),Math.round(p),ch.id]); });
+    if(pts.length>=2) svg+=`<polyline points="${pts.map(q=>q[0]+','+q[1]).join(' ')}" fill="none" stroke="${COL.accent}" stroke-width="2.5"/>`;
+    pts.forEach(q=>{ svg+=`<circle cx="${q[0]}" cy="${q[1]}" r="5" fill="${COL.accent}" style="cursor:pointer" onclick="openErhebung('${q[3]}')"><title>Erhebung öffnen</title></circle>`;
+      svg+=`<text x="${q[0]}" y="${q[1]-9}" text-anchor="middle" font-size="11" font-weight="600" fill="${COL.accent}" style="cursor:pointer" onclick="openErhebung('${q[3]}')">${q[2]}%</text>`; });
+  }
+  svg+='</svg>';
+  return svg;
+}
+function renderVerlauf(c, checks){
+  const box=document.getElementById('verlauf');
+  const COL={red:'#c84b2f',yellow:'#d4920a',green:'#3a7d44',grey:'#9e9890',ink:'#232019',accent:'#2f6d7a',line:'#e2ddd4',mut:'#6b655c'};
+  const st=getSettings();
+  const namesSet=new Set(); checks.forEach(ch=>ch.students.forEach(s=>{ if(s.name) namesSet.add(s.name); }));
+  const names=[...namesSet].sort((a,b)=>a.localeCompare(b));
+
+  const svg=buildVerlaufSvg(checks, verlaufStudent);
+
+  let html='<div class="card">';
+  html+='<div class="row" style="margin-bottom:8px">';
+  html+='<span class="label">Schüler hervorheben</span>';
+  html+=`<select id="verlaufSel" onchange="setVerlaufStudent(this.value)"><option value="">(nur Klassenschnitt)</option>`+
+    names.map(nm=>`<option value="${escapeHtml(nm)}" ${nm===verlaufStudent?'selected':''}>${escapeHtml(nm)}</option>`).join('')+'</select>';
+  html+='<div class="grow"></div><span class="label">'+checks.length+' Erhebungen</span>';
+  html+='</div>';
+  html+='<div class="tablewrap">'+svg+'</div>';
+  html+='<div class="legend">'+
+    `<span><span class="sw" style="background:${COL.ink}"></span>Klassenschnitt</span>`+
+    (verlaufStudent?`<span><span class="sw" style="background:${COL.accent}"></span>${escapeHtml(verlaufStudent)}</span>`:'')+
+    (verlaufStudent?'<span>Klick auf einen Punkt oder Prozentwert öffnet die Erhebung</span>':'<span>oben einen Schüler wählen, um seine Linie zu sehen</span>')+
+    `<span>Zonen (rechts beschriftet): verstanden ab ${st.thrGruen}%, knapp bestanden ab ${st.thrGelb}%, darunter Förderbedarf</span>`+
+    '</div>';
+  html+='</div>';
+  box.innerHTML=html;
+}
+// Klick auf einen Verlaufspunkt: genau diese Erhebung in der Tabellen-Ansicht oeffnen.
+function openErhebung(id){ store.activeCheckId=id; activeView='tabelle'; persist(); afterStoreChanged(); window.scrollTo(0,0); }
+
+// ============================================================
+// SCHUELERPROFIL (Happen 5) — Gespraechsgrundlage, druckbar
+//   Gesamtstand + Klassenschnitt + Delta, seine Verlaufslinie,
+//   Einzelergebnisse je Aufgabe, leeres Reflexionsfeld zum Ausfuellen/Ausdrucken.
+// ============================================================
+function setProfilStudent(nm){ profilStudent=nm; renderView(); }
+function openProfil(name){ profilStudent=name||''; activeView='profil'; renderView(); window.scrollTo(0,0); }
+function stepProfil(dir){
+  const t=activeCheck(); if(!t) return;
+  const names=[...t.students].map(s=>s.name).sort((a,b)=>(a||'').localeCompare(b||''));
+  if(!names.length) return;
+  let i=names.indexOf(profilStudent); if(i<0) i=0;
+  i=(i+dir+names.length)%names.length; profilStudent=names[i]; renderView();
+}
+function printProfil(){ window.print(); }
+// Notiz "naechste Schritte" pro Schueler + Erhebung speichern (lokal, ohne Re-Render, damit der Fokus bleibt).
+function saveProfilNote(v){
+  const t=activeCheck(); if(!t) return;
+  const st=t.students.find(x=>x.name===profilStudent);
+  if(st){ st.note=v; persist(); }
+}
+
+// Fortschrittsreihe eines Schuelers ueber die (chronologischen) Erhebungen: nur wo er vorkommt.
+function studentSeries(name, checks){
+  const out=[];
+  checks.forEach(ch=>{ const s=ch.students.find(x=>x.name===name); if(s) out.push({check:ch, pct:pctOf(scoreOfStudent(s, ch.aufgaben))}); });
+  return out;
+}
+// Eine Aufgabenzeile im Profil: Symbol + Farbe + Klartext (dreifach lesbar).
+function profRow(student, a){
+  const v=student.results[a.id];
+  const cls=v==='done'?'c-done':v==='partial'?'c-partial':v==='wrong'?'c-wrong':'c-none';
+  const sym=v==='done'?'✓':v==='partial'?'~':v==='wrong'?'✗':'–';
+  const txt=v==='done'?'verstanden':v==='partial'?'teilweise':v==='wrong'?'noch nicht':'nicht bearbeitet';
+  return `<li><span class="cell ${cls}">${sym}</span><span class="taskname">${escapeHtml(a.titel)}</span><span class="restext">${txt}</span></li>`;
+}
+
+// Gemeinsames Lernstand-Blatt (rein lokal, keine KI). Du-Ansprache an die Schuelerin,
+// eine Ich-Botschaft fuers Lob. Wird mit dem Schueler zusammen gelesen, nicht als Doku.
+function buildLeitfaden(x){
+  const esc=escapeHtml;
+  const {s,series,curIdx,pct,groups,themed,auf}=x;
+  const thrGruen=getSettings().thrGruen;
+  const listShort=(arr,n=3)=> arr.length<=n ? arr.map(esc).join(', ') : arr.slice(0,n).map(esc).join(', ')+' u.a.';
+
+  const hasSeries=series.length>=2 && curIdx>=1;
+  const firstPct=hasSeries ? series[0].pct : null;
+  const trendDelta=(hasSeries && firstPct!==null && pct!==null) ? pct-firstPct : null;
+  const prevPct=curIdx>=1 ? series[curIdx-1].pct : null;
+  const recentDelta=(prevPct!==null && pct!==null) ? pct-prevPct : null;
+
+  let strongest=null, weakest=null;
+  if(themed){
+    const ts=groups.filter(g=>g.block).map(g=>({block:g.block, pct:pctOf(scoreOverAufgaben(s,g.aufgaben))})).filter(z=>z.pct!==null);
+    if(ts.length){ strongest=ts.reduce((m,z)=>z.pct>m.pct?z:m); weakest=ts.reduce((m,z)=>z.pct<m.pct?z:m); }
+  }
+  const notYet=auf.filter(a=>s.results[a.id]==='wrong').map(a=>a.titel);
+  const partialT=auf.filter(a=>s.results[a.id]==='partial').map(a=>a.titel);
+  const doneT=auf.filter(a=>s.results[a.id]==='done').map(a=>a.titel);
+
+  // Notiz dieser Erhebung + Rueckblick auf den Vorsatz vom letzten Mal (SRL-Schleife)
+  const curNote=s.note || '';
+  let recall=null;
+  for(let i=curIdx-1;i>=0;i--){
+    const prevSt=series[i] && series[i].check.students.find(z=>z.name===s.name);
+    if(prevSt && prevSt.note && prevSt.note.trim()){ recall={label:`${series[i].check.titel}, ${series[i].check.datum.slice(0,10)}`, note:prevSt.note.trim()}; break; }
+  }
+
+  // Abschnitt 1: das laeuft schon gut (Du-Ansprache, eine Ich-Botschaft fuers Lob)
+  const l1=[];
+  if(trendDelta>0) l1.push(`Mir ist aufgefallen: seit dem ${esc(series[0].check.titel)} hast du dich von ${firstPct}% auf ${pct}% gesteigert. Das ist ein echter Fortschritt.`);
+  else if(trendDelta===0 && pct!==null && pct>=thrGruen) l1.push(`Mir ist aufgefallen: du hältst dich stabil im grünen Bereich (${pct}%). Das ist verlässlich.`);
+  else if(trendDelta===0) l1.push(`Du hältst dich bei ${pct}%. Lass uns schauen, wie der nächste Schritt nach oben geht.`);
+  if(themed && strongest) l1.push(`Am sichersten bist du beim Thema „${esc(strongest.block)}“ (${strongest.pct}%).`);
+  else if(doneT.length) l1.push(`Sicher bist du bei: ${listShort(doneT)}.`);
+  if(!l1.length) l1.push(`Lass uns mit etwas anfangen, das du selbst schon als deinen Fortschritt siehst.`);
+
+  // Abschnitt 2: hier ist noch Luft (Du + offene Fragen an die Schuelerin)
+  const l2=[];
+  if(recentDelta<0 && prevPct!==null) l2.push(`Zuletzt ging es etwas runter (von ${prevPct}% auf ${pct}%). Woran lag das aus deiner Sicht?`);
+  if(themed && weakest && (!strongest || weakest.block!==strongest.block)) l2.push(`Beim Thema „${esc(weakest.block)}“ (${weakest.pct}%) ist noch Luft. Was war da für dich schwierig?`);
+  if(notYet.length) l2.push(`Noch nicht sicher: ${listShort(notYet)}. Welche davon nimmst du dir als Nächstes vor?`);
+  else if(partialT.length) l2.push(`Erst teilweise sicher: ${listShort(partialT)}. Welche möchtest du festigen?`);
+  if(!l2.length) l2.push(`Gerade läuft vieles rund. Worauf hast du Lust als Nächstes, ruhig auch etwas Schwierigeres?`);
+
+  // Abschnitt 3: deine naechsten Schritte (Schuelerin schreibt mit)
+  const l3=[
+    `Was nimmst du dir bis zum nächsten Check konkret vor?${(themed&&weakest)?` (z.B. beim Thema „${esc(weakest.block)}“)`:''}`,
+    `Was brauchst du dafür von mir oder aus dem Material?`
+  ];
+
+  const sec=(title,lines)=>`<div class="lf-sec"><h4>${title}</h4><ul>${lines.map(l=>`<li>${l}</li>`).join('')}</ul></div>`;
+  return '<div class="card lf"><h3>Unser Blick auf deinen Lernstand</h3>'+
+    sec('Das läuft schon gut', l1)+
+    sec('Hier ist noch Luft', l2)+
+    '<div class="lf-sec"><h4>Deine nächsten Schritte <span class="lf-hint">(hier schreibst du mit)</span></h4>'+
+      (recall?`<div class="lf-recall">Beim letzten Mal (${esc(recall.label)}) hast du dir vorgenommen: „${esc(recall.note)}“ Konntest du das schon umsetzen?</div>`:'')+
+      '<ul>'+l3.map(l=>`<li>${l}</li>`).join('')+'</ul>'+
+      `<textarea class="lf-write" onchange="saveProfilNote(this.value)" placeholder="Deine nächsten Schritte / unsere Vereinbarung ...">${esc(curNote)}</textarea>`+
+    '</div>'+
+    '</div>';
+}
+
+function renderProfil(c, checks){
+  const box=document.getElementById('profil');
+  const t=activeCheck();
+  if(!t || !t.students.length){ box.innerHTML='<div class="card empty">Keine Schülerdaten in dieser Erhebung.</div>'; return; }
+  const students=[...t.students].sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  const nameList=students.map(s=>s.name);
+  if(!profilStudent || !nameList.includes(profilStudent)) profilStudent=nameList[0]||'';
+  const s=students.find(x=>x.name===profilStudent) || students[0];
+
+  const auf=t.aufgaben;
+  const pct=pctOf(scoreOfStudent(s,auf));
+  const stt=statusOf(pct);
+  const groups=groupAufgaben(auf);
+  const themed=groups.filter(g=>g.block).length>=2;
+  // Entwicklung seit der ersten erfassten Erhebung (Klassenvergleich nur noch in der Grafik)
+  const series=studentSeries(s.name, checks);
+  const curIdx=series.findIndex(x=>x.check.id===t.id);
+  let entwBig='Start', entwCap='erste erfasste Erhebung';
+  if(curIdx>=1 && series[0].pct!==null && pct!==null){
+    const d=pct-series[0].pct;
+    const arrow=d>0?'▲':d<0?'▼':'●';
+    const col=d>0?'var(--green)':d<0?'var(--red)':'var(--mut)';
+    entwBig=`<span style="color:${col}">${arrow} ${d>0?'+':''}${d}</span>`;
+    entwCap=`Entwicklung: ${series[0].pct}% → ${pct}%`;
+  }
+
+  // Steuerzeile (wird nicht mitgedruckt)
+  let html='<div class="row noprint" style="margin:12px 0 6px">';
+  html+='<span class="label">Schüler</span>';
+  html+=`<select id="profilSel" onchange="setProfilStudent(this.value)">`+
+    students.map(x=>`<option value="${escapeHtml(x.name)}" ${x.name===profilStudent?'selected':''}>${escapeHtml(x.name||'(ohne Name)')}</option>`).join('')+`</select>`;
+  html+='<button class="small" onclick="stepProfil(-1)">‹ vorher</button>';
+  html+='<button class="small" onclick="stepProfil(1)">nächster ›</button>';
+  html+='<div class="grow"></div>';
+  html+='<button class="small primary" onclick="printProfil()">Profil drucken</button>';
+  html+='</div>';
+
+  // Kopf + zwei Kacheln (Klassenvergleich bewusst nur noch im Graphen, nicht als Zahl)
+  html+='<div class="card">';
+  html+=`<div class="prof-head"><h2>${escapeHtml(s.name||'(ohne Name)')}</h2>`+
+    `<span class="meta">${escapeHtml(t.titel)} · ${escapeHtml(t.datum.slice(0,10))} · ${escapeHtml(c.name)}</span></div>`;
+  html+='<div class="tiles">';
+  html+=tile((pct===null?'–':pct+'%')+' <span class="badge '+stt.badge+'">'+stt.text+'</span>','Aktueller Stand');
+  html+=tile(entwBig, entwCap);
+  html+='</div></div>';
+
+  // Zwei Spalten: links die Grafik, rechts das gemeinsame Blatt (Schuelerin liest mit)
+  html+='<div class="prof-cols">';
+  html+='<div class="card prof-graf"><h3 style="margin:0 0 6px">Deine Entwicklung über das Jahr</h3>';
+  if(checks.length>=2){
+    html+='<div class="tablewrap">'+buildVerlaufSvg(checks, profilStudent)+'</div>';
+    html+=`<div class="legend"><span><span class="sw" style="background:#232019"></span>Klassenschnitt</span>`+
+      `<span><span class="sw" style="background:#2f6d7a"></span>${escapeHtml(s.name||'du')}</span>`+
+      '<span>Jeder Punkt ist eine Erhebung; die Zonen sind rechts beschriftet.</span></div>';
+  }else{
+    html+='<div class="label">Die Verlaufslinie erscheint ab der zweiten Erhebung.</div>';
+  }
+  html+='</div>';
+  html+=buildLeitfaden({s, series, curIdx, pct, groups, themed, auf});
+  html+='</div>';
+
+  // Einzelergebnisse (volle Breite)
+  html+='<div class="card"><h3 style="margin:0 0 4px">Einzelergebnisse</h3>';
+  if(themed){
+    groups.forEach(g=>{
+      html+=`<div class="prof-theme">${escapeHtml(g.block||'Ohne Thema')} ${themePill(pctOf(scoreOverAufgaben(s,g.aufgaben)))}</div>`;
+      html+='<ul class="prof-list">'+g.aufgaben.map(a=>profRow(s,a)).join('')+'</ul>';
+    });
+  }else{
+    html+='<ul class="prof-list">'+auf.map(a=>profRow(s,a)).join('')+'</ul>';
+  }
+  html+='<div class="legend"><span><span class="sw c-done"></span>✓ verstanden</span>'+
+    '<span><span class="sw c-partial"></span>~ teilweise</span>'+
+    '<span><span class="sw c-wrong"></span>✗ noch nicht</span>'+
+    '<span><span class="sw c-none" style="opacity:.4"></span>– nicht bearbeitet</span></div>';
+  html+='</div>';
+
+  box.innerHTML=html;
+}
+
+// ============================================================
+// STORE-WECHSEL + INIT
+// ============================================================
+function afterStoreChanged(){
+  ensureStore();
+  if(!activeClass()) store.activeClassId = store.classes[0]?.id || null;
+  const c=activeClass();
+  if(c && !c.checks.find(t=>t.id===store.activeCheckId)) store.activeCheckId=c.checks[c.checks.length-1]?.id||null;
+  fillControls();
+  renderView();
+  updateConnUI();
+}
+function updateConnUI(){
+  const dot=document.getElementById('connDot'), txt=document.getElementById('connText');
+  if(connected){ dot.classList.add('on'); txt.textContent='Auto-Speichern aktiv'; }
+  else{ dot.classList.remove('on'); txt.textContent = FS_SUPPORTED?'nur im Browser':'nur im Browser (dieser Browser ohne Auto-Speichern)'; }
+}
+async function init(){
+  if(loadCache()) afterStoreChanged(); else { ensureStore(); afterStoreChanged(); }
+  fileHandle=await loadHandle();
+  if(fileHandle){
+    try{
+      const p=await fileHandle.queryPermission({mode:'readwrite'});
+      if(p==='granted'){ connected=true;
+        const f=await fileHandle.getFile(); const fs=JSON.parse(await f.text());
+        if(fs && Array.isArray(fs.classes) && (fs.savedAt||0)>(store?.savedAt||0)){ store=fs; afterStoreChanged(); }
+        else updateConnUI();
+      }
+    }catch(e){}
+  }
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden && connected) writeFile(); });
+}
+
+// ============================================================
+// DEMO-DATEN (drei datierte Erhebungen, damit spaeter der Verlauf Daten hat)
+// ============================================================
+function loadDemo(){
+  const namen=['Anna Bauer','Ben Schuster','Clara Maier','David Klein','Emma Richter','Felix Wagner','Greta Hofmann','Hans Müller','Irene Koch','Jan Neumann'];
+  const aufDef=[
+    {t:'Ordnungszahl bestimmen',b:'PSE lesen'},{t:'Protonen und Elektronen',b:'PSE lesen'},
+    {t:'Perioden lesen',b:'PSE lesen'},{t:'Hauptgruppen zuordnen',b:'PSE lesen'},
+    {t:'Metalle und Nichtmetalle',b:'Atombau und Trends'},{t:'Elektronenkonfiguration',b:'Atombau und Trends'},
+    {t:'Ionenladung vorhersagen',b:'Atombau und Trends'},{t:'Trend Atomradius',b:'Atombau und Trends'}];
+  const aufgaben=aufDef.map((d,j)=>({id:'a'+(j+1), titel:d.t, block:d.b}));
+  const baseline=namen.map((_,i)=>0.25+(i/namen.length)*0.45);
+  const schwer=aufgaben.map((_,j)=>(j/aufgaben.length)*0.30);
+  const erheb=[
+    {datum:'2025-10-08T09:15', titel:'Eingangscheck', progress:0.00},
+    {datum:'2025-12-10T09:15', titel:'Zwischencheck', progress:0.18},
+    {datum:'2026-02-20T09:15', titel:'Abschlusscheck', progress:0.36},
+  ];
+  ensureStore();
+  let cls=activeClass();
+  if(!cls){ cls={id:uid(), name:'Demo-Klasse', checks:[]}; store.classes.push(cls); }
+  cls.checks=cls.checks.filter(t=>!t.demo);
+  const neu=erheb.map(e=>{
+    const students=namen.map((name,i)=>{
+      const results={};
+      aufgaben.forEach((a,j)=>{
+        const p=baseline[i]+e.progress-schwer[j]+(Math.random()-0.5)*0.20;
+        results[a.id]= p>0.62?'done': p>0.32?'partial':'wrong';
+      });
+      return {name, sid:'demo-'+i, results};
+    });
+    return {id:uid(), testId:'demo-pse', titel:e.titel, datum:e.datum, aufgaben:aufgaben.map(a=>({...a})), students, demo:true};
+  });
+  cls.checks.push(...neu);
+  store.activeClassId=cls.id;
+  store.activeCheckId=neu[neu.length-1].id;
+  persist(); afterStoreChanged();
+}
+
+// ============================================================
+// EVENTS
+// ============================================================
+document.getElementById('selClass').addEventListener('change',e=>{ store.activeClassId=e.target.value; store.activeCheckId=null; persist(); afterStoreChanged(); });
+document.getElementById('selCheck').addEventListener('change',e=>{ store.activeCheckId=e.target.value; persist(); afterStoreChanged(); });
+document.getElementById('btnClassNew').addEventListener('click',newClass);
+document.getElementById('btnClassRename').addEventListener('click',renameClass);
+document.getElementById('btnClassDel').addEventListener('click',deleteClass);
+document.getElementById('btnCheckDel').addEventListener('click',deleteCheck);
+document.getElementById('btnDemo').addEventListener('click',loadDemo);
+document.getElementById('btnRead').addEventListener('click',readCodes);
+document.getElementById('btnConnect').addEventListener('click',connectFile);
+document.getElementById('btnExport').addEventListener('click',exportBackup);
+document.getElementById('btnImportBackup').addEventListener('click',()=>{
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='.json';
+  inp.onchange=()=>{ if(inp.files[0]) importBackupFile(inp.files[0]); }; inp.click();
+});
+
+init();
+</script>
