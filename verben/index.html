@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verb-Grind &middot; Unregelmäßige Verben</title>
+<!-- DSGVO: keine externen Schriften/Skripte, alles läuft lokal im Browser. -->
+<style>
+  :root{
+    --bg:#fafafa; --surface:#ffffff; --surface2:#f0f0f3;
+    --panel-bg:#ffffff; --border:#d7d7de; --border-soft:#e7e7ee;
+    --text:#17171f; --text-dim:#63636f;
+    --accent:#7c5cff; --accent-ink:#ffffff; --accent2:#ff8a3d;
+    --danger:#c0392b; --success:#1f8b4c; --warning:#a8710a;
+    --gold:#b8860b;
+    --tint-success:#e7f6ec; --tint-danger:#fbe9e7; --tint-warning:#fff3dc;
+    --shadow:0 4px 18px rgba(20,20,40,.08);
+    --shadow-lg:0 10px 34px rgba(20,20,40,.16);
+  }
+  :root[data-theme="dark"]{
+    --bg:#0e0e14; --surface:#17171f; --surface2:#1f1f2a;
+    --panel-bg:#17171f; --border:#33333f; --border-soft:#26262f;
+    --text:#f1f1f6; --text-dim:#9797a8;
+    --accent:#a48bff; --accent-ink:#0e0e14; --accent2:#ffab6b;
+    --danger:#ff6b6b; --success:#4ce08a; --warning:#ffcf6b;
+    --gold:#ffd166;
+    --tint-success:rgba(76,224,138,.12); --tint-danger:rgba(255,107,107,.12); --tint-warning:rgba(255,207,107,.12);
+    --shadow:0 4px 18px rgba(0,0,0,.4);
+    --shadow-lg:0 10px 34px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.5; padding-bottom:40px;
+  }
+  #app{max-width:640px; margin:0 auto; padding:16px 14px 90px;}
+  h1,h2,h3{margin:0 0 6px; letter-spacing:-.2px}
+  h1{font-size:1.35rem} h2{font-size:1.1rem} h3{font-size:1rem}
+  p{margin:0 0 10px}
+  .row{display:flex; align-items:center; gap:10px}
+  .between{justify-content:space-between}
+  .wrap{flex-wrap:wrap}
+  .muted{color:var(--text-dim); font-size:.85rem}
+  .small{font-size:.8rem}
+  .center{text-align:center}
+  .stack{display:flex; flex-direction:column; gap:12px}
+  .card{background:var(--surface); border:1px solid var(--border-soft); border-radius:16px; padding:16px; box-shadow:var(--shadow);}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font:inherit; font-weight:700; font-size:.95rem; color:var(--text);
+    background:var(--surface2); border:1px solid var(--border); border-radius:12px;
+    padding:12px 16px; cursor:pointer; text-decoration:none; min-height:46px;
+    transition:transform .08s ease, background .12s ease;
+  }
+  .btn:active{transform:scale(.97)}
+  .btn:hover{background:var(--border-soft)}
+  .btn.primary{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+  .btn.primary:hover{filter:brightness(1.06)}
+  .btn.ghost{background:transparent}
+  .btn.block{width:100%}
+  .btn[disabled]{opacity:.45; cursor:not-allowed}
+  .btn.danger{color:var(--danger); border-color:var(--danger)}
+  input[type=text]{
+    font:inherit; font-size:1rem; padding:12px 14px; border-radius:12px;
+    border:1.5px solid var(--border); background:var(--panel-bg); color:var(--text);
+    width:100%; outline:none;
+  }
+  input[type=text]:focus{border-color:var(--accent)}
+  input[type=text].correct{border-color:var(--success); background:var(--tint-success)}
+  input[type=text].wrong{border-color:var(--danger); background:var(--tint-danger)}
+
+  header.top{display:flex; align-items:center; justify-content:space-between; padding:10px 2px 16px}
+  header.top .brand{font-weight:800; font-size:1.15rem}
+  header.top .brand .dot{color:var(--accent)}
+  .theme-toggle{background:var(--surface2); border:1px solid var(--border-soft); border-radius:999px; padding:6px 12px; font-size:.78rem; font-weight:600; color:var(--text-dim); cursor:pointer}
+
+  /* XP-Leiste */
+  .xpbar-outer{height:14px; border-radius:999px; background:var(--surface2); border:1px solid var(--border-soft); overflow:hidden}
+  .xpbar-inner{height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:999px; transition:width .5s ease}
+  .level-badge{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:52px; height:52px; border-radius:16px; font-size:1.4rem; font-weight:800;
+    background:linear-gradient(160deg,var(--accent),var(--accent2)); color:#fff; flex:none;
+    box-shadow:var(--shadow);
+  }
+
+  /* Streak */
+  .streak{display:flex; align-items:center; gap:6px; font-weight:700; color:var(--accent2)}
+  .streak .flame{font-size:1.15rem}
+
+  /* Kapitel-Pfad */
+  .path{display:flex; flex-direction:column; gap:10px; margin:14px 0}
+  .node{
+    display:flex; align-items:center; gap:12px; padding:12px 14px;
+    border-radius:14px; border:1.5px solid var(--border-soft); background:var(--surface);
+    cursor:pointer; text-align:left;
+  }
+  .node:hover{border-color:var(--accent)}
+  .node.locked{opacity:.5; cursor:not-allowed}
+  .node.done{border-color:var(--success)}
+  .node .num{
+    width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+    font-weight:800; background:var(--surface2); flex:none;
+  }
+  .node.done .num{background:var(--tint-success); color:var(--success)}
+  .node.boss .num{background:var(--tint-warning); color:var(--warning)}
+  .node .title{font-weight:700}
+  .node .sub{font-size:.78rem; color:var(--text-dim)}
+
+  /* Quiz */
+  .progress-dots{display:flex; gap:6px; flex-wrap:wrap}
+  .progress-dots span{width:10px; height:10px; border-radius:50%; background:var(--surface2); border:1px solid var(--border-soft); display:inline-block}
+  .progress-dots span.correct{background:var(--success); border-color:var(--success)}
+  .progress-dots span.wrong{background:var(--danger); border-color:var(--danger)}
+  .progress-dots span.now{outline:2px solid var(--accent); outline-offset:1px}
+
+  .quiz-word{font-size:1.5rem; font-weight:800; margin:2px 0 2px}
+  .quiz-de{color:var(--text-dim); margin-bottom:14px}
+  .field-label{font-size:.78rem; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px}
+  .feedback{display:flex; align-items:center; gap:8px; border-radius:12px; padding:10px 12px; font-weight:700; margin-top:6px}
+  .feedback.ok{background:var(--tint-success); color:var(--success)}
+  .feedback.bad{background:var(--tint-danger); color:var(--danger)}
+  .feedback .icon{font-size:1.1rem}
+  .combo{font-weight:800; color:var(--accent2)}
+
+  .sentence{font-size:1.1rem; line-height:1.7}
+  .sentence b{color:var(--accent)}
+
+  /* Chest / Bonus */
+  .chest{
+    text-align:center; padding:26px 16px; border-radius:18px;
+    background:linear-gradient(160deg, var(--tint-warning), var(--surface));
+    border:1.5px dashed var(--gold);
+  }
+  .chest .icon{font-size:2.6rem}
+  .chest .amount{font-size:1.6rem; font-weight:800; color:var(--gold); margin:6px 0}
+
+  /* Badges */
+  .badge-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px}
+  .badge{
+    border:1.5px solid var(--border-soft); border-radius:14px; padding:12px 10px; text-align:center;
+    background:var(--surface);
+  }
+  .badge.locked{opacity:.4}
+  .badge .ic{font-size:1.6rem}
+  .badge .nm{font-size:.78rem; font-weight:700; margin-top:4px}
+
+  table.stat{width:100%; border-collapse:collapse; font-size:.88rem}
+  table.stat th, table.stat td{padding:7px 6px; border-bottom:1px solid var(--border-soft); text-align:left}
+  table.stat th{color:var(--text-dim); font-weight:700; font-size:.76rem; text-transform:uppercase}
+
+  .timer{font-weight:800; font-size:1.3rem; color:var(--danger)}
+
+  .tabbar{
+    position:fixed; left:0; right:0; bottom:0; display:flex; justify-content:center;
+    background:var(--panel-bg); border-top:1px solid var(--border-soft); padding:8px 10px;
+    box-shadow:0 -6px 20px rgba(0,0,0,.06);
+  }
+  .tabbar .inner{max-width:640px; width:100%; display:flex; gap:6px}
+  .tabbtn{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;
+    background:none; border:none; color:var(--text-dim); font:inherit; font-size:.68rem; font-weight:700;
+    padding:6px 4px; border-radius:10px; cursor:pointer;
+  }
+  .tabbtn .ic{font-size:1.15rem}
+  .tabbtn.active{color:var(--accent); background:var(--tint-warning)}
+
+  footer.appfoot{max-width:640px; margin:26px auto 0; color:var(--text-dim); font-size:.78rem; text-align:center}
+
+  .kv{display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed var(--border-soft)}
+  .kv:last-child{border-bottom:none}
+
+  select{font:inherit; padding:10px 12px; border-radius:10px; border:1.5px solid var(--border); background:var(--panel-bg); color:var(--text)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------------------------------------------------------------
+   DATEN: unregelmäßige Verben, gruppiert in vier Kapitel + Boss-Pool
+--------------------------------------------------------------------- */
+// past/pp sind Arrays: mehrere gültige Schreibweisen werden akzeptiert.
+var VERBS = [
+  // Kapitel 1: Grundstock
+  {inf:"be", past:["was","were"], pp:["been"], de:"sein", tier:1},
+  {inf:"have", past:["had"], pp:["had"], de:"haben", tier:1},
+  {inf:"do", past:["did"], pp:["done"], de:"tun, machen", tier:1},
+  {inf:"go", past:["went"], pp:["gone"], de:"gehen", tier:1},
+  {inf:"get", past:["got"], pp:["got","gotten"], de:"bekommen", tier:1},
+  {inf:"make", past:["made"], pp:["made"], de:"machen, herstellen", tier:1},
+  {inf:"say", past:["said"], pp:["said"], de:"sagen", tier:1},
+  {inf:"see", past:["saw"], pp:["seen"], de:"sehen", tier:1},
+  {inf:"come", past:["came"], pp:["come"], de:"kommen", tier:1},
+  {inf:"take", past:["took"], pp:["taken"], de:"nehmen", tier:1},
+  {inf:"know", past:["knew"], pp:["known"], de:"wissen, kennen", tier:1},
+  {inf:"think", past:["thought"], pp:["thought"], de:"denken", tier:1},
+  {inf:"give", past:["gave"], pp:["given"], de:"geben", tier:1},
+  {inf:"find", past:["found"], pp:["found"], de:"finden", tier:1},
+  {inf:"tell", past:["told"], pp:["told"], de:"erzählen, sagen", tier:1},
+  {inf:"become", past:["became"], pp:["become"], de:"werden", tier:1},
+  {inf:"leave", past:["left"], pp:["left"], de:"verlassen, gehen", tier:1},
+  {inf:"feel", past:["felt"], pp:["felt"], de:"fühlen", tier:1},
+  {inf:"put", past:["put"], pp:["put"], de:"legen, stellen", tier:1},
+  {inf:"bring", past:["brought"], pp:["brought"], de:"bringen", tier:1},
+  {inf:"begin", past:["began"], pp:["begun"], de:"beginnen", tier:1},
+  {inf:"keep", past:["kept"], pp:["kept"], de:"behalten", tier:1},
+  {inf:"hold", past:["held"], pp:["held"], de:"halten", tier:1},
+  {inf:"write", past:["wrote"], pp:["written"], de:"schreiben", tier:1},
+  {inf:"stand", past:["stood"], pp:["stood"], de:"stehen", tier:1},
+  {inf:"hear", past:["heard"], pp:["heard"], de:"hören", tier:1},
+  {inf:"let", past:["let"], pp:["let"], de:"lassen", tier:1},
+  {inf:"mean", past:["meant"], pp:["meant"], de:"bedeuten", tier:1},
+  {inf:"meet", past:["met"], pp:["met"], de:"treffen", tier:1},
+  {inf:"run", past:["ran"], pp:["run"], de:"laufen, rennen", tier:1},
+  {inf:"eat", past:["ate"], pp:["eaten"], de:"essen", tier:1},
+  {inf:"drink", past:["drank"], pp:["drunk"], de:"trinken", tier:1},
+  {inf:"sleep", past:["slept"], pp:["slept"], de:"schlafen", tier:1},
+
+  // Kapitel 2
+  {inf:"pay", past:["paid"], pp:["paid"], de:"bezahlen", tier:2},
+  {inf:"sit", past:["sat"], pp:["sat"], de:"sitzen", tier:2},
+  {inf:"speak", past:["spoke"], pp:["spoken"], de:"sprechen", tier:2},
+  {inf:"lie", past:["lay"], pp:["lain"], de:"liegen", tier:2, note:"nicht verwechseln mit lie (lügen): lied, lied"},
+  {inf:"lead", past:["led"], pp:["led"], de:"führen", tier:2},
+  {inf:"understand", past:["understood"], pp:["understood"], de:"verstehen", tier:2},
+  {inf:"win", past:["won"], pp:["won"], de:"gewinnen", tier:2},
+  {inf:"teach", past:["taught"], pp:["taught"], de:"lehren, unterrichten", tier:2},
+  {inf:"grow", past:["grew"], pp:["grown"], de:"wachsen", tier:2},
+  {inf:"draw", past:["drew"], pp:["drawn"], de:"zeichnen", tier:2},
+  {inf:"drive", past:["drove"], pp:["driven"], de:"fahren", tier:2},
+  {inf:"choose", past:["chose"], pp:["chosen"], de:"wählen", tier:2},
+  {inf:"break", past:["broke"], pp:["broken"], de:"kaputt machen, brechen", tier:2},
+  {inf:"wear", past:["wore"], pp:["worn"], de:"tragen (Kleidung)", tier:2},
+  {inf:"buy", past:["bought"], pp:["bought"], de:"kaufen", tier:2},
+  {inf:"catch", past:["caught"], pp:["caught"], de:"fangen", tier:2},
+  {inf:"build", past:["built"], pp:["built"], de:"bauen", tier:2},
+  {inf:"spend", past:["spent"], pp:["spent"], de:"ausgeben, verbringen", tier:2},
+  {inf:"spread", past:["spread"], pp:["spread"], de:"verbreiten", tier:2},
+  {inf:"send", past:["sent"], pp:["sent"], de:"senden, schicken", tier:2},
+  {inf:"sell", past:["sold"], pp:["sold"], de:"verkaufen", tier:2},
+  {inf:"sing", past:["sang"], pp:["sung"], de:"singen", tier:2},
+  {inf:"ride", past:["rode"], pp:["ridden"], de:"reiten, fahren", tier:2},
+  {inf:"rise", past:["rose"], pp:["risen"], de:"aufsteigen, steigen", tier:2},
+  {inf:"fall", past:["fell"], pp:["fallen"], de:"fallen", tier:2},
+  {inf:"forget", past:["forgot"], pp:["forgotten"], de:"vergessen", tier:2},
+  {inf:"forgive", past:["forgave"], pp:["forgiven"], de:"verzeihen", tier:2},
+  {inf:"hide", past:["hid"], pp:["hidden"], de:"verstecken", tier:2},
+  {inf:"hit", past:["hit"], pp:["hit"], de:"schlagen, treffen", tier:2},
+  {inf:"hurt", past:["hurt"], pp:["hurt"], de:"verletzen, wehtun", tier:2},
+  {inf:"cut", past:["cut"], pp:["cut"], de:"schneiden", tier:2},
+  {inf:"cost", past:["cost"], pp:["cost"], de:"kosten", tier:2},
+  {inf:"deal", past:["dealt"], pp:["dealt"], de:"umgehen mit, handeln", tier:2},
+  {inf:"read", past:["read"], pp:["read"], de:"lesen (Aussprache ändert sich zu 'red')", tier:2},
+  {inf:"lend", past:["lent"], pp:["lent"], de:"verleihen", tier:2},
+  {inf:"lose", past:["lost"], pp:["lost"], de:"verlieren", tier:2},
+
+  // Kapitel 3
+  {inf:"bite", past:["bit"], pp:["bitten"], de:"beißen", tier:3},
+  {inf:"blow", past:["blew"], pp:["blown"], de:"blasen, wehen", tier:3},
+  {inf:"burst", past:["burst"], pp:["burst"], de:"platzen", tier:3},
+  {inf:"dig", past:["dug"], pp:["dug"], de:"graben", tier:3},
+  {inf:"feed", past:["fed"], pp:["fed"], de:"füttern", tier:3},
+  {inf:"fight", past:["fought"], pp:["fought"], de:"kämpfen", tier:3},
+  {inf:"fly", past:["flew"], pp:["flown"], de:"fliegen", tier:3},
+  {inf:"freeze", past:["froze"], pp:["frozen"], de:"frieren, einfrieren", tier:3},
+  {inf:"hang", past:["hung"], pp:["hung"], de:"hängen (Objekte)", tier:3, note:"bei 'hinrichten' regelmäßig: hanged, hanged"},
+  {inf:"kneel", past:["knelt","kneeled"], pp:["knelt","kneeled"], de:"knien", tier:3},
+  {inf:"lay", past:["laid"], pp:["laid"], de:"hinlegen, legen", tier:3, note:"nicht verwechseln mit lie (liegen): lay, lain"},
+  {inf:"lean", past:["leant","leaned"], pp:["leant","leaned"], de:"sich lehnen", tier:3},
+  {inf:"leap", past:["leapt","leaped"], pp:["leapt","leaped"], de:"springen", tier:3},
+  {inf:"light", past:["lit","lighted"], pp:["lit","lighted"], de:"anzünden", tier:3},
+  {inf:"overcome", past:["overcame"], pp:["overcome"], de:"überwinden", tier:3},
+  {inf:"prove", past:["proved"], pp:["proved","proven"], de:"beweisen", tier:3},
+  {inf:"quit", past:["quit"], pp:["quit"], de:"aufhören, kündigen", tier:3},
+  {inf:"seek", past:["sought"], pp:["sought"], de:"suchen nach", tier:3},
+  {inf:"shake", past:["shook"], pp:["shaken"], de:"schütteln", tier:3},
+  {inf:"shine", past:["shone"], pp:["shone"], de:"scheinen (Licht)", tier:3},
+  {inf:"shoot", past:["shot"], pp:["shot"], de:"schießen", tier:3},
+  {inf:"shrink", past:["shrank"], pp:["shrunk"], de:"schrumpfen", tier:3},
+  {inf:"sink", past:["sank"], pp:["sunk"], de:"sinken", tier:3},
+  {inf:"slide", past:["slid"], pp:["slid"], de:"rutschen, gleiten", tier:3},
+  {inf:"smell", past:["smelt","smelled"], pp:["smelt","smelled"], de:"riechen", tier:3},
+  {inf:"sow", past:["sowed"], pp:["sown","sowed"], de:"säen", tier:3},
+  {inf:"speed", past:["sped","speeded"], pp:["sped","speeded"], de:"rasen, beschleunigen", tier:3},
+  {inf:"spell", past:["spelt","spelled"], pp:["spelt","spelled"], de:"buchstabieren", tier:3},
+  {inf:"spill", past:["spilt","spilled"], pp:["spilt","spilled"], de:"verschütten", tier:3},
+  {inf:"spin", past:["spun"], pp:["spun"], de:"drehen, spinnen", tier:3},
+  {inf:"split", past:["split"], pp:["split"], de:"spalten, teilen", tier:3},
+  {inf:"steal", past:["stole"], pp:["stolen"], de:"stehlen", tier:3},
+  {inf:"stick", past:["stuck"], pp:["stuck"], de:"kleben, stecken", tier:3},
+  {inf:"sting", past:["stung"], pp:["stung"], de:"stechen (Insekt)", tier:3},
+  {inf:"stink", past:["stank","stunk"], pp:["stunk"], de:"stinken", tier:3},
+  {inf:"strike", past:["struck"], pp:["struck"], de:"schlagen, streiken", tier:3},
+  {inf:"swear", past:["swore"], pp:["sworn"], de:"schwören, fluchen", tier:3},
+  {inf:"sweep", past:["swept"], pp:["swept"], de:"fegen, kehren", tier:3},
+  {inf:"swim", past:["swam"], pp:["swum"], de:"schwimmen", tier:3},
+  {inf:"swing", past:["swung"], pp:["swung"], de:"schwingen", tier:3},
+  {inf:"throw", past:["threw"], pp:["thrown"], de:"werfen", tier:3},
+  {inf:"wake", past:["woke"], pp:["woken"], de:"aufwachen, wecken", tier:3},
+  {inf:"weep", past:["wept"], pp:["wept"], de:"weinen", tier:3},
+  {inf:"wind", past:["wound"], pp:["wound"], de:"winden, wickeln", tier:3},
+  {inf:"withdraw", past:["withdrew"], pp:["withdrawn"], de:"zurückziehen, abheben", tier:3},
+
+  // Kapitel 4: Boss-Verben, Verwechslungspaare, seltenere Formen
+  {inf:"lie (lügen)", past:["lied"], pp:["lied"], de:"lügen", tier:4, note:"regelmäßig! Falle: lie (liegen) ist unregelmäßig: lay, lain"},
+  {inf:"forbid", past:["forbade"], pp:["forbidden"], de:"verbieten", tier:4},
+  {inf:"foresee", past:["foresaw"], pp:["foreseen"], de:"voraussehen", tier:4},
+  {inf:"forbear", past:["forbore"], pp:["forborne"], de:"unterlassen", tier:4},
+  {inf:"undergo", past:["underwent"], pp:["undergone"], de:"durchmachen, erleiden", tier:4},
+  {inf:"undertake", past:["undertook"], pp:["undertaken"], de:"unternehmen, übernehmen", tier:4},
+  {inf:"withhold", past:["withheld"], pp:["withheld"], de:"zurückhalten", tier:4},
+  {inf:"withstand", past:["withstood"], pp:["withstood"], de:"standhalten, widerstehen", tier:4},
+  {inf:"mistake", past:["mistook"], pp:["mistaken"], de:"verwechseln, sich irren", tier:4},
+  {inf:"arise", past:["arose"], pp:["arisen"], de:"entstehen, auftreten", tier:4},
+  {inf:"bear", past:["bore"], pp:["borne","born"], de:"tragen, ertragen", tier:4},
+  {inf:"bind", past:["bound"], pp:["bound"], de:"binden", tier:4},
+  {inf:"broadcast", past:["broadcast","broadcasted"], pp:["broadcast","broadcasted"], de:"senden, übertragen", tier:4},
+  {inf:"creep", past:["crept"], pp:["crept"], de:"kriechen", tier:4},
+  {inf:"dwell", past:["dwelt","dwelled"], pp:["dwelt","dwelled"], de:"wohnen, verweilen", tier:4}
+];
+var byInf = {};
+VERBS.forEach(function(v){ byInf[v.inf]=v; });
+
+/* Kontext-Sätze: type "past" oder "pp", Lücke wird gegen die Formen des
+   referenzierten Verbs geprüft. */
+var SENTENCES = [
+  {inf:"go", type:"past", text:"Yesterday, we ___ (go) to the cinema."},
+  {inf:"see", type:"pp", text:"I have never ___ (see) such a beautiful sunset."},
+  {inf:"eat", type:"past", text:"She ___ (eat) breakfast at seven o'clock."},
+  {inf:"eat", type:"pp", text:"Have you ever ___ (eat) sushi before?"},
+  {inf:"drink", type:"past", text:"He ___ (drink) a whole bottle of water after the run."},
+  {inf:"sleep", type:"past", text:"The baby ___ (sleep) for ten hours last night."},
+  {inf:"write", type:"pp", text:"This letter was ___ (write) in 1920."},
+  {inf:"break", type:"past", text:"Someone ___ (break) the window during the storm."},
+  {inf:"break", type:"pp", text:"The vase has already been ___ (break) twice."},
+  {inf:"buy", type:"past", text:"My parents ___ (buy) a new car last month."},
+  {inf:"drive", type:"past", text:"We ___ (drive) all night to reach the coast."},
+  {inf:"speak", type:"pp", text:"English is ___ (speak) in many countries."},
+  {inf:"choose", type:"past", text:"The teacher ___ (choose) three students for the project."},
+  {inf:"forget", type:"pp", text:"I have completely ___ (forget) his name."},
+  {inf:"wear", type:"past", text:"She ___ (wear) a red dress at the party."},
+  {inf:"sing", type:"past", text:"The choir ___ (sing) beautifully at the concert."},
+  {inf:"swim", type:"pp", text:"Have you ever ___ (swim) in the sea?"},
+  {inf:"fly", type:"past", text:"The plane ___ (fly) over the mountains."},
+  {inf:"steal", type:"pp", text:"My bike was ___ (steal) last week."},
+  {inf:"throw", type:"past", text:"He ___ (throw) the ball across the field."},
+  {inf:"catch", type:"past", text:"The goalkeeper ___ (catch) the ball just in time."},
+  {inf:"teach", type:"past", text:"Mrs. Miller ___ (teach) us English for three years."},
+  {inf:"understand", type:"past", text:"At first, nobody ___ (understand) the instructions."},
+  {inf:"build", type:"pp", text:"This bridge was ___ (build) in the nineteenth century."},
+  {inf:"sell", type:"past", text:"They ___ (sell) their old flat last year."},
+  {inf:"pay", type:"past", text:"We ___ (pay) the bill and left the restaurant."},
+  {inf:"ride", type:"pp", text:"I have never ___ (ride) a horse before."},
+  {inf:"fall", type:"past", text:"The little boy ___ (fall) off his bike."},
+  {inf:"win", type:"past", text:"Our team ___ (win) the final match."},
+  {inf:"lose", type:"pp", text:"She has ___ (lose) her keys again."},
+  {inf:"meet", type:"past", text:"We ___ (meet) at the station this morning."},
+  {inf:"take", type:"pp", text:"This photo was ___ (take) in Paris."},
+  {inf:"give", type:"pp", text:"I have already ___ (give) him the answer."},
+  {inf:"know", type:"past", text:"Everybody ___ (know) about the plan."},
+  {inf:"think", type:"past", text:"I ___ (think) about it all night."},
+  {inf:"bring", type:"past", text:"He ___ (bring) flowers for his mother."}
+];
+
+/* ---------------------------------------------------------------------
+   LEVEL & BADGES
+--------------------------------------------------------------------- */
+var LEVELS = [
+  {xp:0, title:"Frischling"},
+  {xp:150, title:"Wortsammler:in"},
+  {xp:350, title:"Formen-Fuchs"},
+  {xp:650, title:"Zeiten-Profi"},
+  {xp:1050, title:"Verb-Spezialist:in"},
+  {xp:1600, title:"Grammatik-Meister:in"},
+  {xp:2400, title:"Verb-Legende"}
+];
+function levelInfo(xp){
+  var idx=0;
+  for(var i=0;i<LEVELS.length;i++){ if(xp>=LEVELS[i].xp) idx=i; }
+  var cur=LEVELS[idx], next=LEVELS[idx+1];
+  var pct = next ? Math.round(((xp-cur.xp)/(next.xp-cur.xp))*100) : 100;
+  return {idx:idx, title:cur.title, next:next, pct:Math.max(0,Math.min(100,pct)), xpToNext: next? next.xp-xp : 0};
+}
+
+var BADGES = [
+  {id:"first", ic:"\u{1F31F}", nm:"Erste Schritte", test:function(s){return s.totalRounds>=1;}},
+  {id:"ch1", ic:"1⃣", nm:"Kapitel 1 fertig", test:function(s){return s.chaptersDone[1];}},
+  {id:"ch2", ic:"2⃣", nm:"Kapitel 2 fertig", test:function(s){return s.chaptersDone[2];}},
+  {id:"ch3", ic:"3⃣", nm:"Kapitel 3 fertig", test:function(s){return s.chaptersDone[3];}},
+  {id:"ch4", ic:"4⃣", nm:"Kapitel 4 fertig", test:function(s){return s.chaptersDone[4];}},
+  {id:"boss", ic:"\u{1F451}", nm:"Boss besiegt", test:function(s){return s.bossWon;}},
+  {id:"streak5", ic:"\u{1F525}", nm:"5 Tage in Folge", test:function(s){return s.streak.count>=5;}},
+  {id:"perfect", ic:"\u{1F4AF}", nm:"Perfekte Runde", test:function(s){return s.perfectRounds>=1;}},
+  {id:"xp500", ic:"⚡", nm:"500 XP gesammelt", test:function(s){return s.xp>=500;}},
+  {id:"legend", ic:"\u{1F3C6}", nm:"Verb-Legende", test:function(s){return levelInfo(s.xp).idx>=LEVELS.length-1;}}
+];
+
+/* ---------------------------------------------------------------------
+   STATE (localStorage)
+--------------------------------------------------------------------- */
+var KEY="fos_verben_trainer_v1";
+function defaultState(){
+  return {
+    v:1, name:"", klasse:"11",
+    xp:0,
+    chaptersDone:{1:false,2:false,3:false,4:false},
+    bossWon:false,
+    bestBossScore:0,
+    perfectRounds:0,
+    totalRounds:0,
+    streak:{count:0, last:null},
+    wortstats:{}, // inf -> {seen, wrong}
+    onboarded:false
+  };
+}
+var state = load();
+function load(){
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(!raw) return defaultState();
+    var parsed = JSON.parse(raw);
+    var d = defaultState();
+    for(var k in d){ if(!(k in parsed)) parsed[k]=d[k]; }
+    return parsed;
+  }catch(e){ return defaultState(); }
+}
+function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+function todayStr(){
+  var d=new Date();
+  return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+}
+function touchStreak(){
+  var today=todayStr();
+  if(state.streak.last===today) return;
+  if(state.streak.last===null){ state.streak.count=1; }
+  else{
+    var last=new Date(state.streak.last.replace(/(\d+)-(\d+)-(\d+)/,"$1/$2/$3"));
+    var diffDays=Math.round((new Date(today.replace(/(\d+)-(\d+)-(\d+)/,"$1/$2/$3"))-last)/86400000);
+    if(diffDays===1) state.streak.count+=1;
+    else if(diffDays>1) state.streak.count=1;
+  }
+  state.streak.last=today;
+}
+
+function chapterUnlocked(n){
+  if(n===1) return true;
+  return !!state.chaptersDone[n-1];
+}
+function bossUnlocked(){ return state.chaptersDone[1]&&state.chaptersDone[2]&&state.chaptersDone[3]&&state.chaptersDone[4]; }
+
+function markSeen(inf, wasWrong){
+  var s = state.wortstats[inf] || {seen:0, wrong:0};
+  s.seen++; if(wasWrong) s.wrong++;
+  state.wortstats[inf]=s;
+}
+function weakVerbs(limit){
+  return Object.keys(state.wortstats)
+    .map(function(inf){ return {inf:inf, s:state.wortstats[inf]}; })
+    .filter(function(x){ return x.s.wrong>0; })
+    .sort(function(a,b){ return (b.s.wrong/b.s.seen) - (a.s.wrong/a.s.seen); })
+    .slice(0, limit||5);
+}
+
+/* ---------------------------------------------------------------------
+   RENDER-INFRASTRUKTUR
+--------------------------------------------------------------------- */
+var app = document.getElementById("app");
+var view = "dashboard";
+var roundState = null; // aktuelle Übungsrunde
+
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+function initTheme(){
+  var saved = localStorage.getItem("fos_verben_theme");
+  if(saved){ document.documentElement.setAttribute("data-theme", saved); }
+}
+function toggleTheme(){
+  var cur = document.documentElement.getAttribute("data-theme");
+  var dark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  var effectiveCur = cur || (dark?"dark":"light");
+  var next = effectiveCur==="dark" ? "light":"dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("fos_verben_theme", next);
+}
+initTheme();
+
+function topbar(activeTab){
+  return ''+
+  '<header class="top">'+
+    '<div class="brand">Verb<span class="dot">-Grind</span></div>'+
+    '<button class="theme-toggle" id="themeBtn">Hell / Dunkel</button>'+
+  '</header>';
+}
+
+function tabbar(active){
+  var tabs=[
+    {id:"dashboard", ic:"\u{1F3E0}", nm:"Start"},
+    {id:"stats", ic:"\u{1F4CA}", nm:"Statistik"},
+    {id:"badges", ic:"\u{1F396}", nm:"Erfolge"}
+  ];
+  return '<div class="tabbar"><div class="inner">'+
+    tabs.map(function(t){
+      return '<button class="tabbtn'+(active===t.id?" active":"")+'" data-tab="'+t.id+'"><span class="ic">'+t.ic+'</span>'+t.nm+'</button>';
+    }).join("")+
+  '</div></div>';
+}
+
+function render(){
+  var html="";
+  if(!state.onboarded){ html = renderOnboarding(); }
+  else if(view==="dashboard"){ html = topbar()+renderDashboard()+tabbar("dashboard"); }
+  else if(view==="stats"){ html = topbar()+renderStats()+tabbar("stats"); }
+  else if(view==="badges"){ html = topbar()+renderBadges()+tabbar("badges"); }
+  else if(view==="round"){ html = topbar()+renderRound(); }
+  else if(view==="result"){ html = topbar()+renderResult(); }
+  app.innerHTML = html;
+  bind();
+}
+
+/* ---------------------------------------------------------------------
+   ONBOARDING
+--------------------------------------------------------------------- */
+function renderOnboarding(){
+  return '<div class="stack" style="margin-top:40px">'+
+    '<div class="center"><div style="font-size:2.4rem">\u{1F4AA}</div><h1>Verb-Grind</h1>'+
+    '<p class="muted">Unregelmäßige Verben trainieren, Kapitel freischalten, Bestwerte knacken.</p></div>'+
+    '<div class="card stack">'+
+      '<div><div class="field-label">Dein Name (nur auf diesem Gerät gespeichert)</div>'+
+      '<input type="text" id="onbName" placeholder="z. B. Alex"></div>'+
+      '<div><div class="field-label">Klasse</div>'+
+      '<select id="onbKlasse"><option value="11">11. Klasse</option><option value="12">12. Klasse</option><option value="13">13. Klasse</option></select></div>'+
+      '<button class="btn primary block" id="onbStart">Los geht’s</button>'+
+    '</div>'+
+    '<p class="muted small center">Es gibt keinen Account und keinen Server: Alles bleibt lokal in diesem Browser.</p>'+
+  '</div>';
+}
+
+/* ---------------------------------------------------------------------
+   DASHBOARD
+--------------------------------------------------------------------- */
+var CHAPTER_META = {
+  1:{title:"Kapitel 1: Basis", sub:"33 Grundverben"},
+  2:{title:"Kapitel 2: Aufbau", sub:"36 Verben"},
+  3:{title:"Kapitel 3: Fortgeschritten", sub:"44 Verben"},
+  4:{title:"Kapitel 4: Bossformen", sub:"15 knifflige Verben und Fallen"}
+};
+
+function renderDashboard(){
+  var li = levelInfo(state.xp);
+  var greet = state.name ? esc(state.name) : "Verb-Held:in";
+  var path = "";
+  [1,2,3,4].forEach(function(n){
+    var unlocked = chapterUnlocked(n);
+    var done = state.chaptersDone[n];
+    var meta = CHAPTER_META[n];
+    path += '<button class="node'+(unlocked?"":" locked")+(done?" done":"")+'" data-chapter="'+n+'" '+(unlocked?"":"disabled")+'>'+
+      '<div class="num">'+(done?"✓":(unlocked?n:"\u{1F512}"))+'</div>'+
+      '<div><div class="title">'+meta.title+'</div><div class="sub">'+meta.sub+(done?" &middot; abgeschlossen":"")+'</div></div>'+
+    '</button>';
+  });
+  var bu = bossUnlocked();
+  path += '<button class="node boss'+(bu?"":" locked")+'" data-boss="1" '+(bu?"":"disabled")+'>'+
+    '<div class="num">\u{1F451}</div>'+
+    '<div><div class="title">Boss-Kampf</div><div class="sub">60 Sekunden, die härtesten Verben'+(state.bestBossScore?(" &middot; Bestwert "+state.bestBossScore):"")+'</div></div>'+
+  '</button>';
+
+  var weak = weakVerbs(5);
+  var weakHtml = weak.length ? (
+    '<div class="card">'+
+      '<h3>Wackelkandidaten</h3>'+
+      '<p class="muted small">Diese Verben hast du zuletzt öfter falsch. Gezielt üben:</p>'+
+      '<p>'+weak.map(function(w){return '<b>'+esc(w.inf)+'</b>';}).join(", ")+'</p>'+
+      '<button class="btn primary block" id="drillWeak">Wackelkandidaten üben</button>'+
+    '</div>'
+  ) : "";
+
+  return '<div class="stack">'+
+    '<div class="card row">'+
+      '<div class="level-badge">'+(li.idx+1)+'</div>'+
+      '<div style="flex:1">'+
+        '<div class="row between"><b>'+li.title+'</b><span class="streak"><span class="flame">\u{1F525}</span>'+state.streak.count+'</span></div>'+
+        '<div class="xpbar-outer" style="margin-top:6px"><div class="xpbar-inner" style="width:'+li.pct+'%"></div></div>'+
+        '<div class="muted small" style="margin-top:4px">'+state.xp+' XP'+(li.next?(" &middot; noch "+li.xpToNext+" bis zum nächsten Level"):" &middot; Maximallevel erreicht")+'</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="card">'+
+      '<h3>Hallo, '+greet+'!</h3>'+
+      '<p class="muted small">Klasse '+esc(state.klasse)+' &middot; Kapitel der Reihe nach freischalten, danach den Boss angreifen.</p>'+
+      '<div class="path">'+path+'</div>'+
+    '</div>'+
+    weakHtml+
+    '<div class="card">'+
+      '<button class="btn block" id="ctxBtn">Kontext-Sätze üben</button>'+
+      '<p class="muted small" style="margin-top:8px">Verben im ganzen Satz anwenden statt nur auswendig lernen.</p>'+
+    '</div>'+
+  '</div>';
+}
+
+/* ---------------------------------------------------------------------
+   ÜBUNGSRUNDE (Kapitel-Drill, Wackelkandidaten, Kontext-Sätze)
+--------------------------------------------------------------------- */
+function startRound(mode, chapter){
+  var pool, isSentence=false;
+  if(mode==="chapter"){
+    pool = VERBS.filter(function(v){ return v.tier===chapter; }).slice();
+  } else if(mode==="weak"){
+    var weak = weakVerbs(10).map(function(w){return w.inf;});
+    pool = VERBS.filter(function(v){ return weak.indexOf(v.inf)>=0; });
+    if(pool.length<3){ pool = VERBS.filter(function(v){return v.tier<=2;}); }
+  } else if(mode==="boss"){
+    pool = VERBS.filter(function(v){ return v.tier>=3; }).slice();
+  } else if(mode==="context"){
+    isSentence = true;
+    pool = SENTENCES.slice();
+  }
+  shuffle(pool);
+  var count = mode==="boss" ? 999 : Math.min(10, pool.length);
+  var items = pool.slice(0, count);
+  roundState = {
+    mode:mode, chapter:chapter, isSentence:isSentence,
+    items:items, idx:0, results:[], combo:0, maxCombo:0,
+    startedAt: mode==="boss" ? Date.now() : null,
+    bossSeconds: 60, bossTimer:null, bossScore:0
+  };
+  view="round";
+  render();
+  if(mode==="boss"){ startBossTimer(); }
+}
+function shuffle(a){
+  for(var i=a.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var t=a[i]; a[i]=a[j]; a[j]=t;
+  }
+}
+function startBossTimer(){
+  clearInterval(roundState.bossTimer);
+  roundState.bossTimer = setInterval(function(){
+    roundState.bossSeconds--;
+    var el = document.getElementById("bossTime");
+    if(el) el.textContent = roundState.bossSeconds+"s";
+    if(roundState.bossSeconds<=0){
+      clearInterval(roundState.bossTimer);
+      finishBoss();
+    }
+  }, 1000);
+}
+function finishBoss(){
+  var score = roundState.bossScore;
+  state.bossWon = state.bossWon || score>=8;
+  if(score>state.bestBossScore) state.bestBossScore=score;
+  state.totalRounds++;
+  save();
+  view="result"; roundState.finalScore=score; roundState.finalTotal=null;
+  render();
+}
+
+function renderRound(){
+  if(roundState.mode==="boss"){ return renderBossQuestion(); }
+  var i = roundState.idx;
+  var item = roundState.items[i];
+  var dots = roundState.results.map(function(r,ix){
+    return '<span class="'+(ix<roundState.results.length?(r?"correct":"wrong"):"")+'"></span>';
+  }).join("") + roundState.items.slice(roundState.results.length).map(function(_,ix){
+    return '<span class="'+(ix===0?"now":"")+'"></span>';
+  }).join("");
+
+  var body;
+  if(roundState.isSentence){
+    var v = byInf[item.inf];
+    var label = item.type==="pp" ? "Partizip II" : "Simple Past";
+    var htmlSentence = esc(item.text).replace("___", '<b>___</b>');
+    body = ''+
+      '<p class="quiz-de muted">Setze die richtige Form von <b>'+esc(item.inf)+'</b> ein.</p>'+
+      '<p class="sentence">'+htmlSentence+'</p>'+
+      '<div class="field-label">'+label+'</div>'+
+      '<input type="text" id="ansA" autocomplete="off" autocapitalize="off" spellcheck="false">';
+  } else {
+    body = ''+
+      '<div class="quiz-word">'+esc(item.inf)+'</div>'+
+      '<div class="quiz-de">'+esc(item.de)+(item.note?('<br><span class="small">⚠️ '+esc(item.note)+'</span>'):"")+'</div>'+
+      '<div class="row wrap" style="gap:14px">'+
+        '<div style="flex:1; min-width:130px"><div class="field-label">Simple Past</div><input type="text" id="ansA" autocomplete="off" autocapitalize="off" spellcheck="false"></div>'+
+        '<div style="flex:1; min-width:130px"><div class="field-label">Partizip II</div><input type="text" id="ansB" autocomplete="off" autocapitalize="off" spellcheck="false"></div>'+
+      '</div>';
+  }
+
+  return '<div class="stack">'+
+    '<div class="row between">'+
+      '<div class="progress-dots">'+dots+'</div>'+
+      (roundState.combo>1?('<span class="combo">\u{1F525} Combo x'+roundState.combo+'</span>'):'')+
+    '</div>'+
+    '<div class="card">'+ body +
+      '<div id="feedbackSlot" style="margin-top:10px"></div>'+
+      '<button class="btn primary block" id="submitBtn" style="margin-top:14px">Prüfen</button>'+
+    '</div>'+
+    '<button class="btn ghost" id="quitRound">Abbrechen</button>'+
+  '</div>';
+}
+
+function renderBossQuestion(){
+  if(roundState.idx===0 && !roundState.bossItem){ nextBossItem(); }
+  var item = roundState.bossItem;
+  return '<div class="stack">'+
+    '<div class="card row between">'+
+      '<div><b>Boss-Kampf</b><div class="muted small">Punkte: '+roundState.bossScore+'</div></div>'+
+      '<div class="timer" id="bossTime">'+roundState.bossSeconds+'s</div>'+
+    '</div>'+
+    '<div class="card">'+
+      '<div class="quiz-word">'+esc(item.inf)+'</div>'+
+      '<div class="quiz-de">'+esc(item.de)+'</div>'+
+      '<div class="row wrap" style="gap:14px">'+
+        '<div style="flex:1; min-width:130px"><div class="field-label">Simple Past</div><input type="text" id="ansA" autocomplete="off" autocapitalize="off" spellcheck="false"></div>'+
+        '<div style="flex:1; min-width:130px"><div class="field-label">Partizip II</div><input type="text" id="ansB" autocomplete="off" autocapitalize="off" spellcheck="false"></div>'+
+      '</div>'+
+      '<div id="feedbackSlot" style="margin-top:10px"></div>'+
+      '<button class="btn primary block" id="submitBtn" style="margin-top:14px">Prüfen</button>'+
+    '</div>'+
+    '<button class="btn ghost" id="quitRound">Aufgeben</button>'+
+  '</div>';
+}
+function nextBossItem(){
+  var pool = VERBS.filter(function(v){ return v.tier>=3; });
+  roundState.bossItem = pool[Math.floor(Math.random()*pool.length)];
+}
+
+function norm(s){ return s.trim().toLowerCase().replace(/\s+/g," "); }
+function matchAny(input, arr){ var n=norm(input); return arr.some(function(a){ return norm(a)===n; }); }
+
+function submitAnswer(){
+  var fb = document.getElementById("feedbackSlot");
+  if(roundState.mode==="boss"){
+    var item = roundState.bossItem;
+    var a=document.getElementById("ansA").value, b=document.getElementById("ansB").value;
+    var ok = matchAny(a,item.past) && matchAny(b,item.pp);
+    markSeen(item.inf, !ok);
+    document.getElementById("ansA").className = matchAny(a,item.past)?"correct":"wrong";
+    document.getElementById("ansB").className = matchAny(b,item.pp)?"correct":"wrong";
+    if(ok){ roundState.bossScore++; }
+    fb.innerHTML = ok
+      ? '<div class="feedback ok"><span class="icon">✓</span>Richtig!</div>'
+      : '<div class="feedback bad"><span class="icon">✗</span>Richtig wäre: '+item.past[0]+' / '+item.pp[0]+'</div>';
+    setTimeout(function(){
+      if(roundState.bossSeconds>0){ nextBossItem(); render(); }
+    }, ok?450:1200);
+    return;
+  }
+
+  var item2 = roundState.items[roundState.idx];
+  var ok2;
+  if(roundState.isSentence){
+    var v = byInf[item2.inf];
+    var expected = item2.type==="pp" ? v.pp : v.past;
+    var val = document.getElementById("ansA").value;
+    ok2 = matchAny(val, expected);
+    document.getElementById("ansA").className = ok2?"correct":"wrong";
+    fb.innerHTML = ok2
+      ? '<div class="feedback ok"><span class="icon">✓</span>Richtig!</div>'
+      : '<div class="feedback bad"><span class="icon">✗</span>Richtig wäre: '+expected[0]+'</div>';
+    markSeen(item2.inf, !ok2);
+  } else {
+    var a2=document.getElementById("ansA").value, b2=document.getElementById("ansB").value;
+    var okA=matchAny(a2,item2.past), okB=matchAny(b2,item2.pp);
+    ok2 = okA && okB;
+    document.getElementById("ansA").className = okA?"correct":"wrong";
+    document.getElementById("ansB").className = okB?"correct":"wrong";
+    fb.innerHTML = ok2
+      ? '<div class="feedback ok"><span class="icon">✓</span>Richtig!</div>'
+      : '<div class="feedback bad"><span class="icon">✗</span>Richtig wäre: '+item2.past[0]+' / '+item2.pp[0]+'</div>';
+    markSeen(item2.inf, !ok2);
+  }
+
+  roundState.results.push(ok2);
+  roundState.combo = ok2 ? roundState.combo+1 : 0;
+  roundState.maxCombo = Math.max(roundState.maxCombo, roundState.combo);
+
+  document.getElementById("submitBtn").textContent = (roundState.idx+1<roundState.items.length) ? "Weiter" : "Runde beenden";
+  document.getElementById("submitBtn").onclick = function(){
+    roundState.idx++;
+    if(roundState.idx>=roundState.items.length){
+      finishNormalRound();
+    } else {
+      render();
+    }
+  };
+}
+
+function finishNormalRound(){
+  var correct = roundState.results.filter(Boolean).length;
+  var total = roundState.results.length;
+  var pct = total? Math.round(correct/total*100):0;
+  var baseXp = correct*10;
+  var comboXp = Math.max(0, roundState.maxCombo-2)*5;
+  var earned = baseXp+comboXp;
+  state.xp += earned;
+  state.totalRounds++;
+  if(correct===total && total>0) state.perfectRounds++;
+
+  var chestReward = null;
+  if(pct>=80){
+    var amt = 10 + Math.floor(Math.random()*31); // 10..40, immer positiv
+    state.xp += amt;
+    chestReward = amt;
+  }
+
+  if(roundState.mode==="chapter" && pct>=70){
+    state.chaptersDone[roundState.chapter]=true;
+  }
+  touchStreak();
+  save();
+
+  roundState.finalCorrect=correct; roundState.finalTotal=total; roundState.finalEarned=earned; roundState.chestReward=chestReward;
+  view="result";
+  render();
+  return "";
+}
+
+function renderResult(){
+  if(roundState.mode==="boss"){
+    return '<div class="stack">'+
+      '<div class="card center">'+
+        '<div style="font-size:2rem">\u{1F451}</div>'+
+        '<h2>Boss-Kampf beendet</h2>'+
+        '<p>Punkte in dieser Runde: <b>'+roundState.finalScore+'</b></p>'+
+        (roundState.finalScore>=8?'<p class="muted">Starke Runde! Der Boss wankt.</p>':'<p class="muted">Übung macht den Meister, nächster Versuch wird besser.</p>')+
+        '<p class="muted small">Bestwert: '+state.bestBossScore+'</p>'+
+      '</div>'+
+      '<button class="btn primary block" id="backHome">Zur Übersicht</button>'+
+    '</div>';
+  }
+  var pct = roundState.finalTotal? Math.round(roundState.finalCorrect/roundState.finalTotal*100):0;
+  var chest = roundState.chestReward!==null;
+  return '<div class="stack">'+
+    '<div class="card center">'+
+      '<h2>Runde abgeschlossen</h2>'+
+      '<p><b>'+roundState.finalCorrect+' / '+roundState.finalTotal+'</b> richtig ('+pct+' %)</p>'+
+      '<p class="muted">+'+roundState.finalEarned+' XP verdient'+(roundState.maxCombo>2?(" (inkl. Combo-Bonus für "+roundState.maxCombo+" in Folge)"):"")+'</p>'+
+    '</div>'+
+    (chest ? (
+      '<div class="chest">'+
+        '<div class="icon">\u{1F381}</div>'+
+        '<div>Bonus-Truhe geöffnet (ab 80 % richtig gibt es immer eine Belohnung)</div>'+
+        '<div class="amount">+'+roundState.chestReward+' XP</div>'+
+      '</div>'
+    ) : '')+
+    (roundState.mode==="chapter" && state.chaptersDone[roundState.chapter] ?
+      '<div class="card center"><b>Kapitel '+roundState.chapter+' abgeschlossen!</b><p class="muted small">Das nächste Kapitel ist jetzt freigeschaltet.</p></div>' : '')+
+    '<button class="btn primary block" id="backHome">Zur Übersicht</button>'+
+  '</div>';
+}
+
+/* ---------------------------------------------------------------------
+   STATISTIK & ERFOLGE
+--------------------------------------------------------------------- */
+function renderStats(){
+  var weak = weakVerbs(8);
+  var rows = weak.map(function(w){
+    var acc = Math.round((1-(w.s.wrong/w.s.seen))*100);
+    return '<tr><td>'+esc(w.inf)+'</td><td>'+w.s.seen+'</td><td>'+w.s.wrong+'</td><td>'+acc+' %</td></tr>';
+  }).join("");
+  return '<div class="stack">'+
+    '<div class="card">'+
+      '<h2>Deine Bestwerte</h2>'+
+      '<div class="kv"><span>Gesamt-XP</span><b>'+state.xp+'</b></div>'+
+      '<div class="kv"><span>Level</span><b>'+levelInfo(state.xp).title+'</b></div>'+
+      '<div class="kv"><span>Tage in Folge</span><b>'+state.streak.count+'</b></div>'+
+      '<div class="kv"><span>Perfekte Runden</span><b>'+state.perfectRounds+'</b></div>'+
+      '<div class="kv"><span>Boss-Bestwert</span><b>'+state.bestBossScore+'</b></div>'+
+      '<div class="kv"><span>Runden gespielt</span><b>'+state.totalRounds+'</b></div>'+
+    '</div>'+
+    '<div class="card">'+
+      '<h3>Wackelkandidaten</h3>'+
+      (rows ? '<table class="stat"><tr><th>Verb</th><th>Gesehen</th><th>Falsch</th><th>Quote</th></tr>'+rows+'</table>'
+            : '<p class="muted small">Noch keine Daten, erst ein paar Runden spielen.</p>')+
+    '</div>'+
+    '<div class="card">'+
+      '<button class="btn danger block" id="resetBtn">Fortschritt zurücksetzen</button>'+
+    '</div>'+
+  '</div>';
+}
+
+function renderBadges(){
+  var grid = BADGES.map(function(b){
+    var unlocked = b.test(state);
+    return '<div class="badge'+(unlocked?"":" locked")+'"><div class="ic">'+b.ic+'</div><div class="nm">'+b.nm+'</div></div>';
+  }).join("");
+  return '<div class="stack"><div class="card"><h2>Erfolge</h2><div class="badge-grid">'+grid+'</div></div></div>';
+}
+
+/* ---------------------------------------------------------------------
+   EVENT-BINDINGS
+--------------------------------------------------------------------- */
+function bind(){
+  var themeBtn=document.getElementById("themeBtn");
+  if(themeBtn) themeBtn.onclick=toggleTheme;
+
+  var onbStart=document.getElementById("onbStart");
+  if(onbStart){
+    onbStart.onclick=function(){
+      state.name = document.getElementById("onbName").value.trim();
+      state.klasse = document.getElementById("onbKlasse").value;
+      state.onboarded = true;
+      save();
+      render();
+    };
+  }
+
+  document.querySelectorAll(".tabbtn").forEach(function(btn){
+    btn.onclick=function(){ view=btn.getAttribute("data-tab"); render(); };
+  });
+
+  document.querySelectorAll(".node[data-chapter]").forEach(function(btn){
+    btn.onclick=function(){
+      if(btn.disabled) return;
+      startRound("chapter", parseInt(btn.getAttribute("data-chapter"),10));
+    };
+  });
+  var bossBtn=document.querySelector(".node[data-boss]");
+  if(bossBtn){ bossBtn.onclick=function(){ if(!bossBtn.disabled) startRound("boss"); }; }
+
+  var ctxBtn=document.getElementById("ctxBtn");
+  if(ctxBtn) ctxBtn.onclick=function(){ startRound("context"); };
+  var drillWeak=document.getElementById("drillWeak");
+  if(drillWeak) drillWeak.onclick=function(){ startRound("weak"); };
+
+  var submitBtn=document.getElementById("submitBtn");
+  if(submitBtn) submitBtn.onclick=submitAnswer;
+  var quitRound=document.getElementById("quitRound");
+  if(quitRound) quitRound.onclick=function(){
+    if(roundState && roundState.bossTimer) clearInterval(roundState.bossTimer);
+    view="dashboard"; render();
+  };
+  var backHome=document.getElementById("backHome");
+  if(backHome) backHome.onclick=function(){ view="dashboard"; render(); };
+
+  var resetBtn=document.getElementById("resetBtn");
+  if(resetBtn) resetBtn.onclick=function(){
+    if(confirm("Wirklich den gesamten Fortschritt löschen? Das kann nicht rückgängig gemacht werden.")){
+      localStorage.removeItem(KEY);
+      state = defaultState();
+      view="dashboard";
+      render();
+    }
+  };
+
+  document.querySelectorAll("input[type=text]").forEach(function(inp){
+    inp.addEventListener("keydown", function(e){
+      if(e.key==="Enter"){
+        e.preventDefault();
+        var sb=document.getElementById("submitBtn");
+        if(sb) sb.click();
+      }
+    });
+  });
+  var firstInput = document.getElementById("ansA");
+  if(firstInput) firstInput.focus();
+}
+
+render();
+})();
+</script>
+</body>
+</html>
