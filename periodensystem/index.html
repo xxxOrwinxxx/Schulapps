@@ -857,6 +857,18 @@
   @media (max-width: 700px) { .mini-pse-wrap { overflow-x: auto; } .mini-pse { min-width: 560px; } }
   /* --------- Einstufungstest-Box --------- */
   .placement-box { margin-top: 10px; font-size: 12px; color: var(--text-dim); }
+  /* --------- Selbsteinschätzung nach der Lektion --------- */
+  .self-check { margin: 18px auto 0; max-width: 560px; text-align: left; background: var(--surface); border: 1px solid var(--border-soft); border-radius: 4px; padding: 14px 16px; }
+  .self-check-title { font-weight: 700; font-size: 13px; margin-bottom: 10px; }
+  .self-check-row { display: flex; align-items: center; gap: 10px; font-size: 20px; }
+  .self-check-row input[type=range] { flex: 1; accent-color: var(--accent); }
+  .self-check-val { font-size: 12px; font-weight: 600; min-width: 118px; text-align: right; color: var(--text-dim); }
+  .self-check textarea { width: 100%; margin-top: 10px; font: inherit; font-size: 13px; border-radius: 3px; border: 1px solid var(--border-soft); background: var(--bg); color: inherit; padding: 8px 10px; resize: vertical; box-sizing: border-box; }
+  .self-check button { margin-top: 8px; background: var(--bg); border: 1px solid var(--border-soft); color: inherit; font: inherit; font-weight: 600; font-size: 12px; padding: 7px 14px; border-radius: 3px; cursor: pointer; }
+  .self-check button:hover { border-color: var(--accent); color: var(--accent); }
+  /* --------- Kompetenz-Feinauswertung im Abschlussbericht --------- */
+  .skill-weak-list { margin: 8px 0 0; padding-left: 18px; }
+  .skill-weak-list li { margin: 3px 0; }
 </style>
 </head>
 <body>
@@ -2249,6 +2261,24 @@ const lessons = [
 ];
 
 // ============================================================================
+// KOMPETENZ-TAGS: je Aufgabe eine Teilkompetenz, für das Schwächen-Feedback im
+// Abschlussbericht und den SC1-Export. Zuordnung über Lektions-Id + Aufgabenindex,
+// muss bei Änderungen an den Fragenlisten mitgepflegt werden (Längen-Check unten).
+// ============================================================================
+const SKILLS = {
+  1: ['Symbole & Namen','PSE-Kästchen ablesen','Symbole & Namen','PSE-Kästchen ablesen','PSE-Kästchen ablesen','Isotope & Atommasse','Isotope & Atommasse'],
+  2: ['Perioden & Hauptgruppen','Perioden & Hauptgruppen','Perioden & Hauptgruppen','Perioden & Hauptgruppen','Perioden & Hauptgruppen'],
+  3: ['Teilchenzahlen bestimmen','Teilchenzahlen bestimmen','Teilchenzahlen bestimmen','Energiestufen besetzen','Energiestufen besetzen','Valenzelektronen','Valenzelektronen','Ionen & Edelgaskonfiguration','Ionen & Edelgaskonfiguration'],
+  4: ['Atomradius-Trend','Atomradius-Trend','Atomradius-Trend','Atomradius-Trend','Atomradius-Trend','EN-Trend','EN-Trend','EN-Trend','EN-Trend','Metallcharakter & Trend-Kompass','Metallcharakter & Trend-Kompass','Metallcharakter & Trend-Kompass'],
+  5: ['Ionenladung Metalle','Ionenladung Metalle','Ionenladung Metalle','Ionenladung Nichtmetalle','Ionenladung Nichtmetalle','Ionen & Edelgaskonfiguration','Reaktivität vorhersagen','Reaktivität vorhersagen','Reaktivität vorhersagen','Reaktivität vorhersagen']
+};
+lessons.forEach(l => {
+  const tags = SKILLS[l.id] || [];
+  if (tags.length !== l.questions.length) console.warn(`SKILLS[${l.id}]: ${tags.length} Tags, aber ${l.questions.length} Aufgaben, Zuordnung prüfen!`);
+  tags.forEach((s, i) => { if (l.questions[i]) l.questions[i].skill = s; });
+});
+
+// ============================================================================
 // EINSTUFUNGSTEST (optional): repräsentative Aufgaben quer durch alle Lektionen.
 // Ab 60 % werden alle Lektionen freigeschaltet, ohne sie als erledigt zu markieren.
 // Verweist auf die Original-Aufgabenobjekte (keine Kopien).
@@ -2373,9 +2403,92 @@ function renderTrainingDone() {
         <button id="trainBack">Zur Übersicht</button>
       </div>
     </div>`;
-  document.getElementById('trainAgain').addEventListener('click', startTraining);
+  document.getElementById('trainAgain').addEventListener('click', currentLesson.id === 'training2' ? startTraining2 : startTraining);
   document.getElementById('trainBack').addEventListener('click', backToOverview);
   renderLessonProgress();
+}
+
+// ============================================================================
+// SCHALEN- & IONEN-TRAINING (optional): generierte Übungsrunde zu Schalen-
+// besetzung (Lektion 3) und Ionenladung (Lektion 5). Zählt wie das Atombau-
+// Training NICHT in den Abschlussbericht. Die Musterlösungen werden aus der
+// Elementtabelle berechnet, nie aus dem Bauplan der Aufgabe angenommen.
+// ============================================================================
+const training2Lesson = {
+  id: 'training2',
+  title: 'Schalen- & Ionen-Training',
+  subtitle: 'Optional: Schalenbesetzung angeben und Ionenladung vorhersagen',
+  intro: `<p>Freiwillige Übungsrunde: <strong>6 Aufgaben</strong> zur Verteilung der Elektronen auf die Energiestufen und zur Ionenladung.</p>
+          <p>· Jede Runde würfelt neue Elemente, du kannst sie beliebig oft wiederholen.</p>
+          <p>· Nutze bei Bedarf das Mini-PSE unten oder den PSE-Tab.</p>
+          <p>· Das Training zählt <strong>nicht</strong> in den Abschlussbericht, es ist nur zum Üben.</p>`,
+  questions: []
+};
+// Schalenbesetzung im vereinfachten Modell 2/8/8/2 (gilt für Z <= 20)
+function shellOccupancy(z) {
+  const caps = [2, 8, 8, 2];
+  const occ = [];
+  let rest = z;
+  for (const cap of caps) {
+    if (rest <= 0) break;
+    const k = Math.min(rest, cap);
+    occ.push(k);
+    rest -= k;
+  }
+  return occ;
+}
+function shellVariants(occ) {
+  return [occ.join(','), occ.join(''), occ.join('-'), occ.join('.'), occ.join(';')];
+}
+// Ionen nach den Faustregeln aus Lektion 5: nur eindeutige Hauptgruppen-Fälle
+// (ohne H, ohne Halbmetall B, ohne IV. und VIII. Hauptgruppe)
+const ION_POOL = [3, 4, 11, 12, 13, 19, 20, 7, 8, 9, 15, 16, 17];
+function ionChargeFor(group) {
+  const v = valenceForGroup(group);
+  return v <= 3 ? v : v - 8;   // I. bis III. HG: +v | V. bis VII. HG: v − 8 (negativ)
+}
+function ionDisplay(sym, charge) {
+  const a = Math.abs(charge), sign = charge > 0 ? '⁺' : '⁻';
+  return sym + (a === 1 ? '' : (a === 2 ? '²' : '³')) + sign;
+}
+function ionVariants(sym, charge) {
+  const s = sym.toLowerCase(), a = Math.abs(charge), sg = charge > 0 ? '+' : '-';
+  return [s + a + sg, s + sg + a, s + sg.repeat(a)];   // z. B. mg2+, mg+2, mg++
+}
+function buildTraining2Questions(n) {
+  const byZ = {}; elements.forEach(e => { byZ[e[0]] = e; });
+  const shellPool = TRAIN_POOL.slice();
+  const ionPool = ION_POOL.slice();
+  const draw = pool => pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
+  const qs = [];
+  for (let i = 0; i < n; i++) {
+    if (i % 2 === 0) {
+      const z = draw(shellPool), el = byZ[z], sym = el[1], name = el[2];
+      const occ = shellOccupancy(z);
+      qs.push({type:'input-text',text:`Gib die Verteilung der Elektronen auf die Energiestufen für ein <strong>${name}-Atom (${sym}, Z = ${z})</strong> an. Schreibe die Besetzung von innen nach außen, durch Kommas getrennt (z. B. 2,8,1).`,
+        correctVariants: shellVariants(occ),
+        retryHint:`${z} Elektronen insgesamt. 1. Stufe max. 2, 2. Stufe max. 8, 3. Stufe max. 8. Wie viele bleiben jeweils übrig?`,
+        explainCorrect:`Richtig. ${occ.join(' + ')} = ${z} Elektronen. Die ${occ[occ.length-1]} auf der äußersten Stufe sind die Valenzelektronen.`,
+        solution:`${sym} (Z = ${z}): <strong>${occ.join(', ')}</strong>. Die äußersten ${occ[occ.length-1]} sind die Valenzelektronen.`});
+    } else {
+      const z = draw(ionPool), el = byZ[z], sym = el[1], name = el[2], group = el[6];
+      const charge = ionChargeFor(group);
+      const isMetal = charge > 0;
+      const disp = ionDisplay(sym, charge);
+      qs.push({type:'input-text',text:`Welches Ion bildet ein <strong>${name}-Atom (${sym})</strong>? Schreibe Symbol und Ladung (z. B. Na+ oder Na⁺).`,
+        correctVariants: ionVariants(sym, charge),
+        retryHint: isMetal
+          ? `${sym} steht in der ${romanHG(group)}. Hauptgruppe (Metall): Es gibt alle Valenzelektronen ab. Welche Ladung bleibt übrig?`
+          : `${sym} steht in der ${romanHG(group)}. Hauptgruppe (Nichtmetall): Es nimmt Elektronen auf, bis 8 Valenzelektronen erreicht sind. Aufnehmen heißt negative Ladung.`,
+        explainCorrect:`Richtig. ${sym} (${romanHG(group)}. Hauptgruppe) ${isMetal ? 'gibt ' + Math.abs(charge) + ' Valenzelektron' + (Math.abs(charge) > 1 ? 'en' : '') + ' ab' : 'nimmt ' + Math.abs(charge) + ' Elektron' + (Math.abs(charge) > 1 ? 'en' : '') + ' auf'} → <strong>${disp}</strong> (Edelgaskonfiguration).`,
+        solution:`${sym}: ${romanHG(group)}. Hauptgruppe → <strong>${disp}</strong>.`});
+    }
+  }
+  return qs;
+}
+function startTraining2() {
+  training2Lesson.questions = buildTraining2Questions(6);
+  startLesson('training2');
 }
 
 const STORAGE_KEY = 'pse-fosbos-lernpfad-progress-v2';
@@ -2491,12 +2604,12 @@ function renderLessonsGrid() {
 let currentLesson = null, currentQIndex = 0, lessonResults = [], currentAttempts = 0, currentSolutionRevealed = false;
 
 function startLesson(id) {
-  currentLesson = id === 'placement' ? placementLesson : id === 'training' ? trainingLesson : lessons.find(l => l.id === id);
+  currentLesson = id === 'placement' ? placementLesson : id === 'training' ? trainingLesson : id === 'training2' ? training2Lesson : lessons.find(l => l.id === id);
   currentQIndex = 0;
   lessonResults = [];
   document.getElementById('lessons-overview').style.display = 'none';
   document.getElementById('lessonView').classList.add('active');
-  document.getElementById('lessonTitle').textContent = currentLesson.id === 'placement' ? `🧭 ${currentLesson.title}` : currentLesson.id === 'training' ? `🔁 ${currentLesson.title}` : `${currentLesson.id}. ${currentLesson.title}`;
+  document.getElementById('lessonTitle').textContent = currentLesson.id === 'placement' ? `🧭 ${currentLesson.title}` : (currentLesson.id === 'training' || currentLesson.id === 'training2') ? `🔁 ${currentLesson.title}` : `${currentLesson.id}. ${currentLesson.title}`;
   document.getElementById('lessonInfo').textContent = currentLesson.subtitle;
   renderLessonProgress();
   renderLessonStart();
@@ -2761,19 +2874,23 @@ function showSolutionBtn(show) {
 }
 function renderLessonDone() {
   if (currentLesson.id === 'placement') return renderPlacementDone();
-  if (currentLesson.id === 'training') return renderTrainingDone();
+  if (currentLesson.id === 'training' || currentLesson.id === 'training2') return renderTrainingDone();
   const cc = lessonResults.filter(a => a === 'done').length;
   const pc = lessonResults.filter(a => a === 'partial').length;
   const wc = lessonResults.filter(a => a === 'wrong').length;
   const total = currentLesson.questions.length;
   const score = cc + pc * 0.5;
   const percent = Math.round((score / total) * 100);
-  // Speichern: Ergebnisse immer mit ablegen, Status nur bei >= 60% auf 'done' setzen
+  // Speichern: Ergebnisse immer mit ablegen, Status nur bei >= 60% auf 'done' setzen.
+  // Eine frühere Selbsteinschätzung (conf/note) überlebt das Wiederholen der Lektion.
   const prevStatus = getLessonStatus(currentLesson.id);
+  const prevEntry = (progress[currentLesson.id] && typeof progress[currentLesson.id] === 'object') ? progress[currentLesson.id] : {};
   progress[currentLesson.id] = {
     status: percent >= 60 ? 'done' : (prevStatus === 'done' ? 'done' : 'attempted'),
     results: lessonResults.slice()
   };
+  if (prevEntry.conf) progress[currentLesson.id].conf = prevEntry.conf;
+  if (prevEntry.note) progress[currentLesson.id].note = prevEntry.note;
   saveProgress(progress);
 
   let msg;
@@ -2802,8 +2919,26 @@ function renderLessonDone() {
     return `<div class="missed-wrap"><div class="missed-title">Das solltest du dir nochmal ansehen (aufklappen für die Lösung):</div>${items}</div>`;
   })();
 
-  // Nach Lektion 3 (Atombau) das optionale Übungsmodul anbieten
-  const trainBtnHTML = (currentLesson.id === 3) ? `<button id="startTrainingBtn">🔁 Atombau-Training</button>` : '';
+  // Nach Lektion 3 (Atombau) bzw. Lektion 5 (Ionen) das passende Übungsmodul anbieten
+  const trainBtnHTML = currentLesson.id === 3 ? `<button id="startTrainingBtn">🔁 Atombau-Training</button>`
+                     : currentLesson.id === 5 ? `<button id="startTraining2Btn">🔁 Schalen- & Ionen-Training</button>` : '';
+
+  // Selbsteinschätzung: Regler + optionale Notiz, wandert mit dem Ergebnis-Code zur Lehrkraft
+  const confWords = {1:'sehr unsicher', 2:'eher unsicher', 3:'teils-teils', 4:'ziemlich sicher', 5:'sehr sicher'};
+  const prevConf = progress[currentLesson.id].conf || 0;
+  const escNote = (progress[currentLesson.id].note || '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const selfCheckHTML = `
+    <div class="self-check">
+      <div class="self-check-title">Wie sicher fühlst du dich bei dieser Lektion? <span style="font-weight:400;color:var(--text-dim);">(geht mit dem Ergebnis-Code an mich)</span></div>
+      <div class="self-check-row">
+        <span aria-hidden="true">😥</span>
+        <input type="range" min="1" max="5" step="1" id="selfConf" value="${prevConf || 3}" aria-label="Sicherheit von 1 (sehr unsicher) bis 5 (sehr sicher)">
+        <span aria-hidden="true">🤩</span>
+        <span class="self-check-val" id="selfConfVal"></span>
+      </div>
+      <textarea id="selfNote" rows="2" placeholder="Optional: Was war schwierig, was willst du dir merken?">${escNote}</textarea>
+      <div><button id="selfSaveBtn">Einschätzung speichern</button></div>
+    </div>`;
 
   if (everythingDone) {
     // Mega-Gratulation: ganzer Lernpfad geschafft → Lektionsergebnis tritt zurück, Erfolg im Zentrum
@@ -2815,6 +2950,7 @@ function renderLessonDone() {
           <div class="celebration-sub">Du hast den ganzen Lernpfad gemeistert.</div>
         </div>
         <div class="celebration-meta"><strong>Lektion ${currentLesson.id}:</strong> ${cc}/${total} im 1. Versuch · ${percent} %</div>
+        ${selfCheckHTML}
         <div class="done-actions">
           <button id="retryLesson">Lektion wiederholen</button>
           ${reportBtnHTML}
@@ -2829,6 +2965,7 @@ function renderLessonDone() {
         <div class="score">${cc} im 1. Versuch · ${pc} im 2. Versuch · ${wc} nicht gelöst · ${percent} %</div>
         <p>${msg}</p>
         ${missedHTML}
+        ${selfCheckHTML}
         <div class="done-actions">
           <button id="retryLesson">Lektion wiederholen</button>
           ${trainBtnHTML}
@@ -2839,6 +2976,21 @@ function renderLessonDone() {
   document.getElementById('retryLesson').addEventListener('click', () => startLesson(currentLesson.id));
   const stb = document.getElementById('startTrainingBtn');
   if (stb) stb.addEventListener('click', startTraining);
+  const stb2 = document.getElementById('startTraining2Btn');
+  if (stb2) stb2.addEventListener('click', startTraining2);
+  // Selbsteinschätzung verdrahten (in beiden Abschluss-Varianten vorhanden)
+  const confSlider = document.getElementById('selfConf');
+  const confValEl = document.getElementById('selfConfVal');
+  const updConf = () => { confValEl.textContent = confSlider.value + '/5 · ' + confWords[confSlider.value]; };
+  updConf();
+  confSlider.addEventListener('input', updConf);
+  document.getElementById('selfSaveBtn').addEventListener('click', () => {
+    progress[currentLesson.id].conf = parseInt(confSlider.value, 10);
+    const note = document.getElementById('selfNote').value.trim();
+    if (note) progress[currentLesson.id].note = note; else delete progress[currentLesson.id].note;
+    saveProgress(progress);
+    document.getElementById('selfSaveBtn').textContent = 'Gespeichert ✓';
+  });
   if (everythingDone) {
     document.getElementById('goToReport').addEventListener('click', renderFinalReport);
   } else {
@@ -2927,6 +3079,33 @@ function renderFinalReport() {
       <strong>💡 Schwerpunkt zum Üben: Lektion ${weakest.id}, ${weakest.title} (${weakest.pct} %)</strong>
       <p>${lessonTips[weakest.id] || ''}</p>
       ${weakest.id === 3 ? '<button class="lesson-bar-redo" id="reportTraining">🔁 Atombau-Training starten</button>' : ''}
+      ${weakest.id === 5 ? '<button class="lesson-bar-redo" id="reportTraining2">🔁 Schalen- & Ionen-Training starten</button>' : ''}
+    </div>` : '';
+
+  // Kompetenz-Feinauswertung: schwächste Teilkompetenzen quer über alle Lektionen
+  const skillStats = {};
+  lessons.forEach(l => {
+    const results = getLessonResults(l.id);
+    if (!results.length) return;
+    l.questions.forEach((q, i) => {
+      if (!q.skill || results[i] === undefined) return;
+      if (!skillStats[q.skill]) skillStats[q.skill] = { pts: 0, total: 0 };
+      skillStats[q.skill].total++;
+      if (results[i] === 'done') skillStats[q.skill].pts += 1;
+      else if (results[i] === 'partial') skillStats[q.skill].pts += 0.5;
+    });
+  });
+  const weakSkills = Object.entries(skillStats)
+    .map(([name, s]) => ({ name, pct: Math.round((s.pts / s.total) * 100), total: s.total }))
+    .filter(s => s.pct < 60)
+    .sort((a, b) => a.pct - b.pct)
+    .slice(0, 3);
+  const skillHTML = weakSkills.length ? `
+    <div class="report-box weakness">
+      <strong>🎯 Gezielt üben, diese Teilkompetenzen:</strong>
+      <ul class="skill-weak-list">
+        ${weakSkills.map(s => `<li><strong>${s.name}</strong> · ${s.pct} % (${s.total} Aufgabe${s.total !== 1 ? 'n' : ''})</li>`).join('')}
+      </ul>
     </div>` : '';
 
   // Lektions-Balken
@@ -2978,6 +3157,7 @@ function renderFinalReport() {
       <div class="lesson-bars">${barsHTML}</div>
       ${strengthHTML}
       ${weaknessHTML}
+      ${skillHTML}
       <div class="report-name">
         <label for="reportNameInput">Bitte gib deinen Namen ein. So kann ich dein Ergebnis dir zuordnen, dir gezielt Rückmeldung geben und dich im Lerngespräch besser unterstützen.</label>
         <input type="text" id="reportNameInput" placeholder="Vor- und Nachname" autocomplete="name">
@@ -2996,6 +3176,8 @@ function renderFinalReport() {
   if (reportNameField) { try { reportNameField.value = localStorage.getItem('pse-student-name') || ''; } catch {} }
   const reportTrainingBtn = document.getElementById('reportTraining');
   if (reportTrainingBtn) reportTrainingBtn.addEventListener('click', startTraining);
+  const reportTraining2Btn = document.getElementById('reportTraining2');
+  if (reportTraining2Btn) reportTraining2Btn.addEventListener('click', startTraining2);
   const restartBtn = document.getElementById('restartAllBtn');
   if (restartBtn) restartBtn.addEventListener('click', () => {
     if (confirm('Den GANZEN Lernpfad wirklich von vorn beginnen? Alle Ergebnisse werden gelöscht.')) {
@@ -3036,15 +3218,23 @@ function buildResultCode(name) {
     const res = (progress[l.id] && Array.isArray(progress[l.id].results)) ? progress[l.id].results : [];
     l.questions.forEach((q, i) => {
       const eintrag = { id: 'L' + l.id + 'A' + (i + 1), titel: 'L' + l.id + '.' + (i + 1), block: l.title };
+      if (q.skill) eintrag.skill = q.skill;    // Teilkompetenz (Zusatzfeld, von der Auswertung heute ignoriert)
       if (res[i]) eintrag.ergebnis = res[i];   // 'done' | 'partial' | 'wrong'; sonst nicht bearbeitet
       aufgaben.push(eintrag);
     });
+  });
+  // Selbsteinschätzung je Lektion (Zusatzfeld im SC1-Payload, abwärtskompatibel)
+  const selbst = [];
+  lessons.forEach(l => {
+    const e = progress[l.id];
+    if (e && typeof e === 'object' && e.conf) selbst.push(Object.assign({ lektion: l.id, conf: e.conf }, e.note ? { note: e.note } : {}));
   });
   const payload = {
     v: 1, testId: 'pse-lernpfad', titel: 'PSE-Lernpfad', fach: 'CH', stufe: '10',
     erstellt: new Date().toISOString().slice(0, 16), name: name, sid: null, aufgaben
   };
   if (progress.placementPassed) payload.meta = { placementPassed: true };
+  if (selbst.length) payload.selbst = selbst;
   return 'SC1-' + btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
 }
 function exportProgress() {
