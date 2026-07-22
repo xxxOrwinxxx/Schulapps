@@ -2592,6 +2592,28 @@ function renderLessonsGrid() {
     if (accessible) card.addEventListener('click', () => startLesson(lesson.id));
     g.appendChild(card);
   });
+  // Übungsmodule als eigene Karten, damit sie auffindbar sind (nicht nur nach
+  // Lektion 3/5 bzw. im Bericht). Freigeschaltet, sobald die zugehörige Lektion
+  // abgeschlossen ist oder der Einstufungstest bestanden wurde.
+  const trainingCards = [
+    { title: 'Atombau-Training', desc: 'Protonen, Neutronen, Elektronen und Valenzelektronen sicher bestimmen', unlocked: getLessonStatus(3) === 'done' || !!progress.placementPassed, start: startTraining, lockHint: 'Ab Abschluss von Lektion 3' },
+    { title: 'Schalen- & Ionen-Training', desc: 'Schalenbesetzung angeben und Ionenladung vorhersagen', unlocked: getLessonStatus(5) === 'done' || !!progress.placementPassed, start: startTraining2, lockHint: 'Ab Abschluss von Lektion 5' }
+  ];
+  trainingCards.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'lesson-card';
+    card.dataset.status = t.unlocked ? 'unlocked' : 'locked';
+    card.innerHTML = `
+      <div class="lesson-num">🔁 Übungsmodul</div>
+      <div class="lesson-title">${t.title}</div>
+      <div class="lesson-desc">${t.desc}</div>
+      <div class="lesson-meta">
+        <span>6 Aufgaben · zählt nicht in den Bericht</span>
+        <span class="lesson-status">${t.unlocked ? 'Verfügbar' : t.lockHint}</span>
+      </div>`;
+    if (t.unlocked) card.addEventListener('click', t.start);
+    g.appendChild(card);
+  });
   updateProgressBadge();
   // Einstufungstest-Angebot ausblenden, sobald bestanden oder der Pfad schon läuft
   const pBox = document.getElementById('placementBox');
@@ -2953,6 +2975,7 @@ function renderLessonDone() {
         ${selfCheckHTML}
         <div class="done-actions">
           <button id="retryLesson">Lektion wiederholen</button>
+          ${trainBtnHTML}
           ${reportBtnHTML}
         </div>
       </div>`;
