@@ -88,6 +88,7 @@
     <h2 class="result-h">Dein Ergebnis</h2>
     <div class="tiles" id="tiles"></div>
     <p id="summary" style="font-weight:600"></p>
+    <div id="empfehlung"></div>
     <div style="border-top:1px solid var(--line);margin:14px 0;padding-top:12px">
       <div class="qtext" style="margin-bottom:6px">Für die Lehrkraft: dein Ergebnis-Code</div>
       <textarea class="codearea" id="code" readonly></textarea>
@@ -134,8 +135,16 @@ const ITEMS=[
     {t:"Die Flamme regt Elektronen des Metallions an. Beim Zurückfallen auf eine tiefere Energiestufe geben sie Licht ab, dessen Farbe von den Energiestufenabständen des Metallions abhängt.",k:true},
     {t:"Alle Metallionen senden beim Zurückfallen dasselbe Licht aus. Die unterschiedliche Farbe entsteht durch die jeweilige Flammentemperatur.",k:false}]}
 ];
-const LSKEY="lernstand_ch11_lb2_v1", DONEKEY="lernstand_ch11_lb2_done_v1";
-let answers={}, locked=false;
+const LSKEY="lernstand_ch11_lb2_v1", DONEKEY="lernstand_ch11_lb2_done_v1", ORDERKEY="lernstand_ch11_lb2_order_v1";
+const BLOCK_INFO={bausteine:{thema:"Bausteine der Atome",kap:"Kapitel 2"},isotope:{thema:"Isotope und mittlere Atommasse",kap:"Kapitel 3"},energiestufen:{thema:"Energiestufenmodell",kap:"Kapitel 4"},orbitalmodell:{thema:"Orbitalmodell",kap:"Kapitel 5"},ionen:{thema:"Ionen und Ladung",kap:"Kapitel 6"},flammenfaerbung:{thema:"Flammenfärbung",kap:"Kapitel 4 und 6"}};
+let answers={}, locked=false, orderMap=null;
+function getOrder(item){
+  if(!orderMap){
+    try{ orderMap=JSON.parse(localStorage.getItem(ORDERKEY)||"null"); }catch(e){ orderMap=null; }
+    if(!orderMap){ orderMap={}; ITEMS.forEach(it=>{ if(it.typ==="single"||it.typ==="multi"){ const idx=it.optionen.map((o,i)=>i); for(let j=idx.length-1;j>0;j--){ const k=Math.floor(Math.random()*(j+1)); const t=idx[j]; idx[j]=idx[k]; idx[k]=t; } orderMap[it.id]=idx; } }); try{ localStorage.setItem(ORDERKEY,JSON.stringify(orderMap)); }catch(e){} }
+  }
+  return orderMap[item.id]||item.optionen.map((o,i)=>i);
+}
 
 function nameEl(){ return document.getElementById("name"); }
 function save(){ if(locked)return; try{ localStorage.setItem(LSKEY,JSON.stringify({name:nameEl().value,answers})); }catch(e){} }
@@ -156,7 +165,7 @@ function render(){
     let inner=`<div class="qnum">Aufgabe ${n} von ${ITEMS.length}</div><div class="qtext">${esc(item.frage)}</div>`;
     if(item.typ==="single"||item.typ==="multi"){
       const it=item.typ==="single"?"radio":"checkbox";
-      item.optionen.forEach((o,i)=>{ inner+=`<label class="opt${isSel(item,i)?" sel":""}" data-i="${i}"><input type="${it}" name="${item.id}" ${isSel(item,i)?"checked":""}><span>${esc(o.t)}</span></label>`; });
+      getOrder(item).forEach(oi=>{ const o=item.optionen[oi]; inner+=`<label class="opt${isSel(item,oi)?" sel":""}" data-i="${oi}"><input type="${it}" name="${item.id}" ${isSel(item,oi)?"checked":""}><span>${esc(o.t)}</span></label>`; });
     } else if(item.typ==="zahl"){
       inner+=`<input type="number" inputmode="numeric" id="in-${item.id}" value="${answers[item.id]!=null?esc(answers[item.id]):""}" placeholder="Zahl eingeben">`;
     } else if(item.typ==="kurzwort"){
@@ -261,6 +270,10 @@ function showResult(done,isReplay){
   else if(pct>=55)msg+="Gute Basis. Schau dir die markierten Stellen nochmal an.";
   else msg+="Hier lohnt sich Wiederholung. Nutze die Selbstkontrollen und den Aufgabenpool im Skript.";
   document.getElementById("summary").textContent=msg;
+  const schwach=[]; done.aufgaben.forEach(a=>{ if(a.ergebnis!=="done" && schwach.indexOf(a.block)<0) schwach.push(a.block); });
+  const emp=document.getElementById("empfehlung"); emp.style.marginTop="12px";
+  if(schwach.length){ const lis=schwach.map(b=>'<li>'+esc(BLOCK_INFO[b].thema)+' <span style="color:var(--muted)">('+esc(BLOCK_INFO[b].kap)+')</span></li>').join(""); emp.className="fb part"; emp.innerHTML='<span class="ic">&#128214;</span><span><b>Das schaust du dir im Pflichtkern nochmal an:</b><ul style="margin:6px 0 0;padding-left:18px">'+lis+'</ul></span>'; }
+  else { emp.className="fb ok"; emp.innerHTML='<span class="ic">&#10003;</span><span><b>Alles sitzt. Kein Kapitel musst du nacharbeiten.</b></span>'; }
   document.getElementById("code").value=done.code;
   document.getElementById("lockNote").classList.toggle("hidden",!isReplay);
   document.getElementById("resultCard").classList.remove("hidden");
@@ -278,7 +291,7 @@ document.getElementById("btnCopy").addEventListener("click",()=>{
 nameEl().addEventListener("input",save);
 
 // Start: ?reset leert alles (fuer die Lehrkraft). Sonst: abgeschlossenen Versuch wiederherstellen.
-if(/[?&]reset/i.test(location.search)){ try{ localStorage.removeItem(LSKEY); localStorage.removeItem(DONEKEY); }catch(e){} }
+if(/[?&]reset/i.test(location.search)){ try{ localStorage.removeItem(LSKEY); localStorage.removeItem(DONEKEY); localStorage.removeItem(ORDERKEY); }catch(e){} }
 load(); render();
 const _done=loadDone();
 if(_done){ answers=_done.answers||{}; nameEl().value=_done.name||""; render(); showResult(_done,true); }
