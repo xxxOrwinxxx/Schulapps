@@ -403,13 +403,15 @@ function readCodes(){
     if(!p){ bad++; return; }
     ok++;
     if(ok===1){ titel=p.titel||titel; testId=p.testId||''; if(p.erstellt) datum=p.erstellt; }
-    p.aufgaben.forEach(a=>{ if(a.id && !aufgMap.has(a.id)) aufgMap.set(a.id, {titel:a.titel||a.id, block:a.block||''}); });
+    p.aufgaben.forEach(a=>{ if(a.id && !aufgMap.has(a.id)) aufgMap.set(a.id, {titel:a.titel||a.id, block:a.block||'', skill:a.skill||''}); });
     const results={}; p.aufgaben.forEach(a=>{ if(a.id) results[a.id]=a.ergebnis; });
-    students.push({ name:(p.name||'').trim(), sid:p.sid||null, results });
+    const st={ name:(p.name||'').trim(), sid:p.sid||null, results };
+    if(Array.isArray(p.selbst) && p.selbst.length) st.selbst=p.selbst;   // Selbsteinschaetzung je Lektion (z. B. PSE-Lernpfad)
+    students.push(st);
   });
   if(!ok){ msg.className='msg warn'; msg.textContent='Kein Code lesbar ('+bad+' fehlerhaft).'; return; }
 
-  const aufgaben=[...aufgMap.entries()].map(([id,d])=>({id, titel:d.titel, block:d.block}));
+  const aufgaben=[...aufgMap.entries()].map(([id,d])=>({id, titel:d.titel, block:d.block, skill:d.skill||''}));
   const check={ id:uid(), testId, titel, datum, aufgaben, students };
   c.checks.push(check);
   store.activeCheckId=check.id;
@@ -845,6 +847,39 @@ function renderProfil(c, checks){
   html+='</div>';
   html+=buildLeitfaden({s, series, curIdx, pct, groups, themed, auf});
   html+='</div>';
+
+  // Selbstbild vs. Ergebnis (falls der Code Selbsteinschaetzungen enthaelt, z. B. PSE-Lernpfad)
+  if(Array.isArray(s.selbst) && s.selbst.length){
+    const confWords={1:'sehr unsicher',2:'eher unsicher',3:'teils-teils',4:'ziemlich sicher',5:'sehr sicher'};
+    html+='<div class="card"><h3 style="margin:0 0 4px">Selbstbild vs. Ergebnis</h3>';
+    html+='<div class="label" style="margin-bottom:6px">So sicher hast du dich nach der Lektion selbst eingeschätzt, daneben dein tatsächliches Ergebnis.</div>';
+    html+='<ul class="prof-list">';
+    s.selbst.forEach(e=>{
+      const lekAuf=auf.filter(a=>a.id.indexOf('L'+e.lektion+'A')===0);
+      const lekPct=lekAuf.length?pctOf(scoreOverAufgaben(s,lekAuf)):null;
+      const lekName=(lekAuf.length&&lekAuf[0].block)?lekAuf[0].block:('Lektion '+e.lektion);
+      const confPct=(e.conf-1)*25;   // 1..5 auf 0..100, gleiche Skala wie das Ergebnis
+      let cmpSym='≈', cmpTxt='passt zusammen';
+      if(lekPct!==null && lekPct-confPct>=25){ cmpSym='▲'; cmpTxt='besser als dein Gefühl'; }
+      else if(lekPct!==null && confPct-lekPct>=25){ cmpSym='▼'; cmpTxt='Gefühl war sicherer'; }
+      html+='<li><span class="taskname">'+escapeHtml(lekName)+'</span>'+
+        '<span class="restext" style="min-width:170px">Selbstbild: '+e.conf+'/5 ('+(confWords[e.conf]||'?')+')</span>'+
+        '<span class="restext" style="min-width:100px">Ergebnis: '+(lekPct===null?'–':lekPct+'%')+'</span>'+
+        '<span class="restext" style="min-width:160px">'+cmpSym+' '+cmpTxt+'</span></li>';
+      if(e.note && String(e.note).trim()) html+='<li style="border-bottom:none;padding-top:0"><span class="taskname" style="color:var(--mut);font-size:12.5px">↳ Deine Notiz: „'+escapeHtml(String(e.note).trim())+'“</span></li>';
+    });
+    html+='</ul></div>';
+  }
+
+  // Teilkompetenzen (falls der Code skill-Tags mitliefert): feinere Sicht als die Themenbloecke
+  const skillGroups=(()=>{ const m=new Map(); auf.forEach(a=>{ if(a.skill){ if(!m.has(a.skill)) m.set(a.skill,[]); m.get(a.skill).push(a); } }); return [...m.entries()].map(([name,list])=>({name, pct:pctOf(scoreOverAufgaben(s,list)), n:list.length})).filter(z=>z.pct!==null); })();
+  if(skillGroups.length>=2){
+    skillGroups.sort((a,b)=>a.pct-b.pct);
+    html+='<div class="card"><h3 style="margin:0 0 4px">Teilkompetenzen</h3>';
+    html+='<div class="label" style="margin-bottom:6px">Feiner als die Themen: jede Teilkompetenz über alle Lektionen hinweg, schwächste zuerst.</div>';
+    html+=skillGroups.map(z=>`<div class="prof-theme" style="margin:6px 0 0">${escapeHtml(z.name)} ${themePill(z.pct)} <span style="font-weight:400;font-size:12px;color:var(--mut)">(${z.n} Aufgabe${z.n!==1?'n':''})</span></div>`).join('');
+    html+='</div>';
+  }
 
   // Einzelergebnisse (volle Breite)
   html+='<div class="card"><h3 style="margin:0 0 4px">Einzelergebnisse</h3>';
