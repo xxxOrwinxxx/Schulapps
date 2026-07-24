@@ -1,4 +1,27 @@
-﻿QR-Codes/
+# ==========================================================================
+# Whitelist-Prinzip (Schutz gegen versehentliche Veröffentlichung)
+#
+# Der Ordner Schulapps wird täglich vom Auto-Sync (sync_schulapps.ps1)
+# komplett auf das öffentliche GitHub Pages hochgeladen. Damit NIE wieder
+# ein Lehrer-Werkzeug, ein internes Dokument oder eine Word-Datei mit Namen
+# öffentlich wird, ist hier standardmäßig ALLES gesperrt.
+# Freigegeben werden nur die ausdrücklich aufgeführten Schüler-Dateien.
+# Neue öffentliche Inhalte müssen unten explizit ergänzt werden.
+# ==========================================================================
 
-# Lehrer-Auswertungswerkzeuge: bleiben lokal, nie öffentlich (Schülerdaten lokal, DSGVO)
-auswertung/
+# 1) Alles sperren
+/*
+
+# 2) Nur diese öffentlichen Schüler-Inhalte freigeben
+!/.gitignore
+!/index.html
+
+# Schüler-App PSE-Lernpfad: nur die App selbst, nicht interne Dateien im Ordner
+!/periodensystem/
+/periodensystem/*
+!/periodensystem/index.html
+
+# Schüler-App Lernstand-Check LB2: nur die App selbst
+!/lernstand-lb2-atombau/
+/lernstand-lb2-atombau/*
+!/lernstand-lb2-atombau/index.html
