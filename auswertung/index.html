@@ -134,6 +134,21 @@
     padding:8px 10px; font-size:13px; margin:6px 0 10px; color:var(--ink)}
   .lf-write{width:100%; min-height:80px; margin-top:8px; border:1px solid var(--line);
     border-radius:8px; padding:8px; resize:vertical; font:inherit; color:var(--ink); background:var(--card)}
+  /* Lernbereichs-Landkarte (Schuelerprofil): eine ehrliche Momentaufnahme je Lernbereich, kein Verlauf */
+  .lk-list{list-style:none; margin:0; padding:0}
+  .lk-row{display:block; padding:9px 6px; border-bottom:1px solid var(--line); cursor:pointer;
+    border-radius:6px; break-inside:avoid}
+  .lk-row:last-child{border-bottom:none}
+  .lk-row:hover{background:var(--grey-bg)}
+  .lk-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:5px}
+  .lk-name{font-weight:600}
+  .lk-date{color:var(--mut); font-size:12.5px; white-space:nowrap}
+  .lk-track{background:var(--grey-bg); border:1px solid var(--line); border-radius:6px; height:16px; overflow:hidden}
+  .lk-bar{height:100%; min-width:3px; border-radius:5px 0 0 5px}
+  .lk-bar-green{background:var(--green)} .lk-bar-yellow{background:var(--yellow)}
+  .lk-bar-red{background:var(--red)} .lk-bar-grey{background:var(--grey); opacity:.4}
+  .lk-meta{display:flex; align-items:center; gap:8px; margin-top:5px}
+  .lk-pct{font-variant-numeric:tabular-nums; font-weight:600}
   @media print{
     .noprint{display:none !important}
     #viewtabs,#analysis,#verlauf{display:none !important}
@@ -143,7 +158,7 @@
     #profil{display:block !important}
     a[href]:after{content:""}
     /* Farbmarker auch auf Papier zeigen (Chrome laesst Hintergruende sonst weg) */
-    .cell,.tpill,.badge{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .cell,.tpill,.badge,.lk-bar,.lk-track{-webkit-print-color-adjust:exact; print-color-adjust:exact}
   }
 </style>
 
@@ -236,16 +251,31 @@ function decodeCode(raw){
 let store = null;
 let fileHandle = null, connected = false, saveTimer = null;
 
-const STORE_KEY = 'schnellcheck_auswertung_v1';
+const STORE_KEY = 'schnellcheck_auswertung_v1';   // Speicher-Schluessel bleibt v1 (die Store-Version steckt IM Objekt), sonst verwaisen Cache und Datei
+const STORE_VERSION = 2;                            // 1 -> 2: jede Erhebung bekommt ein Lernbereichs-Feld (lb)
 const DB_NAME = 'schnellcheck_auswertung';
 const DB_STORE = 'handles';
 function uid(){ return Math.random().toString(36).slice(2,8) + Date.now().toString(36); }
 
 function ensureStore(){
-  if(!store) store = { version:1, activeClassId:null, activeCheckId:null,
+  if(!store) store = { version:STORE_VERSION, activeClassId:null, activeCheckId:null,
     settings:{ weightPartial:0.5, thrGruen:55, thrGelb:40, anon:false }, classes:[] };
   if(!store.settings) store.settings = { weightPartial:0.5, thrGruen:55, thrGelb:40, anon:false };
+  migrateStore();
 }
+// In-place-Migration beim Boot, additiv und idempotent: bestehende Erhebungen, Schueler,
+// Ergebnisse und Notizen bleiben unangetastet, es kommt nur das Feld check.lb dazu.
+function migrateStore(){
+  if(!store) return;
+  if((store.version||1) < 2){
+    (store.classes||[]).forEach(c=>(c.checks||[]).forEach(ch=>{
+      if(ch.lb===undefined || ch.lb===null || ch.lb===''){ ch.lb = ch.testId || ch.id; }
+    }));
+  }
+  store.version = STORE_VERSION;
+}
+// Lernbereich einer Erhebung (Laufzeit-Fallback, falls lb einmal nicht gesetzt ist).
+function lbOf(check){ return check.lb || check.testId || check.id; }
 function activeClass(){ return store ? store.classes.find(c=>c.id===store.activeClassId) || null : null; }
 function activeCheck(){
   const c = activeClass(); if(!c) return null;
@@ -279,11 +309,11 @@ function scoreOfStudent(student, aufgaben){
 }
 function pctOf(score){ return score===null ? null : Math.round(score*100); }
 function statusOf(pct){
-  if(pct===null||pct===undefined) return {badge:'badge-grey', text:'keine Daten'};
+  if(pct===null||pct===undefined) return {badge:'badge-grey', text:'keine Daten', sym:'–'};
   const {thrGruen,thrGelb} = getSettings();
-  if(pct>=thrGruen) return {badge:'badge-green', text:'verstanden'};
-  if(pct>=thrGelb) return {badge:'badge-yellow', text:'knapp bestanden'};
-  return {badge:'badge-red', text:'Förderbedarf'};
+  if(pct>=thrGruen) return {badge:'badge-green', text:'verstanden', sym:'✓'};
+  if(pct>=thrGelb) return {badge:'badge-yellow', text:'knapp bestanden', sym:'~'};
+  return {badge:'badge-red', text:'Förderbedarf', sym:'✗'};
 }
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
@@ -412,7 +442,7 @@ function readCodes(){
   if(!ok){ msg.className='msg warn'; msg.textContent='Kein Code lesbar ('+bad+' fehlerhaft).'; return; }
 
   const aufgaben=[...aufgMap.entries()].map(([id,d])=>({id, titel:d.titel, block:d.block, skill:d.skill||''}));
-  const check={ id:uid(), testId, titel, datum, aufgaben, students };
+  const check={ id:uid(), testId, titel, datum, lb:(testId||''), aufgaben, students };
   c.checks.push(check);
   store.activeCheckId=check.id;
   persist(); afterStoreChanged();
@@ -686,8 +716,8 @@ function openErhebung(id){ store.activeCheckId=id; activeView='tabelle'; persist
 
 // ============================================================
 // SCHUELERPROFIL (Happen 5) — Gespraechsgrundlage, druckbar
-//   Gesamtstand + Klassenschnitt + Delta, seine Verlaufslinie,
-//   Einzelergebnisse je Aufgabe, leeres Reflexionsfeld zum Ausfuellen/Ausdrucken.
+//   Aktueller Stand der gewaehlten Erhebung + Lernbereichs-Landkarte (eine Momentaufnahme je
+//   Lernbereich, kein Verlauf), Einzelergebnisse je Aufgabe, gemeinsames Lernstand-Blatt.
 // ============================================================
 function setProfilStudent(nm){ profilStudent=nm; renderView(); }
 function openProfil(name){ profilStudent=name||''; activeView='profil'; renderView(); window.scrollTo(0,0); }
@@ -754,16 +784,14 @@ function buildLeitfaden(x){
 
   // Abschnitt 1: das laeuft schon gut (Du-Ansprache, eine Ich-Botschaft fuers Lob)
   const l1=[];
-  if(trendDelta>0) l1.push(`Mir ist aufgefallen: seit dem ${esc(series[0].check.titel)} hast du dich von ${firstPct}% auf ${pct}% gesteigert. Das ist ein echter Fortschritt.`);
-  else if(trendDelta===0 && pct!==null && pct>=thrGruen) l1.push(`Mir ist aufgefallen: du hältst dich stabil im grünen Bereich (${pct}%). Das ist verlässlich.`);
-  else if(trendDelta===0) l1.push(`Du hältst dich bei ${pct}%. Lass uns schauen, wie der nächste Schritt nach oben geht.`);
+  if(pct!==null && pct>=thrGruen) l1.push(`Mir ist aufgefallen: du stehst hier sicher im grünen Bereich (${pct}%). Das ist verlässlich.`);
+  else if(pct!==null) l1.push(`Du stehst bei ${pct}%. Lass uns gemeinsam anschauen, wo wir am besten ansetzen, damit es nach oben geht.`);
   if(themed && strongest) l1.push(`Am sichersten bist du beim Thema „${esc(strongest.block)}“ (${strongest.pct}%).`);
   else if(doneT.length) l1.push(`Sicher bist du bei: ${listShort(doneT)}.`);
   if(!l1.length) l1.push(`Lass uns mit etwas anfangen, das du selbst schon als deinen Fortschritt siehst.`);
 
   // Abschnitt 2: hier ist noch Luft (Du + offene Fragen an die Schuelerin)
   const l2=[];
-  if(recentDelta<0 && prevPct!==null) l2.push(`Zuletzt ging es etwas runter (von ${prevPct}% auf ${pct}%). Woran lag das aus deiner Sicht?`);
   if(themed && weakest && (!strongest || weakest.block!==strongest.block)) l2.push(`Beim Thema „${esc(weakest.block)}“ (${weakest.pct}%) ist noch Luft. Was war da für dich schwierig?`);
   if(notYet.length) l2.push(`Noch nicht sicher: ${listShort(notYet)}. Welche davon nimmst du dir als Nächstes vor?`);
   else if(partialT.length) l2.push(`Erst teilweise sicher: ${listShort(partialT)}. Welche möchtest du festigen?`);
@@ -787,6 +815,33 @@ function buildLeitfaden(x){
     '</div>';
 }
 
+// Lernbereichs-Landkarte: pro Lernbereich (lb bzw. testId, in dem der Schueler vorkommt) EINE Zeile,
+// chronologisch nach Datum. Bewusst KEINE Verbindungslinie zwischen den Lernbereichen (das sind
+// inhaltlich verschiedene Tests), sondern je Lernbereich eine ehrliche Momentaufnahme. Hat ein
+// Lernbereich ausnahmsweise mehrere Erhebungen, zaehlt die juengste (aktueller Stand). Balkenbreite
+// = Prozentwert; Status dreifach lesbar (Symbol + Wort + Farbe). Klick oeffnet die Erhebung.
+function buildLandkarte(series){
+  const byLb=new Map();
+  series.forEach(e=>{ byLb.set(lbOf(e.check), e); });   // series ist chronologisch; der spaetere (juengere) Eintrag gewinnt
+  const rows=[...byLb.values()].sort((a,b)=>a.check.datum.localeCompare(b.check.datum));
+  if(!rows.length) return '<div class="label">Für diese Schülerin oder diesen Schüler ist noch kein Lernbereich erfasst.</div>';
+  let h='<ul class="lk-list">';
+  rows.forEach(e=>{
+    const pct=e.pct, stt=statusOf(pct);
+    const w=pct===null?0:pct;
+    const barCls=pct===null?'lk-bar-grey':stt.badge==='badge-green'?'lk-bar-green':stt.badge==='badge-yellow'?'lk-bar-yellow':'lk-bar-red';
+    h+=`<li class="lk-row" onclick="openErhebung('${e.check.id}')" title="Erhebung öffnen">`+
+       `<div class="lk-top"><span class="lk-name">${escapeHtml(e.check.titel)}</span>`+
+       `<span class="lk-date">${escapeHtml(e.check.datum.slice(0,10))}</span></div>`+
+       `<div class="lk-track"><div class="lk-bar ${barCls}" style="width:${w}%"></div></div>`+
+       `<div class="lk-meta"><span class="lk-pct">${pct===null?'–':pct+'%'}</span> `+
+       `<span class="badge ${stt.badge}">${stt.sym} ${stt.text}</span></div>`+
+       '</li>';
+  });
+  h+='</ul>';
+  return h;
+}
+
 function renderProfil(c, checks){
   const box=document.getElementById('profil');
   const t=activeCheck();
@@ -801,17 +856,9 @@ function renderProfil(c, checks){
   const stt=statusOf(pct);
   const groups=groupAufgaben(auf);
   const themed=groups.filter(g=>g.block).length>=2;
-  // Entwicklung seit der ersten erfassten Erhebung (Klassenvergleich nur noch in der Grafik)
+  // series (alle Erhebungen dieses Schuelers, chronologisch) fuer Landkarte und Leitfaden
   const series=studentSeries(s.name, checks);
   const curIdx=series.findIndex(x=>x.check.id===t.id);
-  let entwBig='Start', entwCap='erste erfasste Erhebung';
-  if(curIdx>=1 && series[0].pct!==null && pct!==null){
-    const d=pct-series[0].pct;
-    const arrow=d>0?'▲':d<0?'▼':'●';
-    const col=d>0?'var(--green)':d<0?'var(--red)':'var(--mut)';
-    entwBig=`<span style="color:${col}">${arrow} ${d>0?'+':''}${d}</span>`;
-    entwCap=`Entwicklung: ${series[0].pct}% → ${pct}%`;
-  }
 
   // Steuerzeile (wird nicht mitgedruckt)
   let html='<div class="row noprint" style="margin:12px 0 6px">';
@@ -824,26 +871,24 @@ function renderProfil(c, checks){
   html+='<button class="small primary" onclick="printProfil()">Profil drucken</button>';
   html+='</div>';
 
-  // Kopf + zwei Kacheln (Klassenvergleich bewusst nur noch im Graphen, nicht als Zahl)
+  // Kopf + Kachel "Aktueller Stand" der gewaehlten Erhebung (kein Delta ueber verschiedene Lernbereiche)
   html+='<div class="card">';
   html+=`<div class="prof-head"><h2>${escapeHtml(s.name||'(ohne Name)')}</h2>`+
     `<span class="meta">${escapeHtml(t.titel)} · ${escapeHtml(t.datum.slice(0,10))} · ${escapeHtml(c.name)}</span></div>`;
   html+='<div class="tiles">';
-  html+=tile((pct===null?'–':pct+'%')+' <span class="badge '+stt.badge+'">'+stt.text+'</span>','Aktueller Stand');
-  html+=tile(entwBig, entwCap);
+  html+=tile((pct===null?'–':pct+'%')+' <span class="badge '+stt.badge+'">'+stt.sym+' '+stt.text+'</span>','Aktueller Stand');
   html+='</div></div>';
 
-  // Zwei Spalten: links die Grafik, rechts das gemeinsame Blatt (Schuelerin liest mit)
+  // Zwei Spalten: links die Lernbereichs-Landkarte, rechts das gemeinsame Blatt (Schuelerin liest mit)
   html+='<div class="prof-cols">';
-  html+='<div class="card prof-graf"><h3 style="margin:0 0 6px">Deine Entwicklung über das Jahr</h3>';
-  if(checks.length>=2){
-    html+='<div class="tablewrap">'+buildVerlaufSvg(checks, profilStudent)+'</div>';
-    html+=`<div class="legend"><span><span class="sw" style="background:#232019"></span>Klassenschnitt</span>`+
-      `<span><span class="sw" style="background:#2f6d7a"></span>${escapeHtml(s.name||'du')}</span>`+
-      '<span>Jeder Punkt ist eine Erhebung; die Zonen sind rechts beschriftet.</span></div>';
-  }else{
-    html+='<div class="label">Die Verlaufslinie erscheint ab der zweiten Erhebung.</div>';
-  }
+  html+='<div class="card prof-graf"><h3 style="margin:0 0 6px">Lernbereichs-Landkarte</h3>';
+  html+='<div class="label" style="margin-bottom:8px">Jeder Lernbereich hat seinen eigenen Check. Jeder Balken ist eine ehrliche Momentaufnahme je Lernbereich, kein Verlauf. Ein Klick öffnet die Erhebung.</div>';
+  html+=buildLandkarte(series);
+  const stg=getSettings();
+  html+=`<div class="legend"><span>✓ verstanden ab ${stg.thrGruen}%</span>`+
+    `<span>~ knapp bestanden ab ${stg.thrGelb}%</span>`+
+    '<span>✗ darunter Förderbedarf</span>'+
+    '<span>Balkenbreite = Prozentwert</span></div>';
   html+='</div>';
   html+=buildLeitfaden({s, series, curIdx, pct, groups, themed, auf});
   html+='</div>';
