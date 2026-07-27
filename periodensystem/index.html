@@ -3233,9 +3233,111 @@ document.getElementById('lessonBack').addEventListener('click', backToOverview);
 // ============================================================================
 const STUDENT_NAME_KEY = 'pse-student-name';
 
-// Baut den Ergebnis-Code im SC1-Format. Jede Frage jeder Lektion wird eine Aufgabe;
+// Oeffentlicher Schluessel der Auswertungs-App (Base64url, ECDH P-256, roh). Solange er leer ist,
+// entsteht weiter der alte, unverschluesselte SC1-Code. Mit Schluessel wird jeder Ergebnis-Code
+// verschluesselt und ist nur noch mit der Auswertungs-App lesbar. Er darf offen im Quelltext
+// stehen, mit ihm kann man ausschliesslich zusperren.
+// Oeffentlicher Schluessel der Auswertungs-App (eingetragen 2026-07-27). Darf offen im
+// Quelltext stehen, mit ihm kann man ausschliesslich zusperren. Wird er geleert, entsteht
+// wieder der alte, unverschluesselte SC1-Code.
+const TEACHER_PUBKEY = "BMlCJQIy_90-L10SARPBR3AcigAcLss8GxbFRr9hheAXr9L5u9GVx_ZasTPtGf7E5zAeW3-ETmGBLej6t6r-dHs";
+
+// ACHTUNG: Das Kurzformat traegt die Ergebnisse nach POSITION (Lektionen in Reihenfolge, darin die
+// Fragen). Wer Lektionen oder Fragen umsortiert, hinzufuegt oder entfernt, MUSS TEST_VERSION
+// erhoehen und die Test-Beschreibung neu in die Auswertungs-App einlesen.
+const TEST_VERSION = 1;
+const TEST_ID = 'pse-lernpfad';
+
+const SC2_EPOCH = Date.UTC(2020, 0, 1);
+const RES_CODE = { wrong: 0, partial: 1, done: 2 };   // 3 = nicht bearbeitet
+
+function b64uEncode(bytes) { let s = ''; for (const b of bytes) s += String.fromCharCode(b);
+  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64uDecode(str) { const bin = atob(str.replace(/-/g, '+').replace(/_/g, '/'));
+  const out = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i); return out; }
+
+// Flache Aufgabenliste in genau der Reihenfolge, die auch die Test-Beschreibung nutzt.
+function flatItems() {
+  const out = [];
+  lessons.forEach(l => l.questions.forEach((q, i) => {
+    out.push({ id: 'L' + l.id + 'A' + (i + 1), titel: 'L' + l.id + '.' + (i + 1), block: l.title, skill: q.skill || '' });
+  }));
+  return out;
+}
+
+// [1 Version][1 Testfassung][2 Tage seit 2020-01-01][1 Laenge][testId][1 Laenge][Name][1 Anzahl][je 2 Bit][JSON-Anhang]
+function packPayload(name, ergebnisse, extras) {
+  const enc = new TextEncoder();
+  const tid = enc.encode(TEST_ID), nm = enc.encode(name);
+  const ex = (extras && Object.keys(extras).length) ? enc.encode(JSON.stringify(extras)) : new Uint8Array(0);
+  const n = ergebnisse.length, resBytes = Math.ceil(n / 4);
+  const out = new Uint8Array(1 + 1 + 2 + 1 + tid.length + 1 + nm.length + 1 + resBytes + ex.length);
+  let o = 0;
+  out[o++] = 2;
+  out[o++] = TEST_VERSION;
+  const d = new Date();   // Ortszeit-Kalendertag, damit spaete Abgaben nicht auf den Vortag rutschen
+  const days = Math.round((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - SC2_EPOCH) / 86400000);
+  out[o++] = days & 255; out[o++] = (days >> 8) & 255;
+  out[o++] = tid.length; out.set(tid, o); o += tid.length;
+  out[o++] = nm.length;  out.set(nm, o);  o += nm.length;
+  out[o++] = n;
+  for (let i = 0; i < n; i++) {
+    const r = ergebnisse[i];
+    const code = (r === null || r === undefined) ? 3 : (RES_CODE[r] !== undefined ? RES_CODE[r] : 0);
+    out[o + (i >> 2)] |= code << ((i % 4) * 2);
+  }
+  o += resBytes;
+  if (ex.length) out.set(ex, o);
+  return out;
+}
+
+// ECDH P-256 + AES-256-GCM, Einmal-Schluessel pro Code.
+// Aufbau: [65 Einmal-Schluessel][12 IV][Geheimtext + Pruefsumme].
+async function encryptForTeacher(payload) {
+  const teacherPub = await crypto.subtle.importKey('raw', b64uDecode(TEACHER_PUBKEY), { name: 'ECDH', namedCurve: 'P-256' }, false, []);
+  const eph = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveBits']);
+  const ephRaw = new Uint8Array(await crypto.subtle.exportKey('raw', eph.publicKey));
+  const secret = await crypto.subtle.deriveBits({ name: 'ECDH', public: teacherPub }, eph.privateKey, 256);
+  const keyRaw = await crypto.subtle.digest('SHA-256', secret);
+  const aesKey = await crypto.subtle.importKey('raw', keyRaw, { name: 'AES-GCM' }, false, ['encrypt']);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, aesKey, payload));
+  const out = new Uint8Array(65 + 12 + ct.length);
+  out.set(ephRaw, 0); out.set(iv, 65); out.set(ct, 77);
+  return 'SC2-' + b64uEncode(out);
+}
+
+// Test-Beschreibung fuer die Auswertungs-App (nur Aufgabenliste und Themen, keine Schuelerdaten).
+// Aufruf mit ?manifest an der Adresse, nur fuer die Lehrkraft gedacht.
+function buildManifest() {
+  const m = { m: 1, t: TEST_ID, tv: TEST_VERSION, ti: 'PSE-Lernpfad', f: 'CH', s: '10', a: flatItems() };
+  return 'SCM1-' + btoa(unescape(encodeURIComponent(JSON.stringify(m))));
+}
+
+// Baut den Ergebnis-Code. Jede Frage jeder Lektion wird eine Aufgabe;
 // nicht bearbeitete Lektionen liefern Aufgaben ohne Ergebnis (in der Auswertung: nicht bearbeitet).
-function buildResultCode(name) {
+async function buildResultCode(name) {
+  // Kurzformat, sobald ein Lehrer-Schluessel hinterlegt ist
+  if (TEACHER_PUBKEY && window.crypto && crypto.subtle && crypto.subtle.deriveBits) {
+    try {
+      const erg = [];
+      lessons.forEach(l => {
+        const res = (progress[l.id] && Array.isArray(progress[l.id].results)) ? progress[l.id].results : [];
+        l.questions.forEach((q, i) => erg.push(res[i] || null));
+      });
+      const extras = {};
+      const sel = [];
+      lessons.forEach(l => { const e = progress[l.id];
+        if (e && typeof e === 'object' && e.conf) sel.push(Object.assign({ lektion: l.id, conf: e.conf }, e.note ? { note: e.note } : {})); });
+      if (sel.length) extras.selbst = sel;
+      if (progress.placementPassed) extras.placementPassed = true;
+      return await encryptForTeacher(packPayload(name, erg, extras));
+    } catch (e) { /* faellt bewusst auf das Altformat zurueck, statt den Schueler zu blockieren */ }
+  }
+  return buildResultCodeSC1(name);
+}
+
+function buildResultCodeSC1(name) {
   const aufgaben = [];
   lessons.forEach(l => {
     const res = (progress[l.id] && Array.isArray(progress[l.id].results)) ? progress[l.id].results : [];
@@ -3260,7 +3362,7 @@ function buildResultCode(name) {
   if (selbst.length) payload.selbst = selbst;
   return 'SC1-' + btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
 }
-function exportProgress() {
+async function exportProgress() {
   let name = '';
   try { name = localStorage.getItem(STUDENT_NAME_KEY) || ''; } catch {}
   const field = document.getElementById('reportNameInput');
@@ -3277,15 +3379,35 @@ function exportProgress() {
     name = entered.trim();
   }
   try { localStorage.setItem(STUDENT_NAME_KEY, name); } catch {}
-  const code = buildResultCode(name);
-  const fallback = () => { prompt('Code bitte manuell kopieren (Strg+C):', code); };
+  const code = await buildResultCode(name);
+  // Ehrlich benennen, was im Code steht (und was nicht).
+  const info = '\n\nIm Code stehen: dein Name, das Datum, pro Aufgabe richtig/teilweise/nicht richtig'
+    + ' und deine Selbsteinschätzung. Mehr nicht.'
+    + (TEACHER_PUBKEY ? ' Er ist verschlüsselt und nur mit meiner Auswertung zu öffnen.' : '');
+  const fallback = () => { prompt('Code bitte manuell kopieren (Strg+C):' + info, code); };
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(code)
-      .then(() => alert((name ? 'Danke, ' + name + '! ' : '') + 'Dein Ergebnis-Code ist kopiert. Schick ihn wie besprochen an mich.'))
+      .then(() => alert((name ? 'Danke, ' + name + '! ' : '') + 'Dein Ergebnis-Code ist kopiert. Schick ihn wie besprochen an mich.' + info))
       .catch(fallback);
   } else { fallback(); }
 }
 document.getElementById('exportBtn').addEventListener('click', exportProgress);
+
+// Lehrer-Ansicht: ?manifest zeigt die Test-Beschreibung fuer die Auswertungs-App.
+if (/[?&]manifest/i.test(location.search)) {
+  document.body.innerHTML =
+    '<div style="padding:24px;max-width:760px;margin:0 auto;font-family:system-ui,sans-serif">'
+    + '<h1 style="margin:0 0 6px">Test-Beschreibung</h1>'
+    + '<p>Für die Auswertungs-App. Einmal in das Code-Feld einfügen und einlesen, danach sind die kurzen Schülercodes lesbar.</p>'
+    + '<p><b>PSE-Lernpfad</b> · ' + TEST_ID + ' · Fassung ' + TEST_VERSION + ' · ' + flatItems().length + ' Aufgaben</p>'
+    + '<textarea id="manOut" readonly style="width:100%;height:200px;font-family:monospace;font-size:12px"></textarea>'
+    + '<p><button id="manCopy">Beschreibung kopieren</button></p></div>';
+  const out = document.getElementById('manOut'); out.value = buildManifest();
+  document.getElementById('manCopy').addEventListener('click', () => {
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(out.value).then(() => alert('Kopiert.'), () => out.select());
+    else out.select();
+  });
+}
 document.getElementById('placementBtn').addEventListener('click', () => startLesson('placement'));
 document.getElementById('resetBtn').addEventListener('click', () => {
   if (confirm('Gesamten Lernpfad-Fortschritt wirklich zurücksetzen?\n\nAlle gespeicherten Ergebnisse werden gelöscht und alle Lektionen wieder gesperrt.')) {

@@ -96,6 +96,7 @@
         <button class="primary" id="btnCopy">Code kopieren</button>
       </div>
       <p class="hint" style="margin-top:10px">Kopiere den Code und schicke ihn über Teams an deine Lehrkraft.</p>
+      <p class="hint" style="margin-top:6px" id="codeInfo"></p>
     </div>
   </div>
 </div>
@@ -106,6 +107,89 @@
 const TEST={testId:"ch11-lb2-atombau",titel:"LB2 Aufbau des Periodensystems",fach:"CH",stufe:"11",
   bloecke:{bausteine:"Bausteine",isotope:"Isotope & mittlere Atommasse",energiestufen:"Energiestufenmodell",
            orbitalmodell:"Orbitalmodell",ionen:"Ionen & Ladung",flammenfaerbung:"Flammenfärbung"}};
+
+// ============================================================
+// ERGEBNIS-CODE
+// Oeffentlicher Schluessel der Auswertungs-App der Lehrkraft (Base64url, ECDH P-256, roh).
+// Solange er leer ist, entsteht weiter der alte, unverschluesselte SC1-Code. Sobald er
+// eingetragen ist, wird jeder Ergebnis-Code verschluesselt und ist NUR noch mit der
+// Auswertungs-App lesbar. Der oeffentliche Schluessel darf offen im Quelltext stehen,
+// mit ihm kann man ausschliesslich zusperren.
+// Oeffentlicher Schluessel der Auswertungs-App (eingetragen 2026-07-27). Darf offen im
+// Quelltext stehen, mit ihm kann man ausschliesslich zusperren. Wird er geleert, entsteht
+// wieder der alte, unverschluesselte SC1-Code.
+const TEACHER_PUBKEY="BMlCJQIy_90-L10SARPBR3AcigAcLss8GxbFRr9hheAXr9L5u9GVx_ZasTPtGf7E5zAeW3-ETmGBLej6t6r-dHs";
+
+// ACHTUNG: Das Kurzformat traegt die Ergebnisse nach POSITION in ITEMS, nicht nach Aufgaben-Id.
+// Wer Aufgaben umsortiert, hinzufuegt oder entfernt, MUSS TEST_VERSION erhoehen und das
+// Manifest neu in die Auswertungs-App einlesen. Sonst weist die App den Code ab (sie raet nicht).
+const TEST_VERSION=1;
+
+const SC2_EPOCH=Date.UTC(2020,0,1);
+const RES_CODE={wrong:0,partial:1,done:2};   // 3 = nicht bearbeitet
+
+function b64uEncode(bytes){ let s=""; for(const b of bytes) s+=String.fromCharCode(b);
+  return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64uDecode(str){ const bin=atob(str.replace(/-/g,"+").replace(/_/g,"/"));
+  const out=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) out[i]=bin.charCodeAt(i); return out; }
+
+// [1 Version][1 Testfassung][2 Tage seit 2020-01-01][1 Laenge][testId][1 Laenge][Name][1 Anzahl][je 2 Bit]
+function packPayload(name,aufgaben){
+  const enc=new TextEncoder();
+  const tid=enc.encode(TEST.testId), nm=enc.encode(name);
+  const n=aufgaben.length, resBytes=Math.ceil(n/4);
+  const out=new Uint8Array(1+1+2+1+tid.length+1+nm.length+1+resBytes);
+  let o=0;
+  out[o++]=2;
+  out[o++]=TEST_VERSION;
+  // Ortszeit-Kalendertag, damit ein Check am spaeten Abend nicht auf den Vortag rutscht.
+  const d=new Date();
+  const days=Math.round((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())-SC2_EPOCH)/86400000);
+  out[o++]=days&255; out[o++]=(days>>8)&255;
+  out[o++]=tid.length; out.set(tid,o); o+=tid.length;
+  out[o++]=nm.length;  out.set(nm,o);  o+=nm.length;
+  out[o++]=n;
+  for(let i=0;i<n;i++){
+    const r=aufgaben[i].ergebnis;
+    const code=(r===null||r===undefined)?3:(RES_CODE[r]!==undefined?RES_CODE[r]:0);
+    out[o+(i>>2)] |= code<<((i%4)*2);
+  }
+  return out;
+}
+
+// ECDH P-256 + AES-256-GCM. Der Einmal-Schluessel wird pro Code neu erzeugt, deshalb ist jede
+// abgeleitete AES-Sitzung einmalig. Aufbau: [65 Einmal-Schluessel][12 IV][Geheimtext + Pruefsumme].
+async function encryptForTeacher(payload){
+  const teacherPub=await crypto.subtle.importKey("raw",b64uDecode(TEACHER_PUBKEY),{name:"ECDH",namedCurve:"P-256"},false,[]);
+  const eph=await crypto.subtle.generateKey({name:"ECDH",namedCurve:"P-256"},true,["deriveBits"]);
+  const ephRaw=new Uint8Array(await crypto.subtle.exportKey("raw",eph.publicKey));
+  const secret=await crypto.subtle.deriveBits({name:"ECDH",public:teacherPub},eph.privateKey,256);
+  const keyRaw=await crypto.subtle.digest("SHA-256",secret);
+  const aesKey=await crypto.subtle.importKey("raw",keyRaw,{name:"AES-GCM"},false,["encrypt"]);
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},aesKey,payload));
+  const out=new Uint8Array(65+12+ct.length);
+  out.set(ephRaw,0); out.set(iv,65); out.set(ct,77);
+  return "SC2-"+b64uEncode(out);
+}
+
+async function buildCode(name,aufgaben){
+  if(TEACHER_PUBKEY && window.crypto && crypto.subtle && crypto.subtle.deriveBits){
+    try{ return await encryptForTeacher(packPayload(name,aufgaben)); }
+    catch(e){ /* faellt unten bewusst auf das Altformat zurueck, statt den Schueler zu blockieren */ }
+  }
+  const payload={v:1,testId:TEST.testId,titel:TEST.titel,fach:TEST.fach,stufe:TEST.stufe,erstellt:nowStamp(),
+    name:name,sid:null,aufgaben:aufgaben.map(a=>({id:a.id,titel:a.titel,ergebnis:a.ergebnis||"wrong",block:a.block}))};
+  return "SC1-"+btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+}
+
+// Test-Beschreibung fuer die Auswertungs-App (Aufgabentitel und Themen, keine Schuelerdaten).
+// Aufruf mit ?manifest an der Adresse, nur fuer die Lehrkraft gedacht.
+function buildManifest(){
+  const m={m:1,t:TEST.testId,tv:TEST_VERSION,ti:TEST.titel,f:TEST.fach,s:TEST.stufe,
+    a:ITEMS.map(it=>({id:it.id,titel:it.titel,block:(BLOCK_INFO[it.block]&&BLOCK_INFO[it.block].thema)||it.block,skill:""}))};
+  return "SCM1-"+btoa(unescape(encodeURIComponent(JSON.stringify(m))));
+}
 // Optionsreihenfolge bewusst gemischt: die richtige Antwort steht mal an Position 1, 2, 3, 4.
 const ITEMS=[
  {id:"a1",block:"bausteine",titel:"Teilchen zuordnen",typ:"zuordnung",frage:"Ordne jedes Teilchen der passenden Beschreibung zu.",
@@ -228,15 +312,20 @@ function nowStamp(){ const d=new Date(),z=n=>String(n).padStart(2,"0"); return d
 function toast(t){ const el=document.getElementById("toast"); el.textContent=t; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),2200); }
 
 // Erster Abschluss: bewertet, speichert den Versuch fest, zeigt das Ergebnis.
-function finish(){
+async function finish(){
   if(loadDone())return; // schon abgeschlossen: kein neuer Versuch
   const name=nameEl().value.trim();
   if(!name){ toast("Bitte trage zuerst deinen Namen ein."); nameEl().focus(); document.getElementById("startCard").scrollIntoView({behavior:"smooth"}); return; }
   const offen=ITEMS.filter(it=>!answered(it)).length;
   if(offen>0 && !confirm(offen+" Aufgabe(n) sind noch offen und zaehlen als nicht bearbeitet. Jetzt endgueltig auswerten? Es zaehlt dein erster Versuch."))return;
-  const aufgaben=ITEMS.map(item=>({id:item.id,titel:item.titel,ergebnis:answered(item)?grade(item):"wrong",block:item.block}));
-  const payload={v:1,testId:TEST.testId,titel:TEST.titel,fach:TEST.fach,stufe:TEST.stufe,erstellt:nowStamp(),name:name,sid:null,aufgaben:aufgaben};
-  const done={name:name,answers:JSON.parse(JSON.stringify(answers)),aufgaben:aufgaben,code:"SC1-"+btoa(unescape(encodeURIComponent(JSON.stringify(payload))))};
+  // Nicht bearbeitet bleibt bewusst "nicht bearbeitet" (null) und wird nicht zu "falsch" verdichtet.
+  const aufgaben=ITEMS.map(item=>({id:item.id,titel:item.titel,ergebnis:answered(item)?grade(item):null,block:item.block}));
+  const btn=document.getElementById("btnEval");
+  btn.disabled=true;
+  let code;
+  try{ code=await buildCode(name,aufgaben); }
+  finally{ btn.disabled=false; }
+  const done={name:name,answers:JSON.parse(JSON.stringify(answers)),aufgaben:aufgaben,code:code};
   saveDone(done);
   showResult(done,false);
 }
@@ -260,6 +349,7 @@ function showResult(done,isReplay){
     const loes=auswahl?"Die richtige Antwort ist oben mit &#10003; markiert.":esc(correctText(item));
     if(a.ergebnis==="done"){ fb.className="fb ok"; fb.innerHTML='<span class="ic">&#10003;</span><span><b>Richtig.</b></span>'; }
     else if(a.ergebnis==="partial"){ fb.className="fb part"; fb.innerHTML='<span class="ic">~</span><span><b>Teilweise richtig.</b> '+loes+'</span>'; }
+    else if(a.ergebnis===null||a.ergebnis===undefined){ fb.className="fb no"; fb.innerHTML='<span class="ic">&#8211;</span><span><b>Nicht bearbeitet.</b> '+loes+'</span>'; }
     else { fb.className="fb no"; fb.innerHTML='<span class="ic">&#10007;</span><span><b>Leider falsch.</b> '+loes+'</span>'; }
     document.getElementById("card-"+a.id).classList.add("locked");
   });
@@ -290,11 +380,35 @@ document.getElementById("btnCopy").addEventListener("click",()=>{
 });
 nameEl().addEventListener("input",save);
 
-// Start: ?reset leert alles (fuer die Lehrkraft). Sonst: abgeschlossenen Versuch wiederherstellen.
-if(/[?&]reset/i.test(location.search)){ try{ localStorage.removeItem(LSKEY); localStorage.removeItem(DONEKEY); localStorage.removeItem(ORDERKEY); }catch(e){} }
-load(); render();
-const _done=loadDone();
-if(_done){ answers=_done.answers||{}; nameEl().value=_done.name||""; render(); showResult(_done,true); }
+// Was im Ergebnis-Code steht, ehrlich benannt. Zweiter Satz nur, wenn wirklich verschluesselt wird.
+document.getElementById("codeInfo").textContent =
+  "Im Code stehen: dein Name, das Datum und für jede Aufgabe richtig, teilweise oder nicht richtig. Mehr nicht."
+  + (TEACHER_PUBKEY ? " Er ist verschlüsselt und lässt sich nur mit der Auswertung deiner Lehrkraft öffnen." : "");
+
+// Lehrer-Ansicht: ?manifest zeigt die Test-Beschreibung fuer die Auswertungs-App.
+// Enthaelt nur Aufgabentitel und Themen, keine Schuelerdaten.
+if(/[?&]manifest/i.test(location.search)){
+  document.body.innerHTML =
+    '<div class="wrap" style="padding:24px;max-width:760px;margin:0 auto">'
+    +'<h1 style="margin:0 0 6px">Test-Beschreibung</h1>'
+    +'<p class="hint">Für die Auswertungs-App. Einmal pro Test in das Code-Feld einfügen und einlesen. '
+    +'Danach sind die kurzen Schülercodes dieses Tests lesbar.</p>'
+    +'<p class="hint"><b>'+TEST.titel+'</b> · '+TEST.testId+' · Fassung '+TEST_VERSION+' · '+ITEMS.length+' Aufgaben</p>'
+    +'<textarea id="manOut" readonly style="width:100%;height:180px;font-family:monospace;font-size:12px"></textarea>'
+    +'<p style="margin-top:10px"><button class="primary" id="manCopy">Beschreibung kopieren</button></p>'
+    +'</div>';
+  const out=document.getElementById("manOut"); out.value=buildManifest();
+  document.getElementById("manCopy").addEventListener("click",()=>{
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(out.value).then(()=>alert("Kopiert."),()=>out.select());
+    else out.select();
+  });
+}else{
+  // Start: ?reset leert alles (fuer die Lehrkraft). Sonst: abgeschlossenen Versuch wiederherstellen.
+  if(/[?&]reset/i.test(location.search)){ try{ localStorage.removeItem(LSKEY); localStorage.removeItem(DONEKEY); localStorage.removeItem(ORDERKEY); }catch(e){} }
+  load(); render();
+  const _done=loadDone();
+  if(_done){ answers=_done.answers||{}; nameEl().value=_done.name||""; render(); showResult(_done,true); }
+}
 </script>
 </body>
 </html>
