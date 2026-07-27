@@ -1,0 +1,10 @@
+# QR-Codes zeigen auf die Live-Adresse und werden lokal erzeugt, nicht hochgeladen
+QR-Codes/
+
+# Sicherheitsnetz: Lehrer-Material darf hier nie landen (liegt in ../Lehrerapps/)
+auswertung/
+pse-auswertung/
+kompetenzstand/
+*.json
+*.docx
+*.xlsx
