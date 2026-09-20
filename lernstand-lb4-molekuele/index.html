@@ -120,7 +120,7 @@ const TEACHER_PUBKEY="BMlCJQIy_90-L10SARPBR3AcigAcLss8GxbFRr9hheAXr9L5u9GVx_ZasT
 // ACHTUNG: Das Kurzformat traegt die Ergebnisse nach POSITION in ITEMS, nicht nach Aufgaben-Id.
 // Wer Aufgaben umsortiert, hinzufuegt oder entfernt, MUSS TEST_VERSION erhoehen und das
 // Manifest neu in die Auswertungs-App einlesen. Sonst weist die App den Code ab (sie raet nicht).
-const TEST_VERSION=1;
+const TEST_VERSION=2;   // 1 -> 2 am 20.09.2026: zwei Wiederholungsaufgaben ergaenzt (16 -> 18)
 
 const SC2_EPOCH=Date.UTC(2020,0,1);
 const RES_CODE={wrong:0,partial:1,done:2};   // 3 = nicht bearbeitet
@@ -227,7 +227,11 @@ const ITEMS=[
  {id:"w3",block:"wdh_lb3",skill:"Formelsprache: benennen und aufstellen",titel:"Binäre Verbindung benennen",typ:"single",frage:"Wie heißt die Verbindung P₂O₃ nach den Regeln der Nomenklatur?",
   optionen:[{t:"Phosphortrioxid",k:false},{t:"Diphosphortrioxid",k:true},{t:"Diphosphoroxid",k:false},{t:"Phosphor(II)-oxid",k:false}]},
  {id:"w4",block:"wdh_lb3",skill:"Formelsprache: benennen und aufstellen",titel:"Verhältnisformel Atom-Ionen",typ:"single",frage:"Aluminiumsulfid besteht aus Al³⁺-Ionen und S²⁻-Ionen. Welche Verhältnisformel ist richtig?",
-  optionen:[{t:"AlS",k:false},{t:"Al₃S₂",k:false},{t:"Al₂S",k:false},{t:"Al₂S₃",k:true}]}
+  optionen:[{t:"AlS",k:false},{t:"Al₃S₂",k:false},{t:"Al₂S",k:false},{t:"Al₂S₃",k:true}]},
+ {id:"w5",block:"wdh_lb3",skill:"Reaktionsgleichungen aufstellen und ausgleichen",titel:"Verbrennungsgleichung ausgleichen",typ:"single",frage:"Ethanol verbrennt vollständig: __ C₂H₅OH + __ O₂ → __ CO₂ + __ H₂O. Welche kleinsten ganzzahligen Koeffizienten gleichen die Gleichung aus? Denke an den Sauerstoff, der schon im Ethanol-Molekül steckt.",
+  optionen:[{t:"1, 3, 2, 3",k:true},{t:"1, 2, 2, 3",k:false},{t:"1, 4, 2, 3",k:false},{t:"1, 3, 2, 2",k:false}]},
+ {id:"w6",block:"wdh_lb3",skill:"Reaktionsgleichungen aufstellen und ausgleichen",titel:"Elementare Edukte ansetzen",typ:"multi",frage:"Welche dieser Elemente kommen elementar als zweiatomige Moleküle vor (X₂)? Das entscheidet, wie du die Edukte in einer Gleichung ansetzt. (Mehrere sind richtig.)",
+  optionen:[{t:"Sauerstoff",k:true},{t:"Neon",k:false},{t:"Wasserstoff",k:true},{t:"Phosphor",k:false},{t:"Brom",k:true},{t:"Argon",k:false}]}
 ];
 const LSKEY="lernstand_ch11_lb4_v1", DONEKEY="lernstand_ch11_lb4_done_v1", ORDERKEY="lernstand_ch11_lb4_order_v1";
 const BLOCK_INFO={
@@ -236,7 +240,7 @@ const BLOCK_INFO={
   b3:{thema:"Elektronegativität, Dipol und Wasserstoffbrücken",kap:"Kapitel 5 und 6, Pool-Aufgaben 20 bis 30"},
   b4:{thema:"Siedetemperatur, Löslichkeit und Viskosität",kap:"Kapitel 6 und 7, Pool-Aufgaben 25 bis 34"},
   wdh_lb2:{thema:"Wiederholung LB2: Ionen, Periode und Hauptgruppe",kap:"Pflichtkern Periodensystem, Kapitel 4 und 6"},
-  wdh_lb3:{thema:"Wiederholung LB3: Nomenklatur und Verhältnisformeln",kap:"Pflichtkern Salze, Kapitel 2 und 5"}};
+  wdh_lb3:{thema:"Wiederholung LB3: Nomenklatur, Gleichungen und Verhältnisformeln",kap:"Pflichtkern Salze, Kapitel 2 und 5"}};
 let answers={}, locked=false, orderMap=null;
 function getOrder(item){
   if(!orderMap){
