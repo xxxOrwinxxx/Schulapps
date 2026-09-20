@@ -105,8 +105,7 @@
 <script>
 "use strict";
 const TEST={testId:"ch11-lb2-atombau",titel:"LB2 Aufbau des Periodensystems",fach:"CH",stufe:"11",
-  bloecke:{bausteine:"Bausteine",isotope:"Isotope & mittlere Atommasse",energiestufen:"Energiestufenmodell",
-           orbitalmodell:"Orbitalmodell",ionen:"Ionen & Ladung",flammenfaerbung:"Flammenfärbung"}};
+  bloecke:{b1:"Bausteine und Isotope",b2:"Atommasse, Energiestufen und PSE",b3:"Orbitalmodell und Elektronenkonfiguration",b4:"Ionen, Systematik und Flammenfärbung"}};
 
 // ============================================================
 // ERGEBNIS-CODE
@@ -187,32 +186,32 @@ async function buildCode(name,aufgaben){
 // Aufruf mit ?manifest an der Adresse, nur fuer die Lehrkraft gedacht.
 function buildManifest(){
   const m={m:1,t:TEST.testId,tv:TEST_VERSION,ti:TEST.titel,f:TEST.fach,s:TEST.stufe,
-    a:ITEMS.map(it=>({id:it.id,titel:it.titel,block:(BLOCK_INFO[it.block]&&BLOCK_INFO[it.block].thema)||it.block,skill:""}))};
+    a:ITEMS.map(it=>({id:it.id,titel:it.titel,block:(BLOCK_INFO[it.block]&&BLOCK_INFO[it.block].thema)||it.block,skill:it.skill||""}))};
   return "SCM1-"+btoa(unescape(encodeURIComponent(JSON.stringify(m))));
 }
 // Optionsreihenfolge bewusst gemischt: die richtige Antwort steht mal an Position 1, 2, 3, 4.
 const ITEMS=[
- {id:"a1",block:"bausteine",titel:"Teilchen zuordnen",typ:"zuordnung",frage:"Ordne jedes Teilchen der passenden Beschreibung zu.",
+ {id:"a1",block:"b1",titel:"Teilchen zuordnen",typ:"zuordnung",frage:"Ordne jedes Teilchen der passenden Beschreibung zu.",
   paare:[{l:"Proton",r:"im Kern, positiv geladen"},{l:"Neutron",r:"im Kern, ungeladen"},{l:"Elektron",r:"in der Hülle, negativ geladen"}]},
- {id:"a2",block:"bausteine",titel:"Aluminium ablesen",typ:"single",frage:"Ein neutrales Aluminiumatom wird als ²⁷Al geschrieben (Massenzahl 27). Schlage die Ordnungszahl im Periodensystem nach. Wie viele Elektronen und Neutronen hat es?",
+ {id:"a2",block:"b1",titel:"Aluminium ablesen",typ:"single",frage:"Ein neutrales Aluminiumatom wird als ²⁷Al geschrieben (Massenzahl 27). Schlage die Ordnungszahl im Periodensystem nach. Wie viele Elektronen und Neutronen hat es?",
   optionen:[{t:"13 Elektronen, 27 Neutronen",k:false},{t:"13 Elektronen, 14 Neutronen",k:true},{t:"14 Elektronen, 13 Neutronen",k:false},{t:"27 Elektronen, 14 Neutronen",k:false}]},
- {id:"a3",block:"isotope",titel:"Isotope erkennen",typ:"single",frage:"Zwei Atome sind Isotope desselben Elements. Was trifft auf sie zu?",
+ {id:"a3",block:"b1",titel:"Isotope erkennen",typ:"single",frage:"Zwei Atome sind Isotope desselben Elements. Was trifft auf sie zu?",
   optionen:[{t:"Gleich viele Neutronen, aber unterschiedlich viele Protonen.",k:false},{t:"Gleiche Massenzahl, aber unterschiedlich viele Protonen.",k:false},{t:"Gleich viele Protonen, aber unterschiedlich viele Neutronen.",k:true},{t:"Sie haben unterschiedlich viele Elektronen.",k:false}]},
- {id:"a4",block:"isotope",titel:"Mittlere Atommasse",typ:"single",frage:"Warum ist die mittlere Atommasse der meisten Elemente keine ganze Zahl (Chlor z. B. 35,5)?",
+ {id:"a4",block:"b2",titel:"Mittlere Atommasse",typ:"single",frage:"Warum ist die mittlere Atommasse der meisten Elemente keine ganze Zahl (Chlor z. B. 35,5)?",
   optionen:[{t:"Weil die Elektronen mitgewogen werden und die Masse leicht verschieben.",k:false},{t:"Weil sie der nach der Häufigkeit gewichtete Durchschnitt mehrerer Isotope eines Elements ist.",k:true},{t:"Weil beim Zusammenhalt des Atomkerns etwas Masse als Bindungsenergie fehlt.",k:false},{t:"Weil man über viele gleiche Atome mittelt und das Ergebnis dann rundet.",k:false}]},
- {id:"a5",block:"energiestufen",titel:"Maximalbesetzung",typ:"zahl",frage:"Jede Energiestufe n fasst höchstens 2·n² Elektronen. Wie viele Elektronen sind das für die 3. Stufe (n = 3)?",loesung:18},
- {id:"a6",block:"energiestufen",titel:"Periode und Hauptgruppe",typ:"single",frage:"Ein Schwefelatom (S, 16 Elektronen) hat im Energiestufenmodell die Besetzung 2, 8, 6. In welcher Periode und Hauptgruppe steht Schwefel?",
+ {id:"a5",block:"b2",titel:"Maximalbesetzung",typ:"zahl",frage:"Jede Energiestufe n fasst höchstens 2·n² Elektronen. Wie viele Elektronen sind das für die 3. Stufe (n = 3)?",loesung:18},
+ {id:"a6",block:"b2",skill:"Ionen aus dem Periodensystem",titel:"Periode und Hauptgruppe",typ:"single",frage:"Ein Schwefelatom (S, 16 Elektronen) hat im Energiestufenmodell die Besetzung 2, 8, 6. In welcher Periode und Hauptgruppe steht Schwefel?",
   optionen:[{t:"3. Periode, 6. Hauptgruppe",k:true},{t:"6. Periode, 3. Hauptgruppe",k:false},{t:"3. Periode, 16. Hauptgruppe",k:false},{t:"8. Periode, 6. Hauptgruppe",k:false}]},
- {id:"a7",block:"orbitalmodell",titel:"Besetzungsprinzipien",typ:"zuordnung",frage:"Ordne jedem Besetzungsprinzip die passende Aussage zu.",
+ {id:"a7",block:"b3",titel:"Besetzungsprinzipien",typ:"zuordnung",frage:"Ordne jedem Besetzungsprinzip die passende Aussage zu.",
   paare:[{l:"Aufbauprinzip",r:"Die energieärmsten Orbitale werden zuerst besetzt."},{l:"Pauli-Prinzip",r:"In ein Orbital passen höchstens zwei Elektronen mit entgegengesetztem Spin."},{l:"Hund-Regel",r:"Energiegleiche Orbitale werden zuerst einzeln mit gleichem Spin besetzt."}]},
- {id:"a8",block:"orbitalmodell",titel:"Elektronenkonfiguration",typ:"single",frage:"Wie lautet die vollständige Elektronenkonfiguration eines Siliciumatoms (Si, 14 Elektronen)?",
+ {id:"a8",block:"b3",titel:"Elektronenkonfiguration",typ:"single",frage:"Wie lautet die vollständige Elektronenkonfiguration eines Siliciumatoms (Si, 14 Elektronen)?",
   optionen:[{t:"1s² 2s² 2p⁶ 3s² 3p⁴",k:false},{t:"1s² 2s² 2p⁸ 3s² 3p²",k:false},{t:"1s² 2s² 2p⁶ 3s² 3p²",k:true},{t:"1s² 2s² 2p⁶ 3s⁴",k:false}]},
- {id:"a9",block:"orbitalmodell",titel:"Element aus Konfiguration",typ:"kurzwort",frage:"Ein Atom hat die Elektronenkonfiguration 1s² 2s² 2p⁶ 3s¹. Um welches Element handelt es sich? Gib das Elementsymbol an.",loesung:"Na",akzeptiert:["na","natrium"]},
- {id:"a10",block:"ionen",titel:"Anion ableiten",typ:"single",frage:"Ein Sauerstoffatom (O) hat 6 Valenzelektronen. Welches Ion bildet es, um die Edelgaskonfiguration (Oktett) zu erreichen?",
+ {id:"a9",block:"b3",titel:"Element aus Konfiguration",typ:"kurzwort",frage:"Ein Atom hat die Elektronenkonfiguration 1s² 2s² 2p⁶ 3s¹. Um welches Element handelt es sich? Gib das Elementsymbol an.",loesung:"Na",akzeptiert:["na","natrium"]},
+ {id:"a10",block:"b4",skill:"Ionen aus dem Periodensystem",titel:"Anion ableiten",typ:"single",frage:"Ein Sauerstoffatom (O) hat 6 Valenzelektronen. Welches Ion bildet es, um die Edelgaskonfiguration (Oktett) zu erreichen?",
   optionen:[{t:"O²⁺",k:false},{t:"O⁶⁻",k:false},{t:"O⁶⁺",k:false},{t:"O²⁻",k:true}]},
- {id:"a11",block:"ionen",titel:"Systematik Ionen",typ:"multi",frage:"Welche Aussagen über die Ionenbildung sind richtig? (Mehrere sind richtig.)",
+ {id:"a11",block:"b4",titel:"Systematik Ionen",typ:"multi",frage:"Welche Aussagen über die Ionenbildung sind richtig? (Mehrere sind richtig.)",
   optionen:[{t:"Metallatome mit weniger als 4 Valenzelektronen geben Elektronen ab und bilden Kationen.",k:true},{t:"Wenn ein Atom Elektronen aufnimmt, wird es positiv geladen.",k:false},{t:"Nichtmetallatome mit mehr als 4 Valenzelektronen nehmen Elektronen auf und bilden Anionen.",k:true},{t:"Die Ladung eines Kations ist immer +1, egal wie viele Elektronen abgegeben werden.",k:false},{t:"Ein Atom erreicht durch Abgabe oder Aufnahme von Elektronen die Edelgaskonfiguration und wird dadurch zum Ion.",k:true}]},
- {id:"a12",block:"flammenfaerbung",titel:"Flammenfärbung erklären",typ:"single",frage:"Warum zeigt jedes Metallion in der Brennerflamme eine eigene, charakteristische Farbe? Wähle die auf Teilchenebene richtige Erklärung.",
+ {id:"a12",block:"b4",titel:"Flammenfärbung erklären",typ:"single",frage:"Warum zeigt jedes Metallion in der Brennerflamme eine eigene, charakteristische Farbe? Wähle die auf Teilchenebene richtige Erklärung.",
   optionen:[
     {t:"Die Flamme hebt Elektronen des Metallions auf höhere Energiestufen. Schon dieses Anheben sendet das farbige Licht aus, je nach Metallion in anderer Farbe.",k:false},
     {t:"In der Flamme werden die Elektronen des Nichtmetall-Ions (etwa Chlorid) angeregt. Deren Rückfall bestimmt die Farbe des Salzes.",k:false},
@@ -220,7 +219,11 @@ const ITEMS=[
     {t:"Alle Metallionen senden beim Zurückfallen dasselbe Licht aus. Die unterschiedliche Farbe entsteht durch die jeweilige Flammentemperatur.",k:false}]}
 ];
 const LSKEY="lernstand_ch11_lb2_v1", DONEKEY="lernstand_ch11_lb2_done_v1", ORDERKEY="lernstand_ch11_lb2_order_v1";
-const BLOCK_INFO={bausteine:{thema:"Bausteine der Atome",kap:"Kapitel 2"},isotope:{thema:"Isotope und mittlere Atommasse",kap:"Kapitel 3"},energiestufen:{thema:"Energiestufenmodell",kap:"Kapitel 4"},orbitalmodell:{thema:"Orbitalmodell",kap:"Kapitel 5"},ionen:{thema:"Ionen und Ladung",kap:"Kapitel 6"},flammenfaerbung:{thema:"Flammenfärbung",kap:"Kapitel 4 und 6"}};
+const BLOCK_INFO={
+  b1:{thema:"Bausteine der Atome und Isotope",kap:"Kapitel 2 und 3"},
+  b2:{thema:"Mittlere Atommasse, Energiestufen, Periode und Hauptgruppe",kap:"Kapitel 3 und 4"},
+  b3:{thema:"Orbitalmodell und Elektronenkonfiguration",kap:"Kapitel 5"},
+  b4:{thema:"Ionen, Ladung und Flammenfärbung",kap:"Kapitel 4 und 6"}};
 let answers={}, locked=false, orderMap=null;
 function getOrder(item){
   if(!orderMap){

@@ -107,12 +107,7 @@
 <script>
 "use strict";
 const TEST={testId:"ch11-lb4-molekuele",titel:"LB4 Molekulare Stoffe und Elektronenpaarbindung",fach:"CH",stufe:"11",
-  bloecke:{k1:"Elektronenpaarbindung und Valenzstrichformel",k2:"Molekül-Ionen, Formalladung und Mesomerie",
-           k3:"Kohlenwasserstoffe und Alkanole benennen",k4:"Die Form der Moleküle",
-           k5:"Elektronegativität und Polarität",k6:"Zwischenmolekulare Wechselwirkungen",
-           k7:"Löslichkeit und Viskosität",
-           wdh_lb2:"Wiederholung: Aufbau des Periodensystems (LB2)",
-           wdh_lb3:"Wiederholung: Salze und Ionenbindung (LB3)"}};
+  bloecke:{b1:"Bindung und Formelbild",b2:"Benennen und Molekülgestalt",b3:"Polarität und Wasserstoffbrücken",b4:"Stoffeigenschaften deuten",wdh_lb2:"Wiederholung: Aufbau des Periodensystems (LB2)",wdh_lb3:"Wiederholung: Salze und Ionenbindung (LB3)"}};
 
 // ============================================================
 // ERGEBNIS-CODE
@@ -189,7 +184,7 @@ async function buildCode(name,aufgaben){
 // Aufruf mit ?manifest an der Adresse, nur fuer die Lehrkraft gedacht.
 function buildManifest(){
   const m={m:1,t:TEST.testId,tv:TEST_VERSION,ti:TEST.titel,f:TEST.fach,s:TEST.stufe,
-    a:ITEMS.map(it=>({id:it.id,titel:it.titel,block:(BLOCK_INFO[it.block]&&BLOCK_INFO[it.block].thema)||it.block,skill:""}))};
+    a:ITEMS.map(it=>({id:it.id,titel:it.titel,block:(BLOCK_INFO[it.block]&&BLOCK_INFO[it.block].thema)||it.block,skill:it.skill||""}))};
   return "SCM1-"+btoa(unescape(encodeURIComponent(JSON.stringify(m))));
 }
 
@@ -201,48 +196,45 @@ function buildManifest(){
 // Optionsreihenfolge wird pro Geraet einmal gemischt (siehe getOrder), im Quelltext steht die richtige Antwort
 // deshalb an wechselnden Positionen.
 const ITEMS=[
- {id:"a1",block:"k1",titel:"Valenzstrichformel aufstellen",typ:"single",frage:"Methanal H₂CO (C-Atom in der Mitte) hat 12 Valenzelektronen, also 6 Elektronenpaare. Bei welcher Verteilung erreichen alle Atome die Edelgaskonfiguration?",
+ {id:"a1",block:"b1",titel:"Valenzstrichformel aufstellen",typ:"single",frage:"Methanal H₂CO (C-Atom in der Mitte) hat 12 Valenzelektronen, also 6 Elektronenpaare. Bei welcher Verteilung erreichen alle Atome die Edelgaskonfiguration?",
   optionen:[{t:"Zwei C-H-Einfachbindungen, eine C-O-Einfachbindung, drei freie Paare am O-Atom",k:false},{t:"Zwei C-H-Einfachbindungen, eine C=O-Doppelbindung, zwei freie Paare am O-Atom",k:true},{t:"Zwei C-H-Einfachbindungen, eine C-O-Einfachbindung, ein freies Paar am O-Atom und je ein freies Paar an den beiden H-Atomen",k:false},{t:"Zwei C-H-Einfachbindungen, eine C=O-Doppelbindung, je zwei freie Paare am C-Atom und am O-Atom",k:false}]},
- {id:"a2",block:"k2",titel:"Formalladung deuten",typ:"single",frage:"In der Valenzstrichformel des Ammonium-Ions NH₄⁺ steht am Stickstoffatom die Formalladung ⊕. Welche Aussage dazu ist richtig?",
+ {id:"a2",block:"b1",titel:"Formalladung deuten",typ:"single",frage:"In der Valenzstrichformel des Ammonium-Ions NH₄⁺ steht am Stickstoffatom die Formalladung ⊕. Welche Aussage dazu ist richtig?",
   optionen:[{t:"Das Stickstoffatom hat ein Elektron abgegeben und liegt im Ammonium-Ion als einzelnes N⁺-Ion vor.",k:false},{t:"Die Formalladung ⊕ kommt zur Ionenladung + hinzu, das Teilchen ist insgesamt zweifach positiv geladen.",k:false},{t:"Dem Stickstoffatom gehören in der Formel rechnerisch 4 Elektronen (vier Bindungen, jede zur Hälfte gezählt) statt 5 laut PSE: 5 − 4 = +1. Ein Elektron abgegeben hat es dabei nicht.",k:true},{t:"Die Formalladung ⊕ ist eine Partialladung δ⁺: Das Stickstoffatom zieht die Bindungselektronen schwächer an als die Wasserstoffatome.",k:false}]},
- {id:"a3",block:"k2",titel:"Mesomerie deuten",typ:"single",frage:"Für das Carbonat-Ion CO₃²⁻ lassen sich drei mesomere Grenzformeln zeichnen. Was sagen sie gemeinsam über das Teilchen aus?",
+ {id:"a3",block:"b1",titel:"Mesomerie deuten",typ:"single",frage:"Für das Carbonat-Ion CO₃²⁻ lassen sich drei mesomere Grenzformeln zeichnen. Was sagen sie gemeinsam über das Teilchen aus?",
   optionen:[{t:"Keine einzelne Grenzformel beschreibt das Teilchen richtig: Alle drei C-O-Bindungen sind gleich lang, die Elektronen sind über alle drei Bindungen verteilt (delokalisiert).",k:true},{t:"Das Ion wechselt ständig zwischen den drei Formen, in jedem Augenblick liegt genau eine der drei Grenzformeln vor.",k:false},{t:"Es gibt drei verschiedene Carbonat-Ionen, die sich in der Lage der Doppelbindung unterscheiden und als Gemisch vorliegen.",k:false},{t:"Eine C-O-Bindung ist als Doppelbindung kürzer, die beiden anderen sind als Einfachbindungen länger.",k:false}]},
- {id:"a4",block:"k3",titel:"Hauptkette finden",typ:"single",frage:"Wie heißt das Alkan mit der Halbstrukturformel CH₃-CH(CH₂-CH₃)-CH₂-CH₃ nach IUPAC? (Die Gruppe in der Klammer ist an das C-Atom direkt davor gebunden.)",
+ {id:"a4",block:"b2",titel:"Hauptkette finden",typ:"single",frage:"Wie heißt das Alkan mit der Halbstrukturformel CH₃-CH(CH₂-CH₃)-CH₂-CH₃ nach IUPAC? (Die Gruppe in der Klammer ist an das C-Atom direkt davor gebunden.)",
   optionen:[{t:"2-Ethylbutan",k:false},{t:"Hexan",k:false},{t:"2-Methylpentan",k:false},{t:"3-Methylpentan",k:true}]},
- {id:"a5",block:"k3",titel:"Alkanol benennen",typ:"single",frage:"Wie heißt das Alkanol mit der Halbstrukturformel CH₃-CH(CH₃)-CH₂-CH₂-CH₂-OH nach IUPAC?",
+ {id:"a5",block:"b2",titel:"Alkanol benennen",typ:"single",frage:"Wie heißt das Alkanol mit der Halbstrukturformel CH₃-CH(CH₃)-CH₂-CH₂-CH₂-OH nach IUPAC?",
   optionen:[{t:"2-Methylpentan-5-ol",k:false},{t:"4-Methylpentan-1-ol",k:true},{t:"2-Methylpentan-1-ol",k:false},{t:"4-Methylhexan-1-ol",k:false}]},
- {id:"a6",block:"k4",titel:"Grundkörper und Molekülgestalt",typ:"single",frage:"Am Sauerstoffatom des Methanolmoleküls CH₃-OH gibt es vier Elektronenpaarbereiche: zwei bindende (zum C-Atom und zum H-Atom) und zwei freie. Wie ist das Molekül am Sauerstoffatom gebaut?",
+ {id:"a6",block:"b2",titel:"Grundkörper und Molekülgestalt",typ:"single",frage:"Am Sauerstoffatom des Methanolmoleküls CH₃-OH gibt es vier Elektronenpaarbereiche: zwei bindende (zum C-Atom und zum H-Atom) und zwei freie. Wie ist das Molekül am Sauerstoffatom gebaut?",
   optionen:[{t:"Tetraedrisch mit 109,5°, weil vier Elektronenpaarbereiche immer die Molekülgestalt tetraedrisch ergeben.",k:false},{t:"Linear mit 180°, weil freie Elektronenpaare keinen Raum brauchen und sich die zwei Bindungen gegenüber anordnen.",k:false},{t:"Gewinkelt, der Bindungswinkel ist etwas kleiner als 109,5°: Der Grundkörper ist tetraedrisch, die Molekülgestalt beschreibt aber nur die Lage der Atome.",k:true},{t:"Trigonal-pyramidal mit etwa 107°, weil freie Elektronenpaare die Bindungen zusammendrücken.",k:false}]},
- {id:"a7",block:"k5",titel:"Partialladungen setzen",typ:"single",frage:"Welche Aussage zu den Partialladungen im Methanolmolekül CH₃-OH ist richtig?",
+ {id:"a7",block:"b3",titel:"Partialladungen setzen",typ:"single",frage:"Welche Aussage zu den Partialladungen im Methanolmolekül CH₃-OH ist richtig?",
   optionen:[{t:"Das Sauerstoffatom trägt δ⁻. Das Wasserstoffatom der Hydroxygruppe und das Kohlenstoffatom tragen δ⁺.",k:true},{t:"Das Sauerstoffatom trägt δ⁺, weil es zwei Bindungen eingeht und dabei Elektronen abgibt.",k:false},{t:"Das Sauerstoffatom trägt die Ladung 2−, wie im Oxid-Ion O²⁻.",k:false},{t:"Kein Atom trägt eine Partialladung, weil das Molekül insgesamt ungeladen ist.",k:false}]},
- {id:"a8",block:"k5",titel:"Dipol erkennen",typ:"single",frage:"Welches dieser Moleküle ist ein Dipol? (Die Molekülgestalt steht jeweils in Klammern.)",
+ {id:"a8",block:"b3",titel:"Dipol erkennen",typ:"single",frage:"Welches dieser Moleküle ist ein Dipol? (Die Molekülgestalt steht jeweils in Klammern.)",
   optionen:[{t:"Kohlenstoffdioxid CO₂ (linear)",k:false},{t:"Tetrachlormethan CCl₄ (tetraedrisch)",k:false},{t:"Methan CH₄ (tetraedrisch)",k:false},{t:"Fluormethan CH₃F (tetraedrisch)",k:true}]},
- {id:"a9",block:"k6",titel:"Wasserstoffbrücken erkennen",typ:"multi",frage:"Zwischen den Molekülen welcher Stoffe wirken Wasserstoffbrücken? (Mehrere sind richtig.)",
+ {id:"a9",block:"b3",titel:"Wasserstoffbrücken erkennen",typ:"multi",frage:"Zwischen den Molekülen welcher Stoffe wirken Wasserstoffbrücken? (Mehrere sind richtig.)",
   optionen:[{t:"Methanol CH₃-OH",k:true},{t:"Chlorwasserstoff HCl",k:false},{t:"Fluorwasserstoff HF",k:true},{t:"Fluormethan CH₃F",k:false},{t:"Ammoniak NH₃",k:true},{t:"Methan CH₄",k:false}]},
- {id:"a10",block:"k6",titel:"Sieden auf Teilchenebene",typ:"single",frage:"Bei der Destillation siedet Ethanol bei 78 °C. Was geschieht dabei mit den Ethanolmolekülen?",
+ {id:"a10",block:"b4",titel:"Sieden auf Teilchenebene",typ:"single",frage:"Bei der Destillation siedet Ethanol bei 78 °C. Was geschieht dabei mit den Ethanolmolekülen?",
   optionen:[{t:"Die Elektronenpaarbindungen in den Molekülen brechen, die Ethanolmoleküle zerfallen in Kohlenstoff-, Wasserstoff- und Sauerstoffatome.",k:false},{t:"Die Wechselwirkungen zwischen den Ethanolmolekülen werden überwunden, die Moleküle selbst bleiben ganz.",k:true},{t:"In jedem Molekül wird nur die O-H-Bindung gespalten, deshalb gibt es im Dampf keine Wasserstoffbrücken mehr.",k:false},{t:"Die einzelnen Moleküle dehnen sich durch die Wärme aus und werden dadurch leichter als Luft.",k:false}]},
- {id:"a11",block:"k6",titel:"Leitproblem Siedetemperatur",typ:"single",frage:"Wasser (18 g/mol) siedet bei 100 °C, Ethanol (46 g/mol) bei 78 °C, Methanol (32 g/mol) bei 65 °C. Welche Erklärung trifft zu?",
+ {id:"a11",block:"b4",titel:"Leitproblem Siedetemperatur",typ:"single",frage:"Wasser (18 g/mol) siedet bei 100 °C, Ethanol (46 g/mol) bei 78 °C, Methanol (32 g/mol) bei 65 °C. Welche Erklärung trifft zu?",
   optionen:[{t:"Die O-H-Bindungen im Wassermolekül sind stärker als in den Alkanolmolekülen. Beim Sieden müssen sie gespalten werden, das braucht bei Wasser die meiste Energie.",k:false},{t:"Nur zwischen Wassermolekülen wirken Wasserstoffbrücken. Zwischen Alkanolmolekülen wirken ausschließlich London-Wechselwirkungen (Van-der-Waals-Wechselwirkungen), und die sind schwächer.",k:false},{t:"Ein Wassermolekül kann bis zu vier Wasserstoffbrücken ausbilden, ein Alkanolmolekül höchstens zwei. Ethanol siedet höher als Methanol, weil zwischen den längeren Kohlenstoffketten stärkere London-Wechselwirkungen wirken.",k:true},{t:"Je kleiner ein Molekül ist, desto dichter liegen die Moleküle beieinander und desto höher ist grundsätzlich die Siedetemperatur. Wasser hat das kleinste Molekül.",k:false}]},
- {id:"a12",block:"k7",titel:"Löslichkeit erklären",typ:"single",frage:"Pentan-1-ol löst sich deutlich schlechter in Wasser als Ethanol. Welche Begründung ist richtig?",
+ {id:"a12",block:"b4",titel:"Löslichkeit erklären",typ:"single",frage:"Pentan-1-ol löst sich deutlich schlechter in Wasser als Ethanol. Welche Begründung ist richtig?",
   optionen:[{t:"Pentan-1-ol hat eine geringere Dichte als Wasser. Die Dichte entscheidet darüber, ob sich zwei Flüssigkeiten mischen.",k:false},{t:"Pentan-1-ol-Moleküle haben keine polare Gruppe und sind deshalb vollständig unpolar.",k:false},{t:"Pentan-1-ol-Moleküle sind zu groß für die Lücken zwischen den Wassermolekülen.",k:false},{t:"Beide Moleküle bilden mit ihrer Hydroxygruppe Wasserstoffbrücken zu Wassermolekülen. Beim Pentan-1-ol überwiegt aber der lange unpolare Schwanz, der das nicht kann.",k:true}]},
- {id:"w1",block:"wdh_lb2",titel:"Anion ableiten",typ:"single",frage:"Ein Sauerstoffatom (O) hat 6 Valenzelektronen. Welches Ion bildet es, um die Edelgaskonfiguration (Oktett) zu erreichen?",
+ {id:"w1",block:"wdh_lb2",skill:"Ionen aus dem Periodensystem",titel:"Anion ableiten",typ:"single",frage:"Ein Sauerstoffatom (O) hat 6 Valenzelektronen. Welches Ion bildet es, um die Edelgaskonfiguration (Oktett) zu erreichen?",
   optionen:[{t:"O²⁺",k:false},{t:"O⁶⁻",k:false},{t:"O⁶⁺",k:false},{t:"O²⁻",k:true}]},
- {id:"w2",block:"wdh_lb2",titel:"Periode und Hauptgruppe",typ:"single",frage:"Ein Schwefelatom (S, 16 Elektronen) hat im Energiestufenmodell die Besetzung 2, 8, 6. In welcher Periode und Hauptgruppe steht Schwefel?",
+ {id:"w2",block:"wdh_lb2",skill:"Ionen aus dem Periodensystem",titel:"Periode und Hauptgruppe",typ:"single",frage:"Ein Schwefelatom (S, 16 Elektronen) hat im Energiestufenmodell die Besetzung 2, 8, 6. In welcher Periode und Hauptgruppe steht Schwefel?",
   optionen:[{t:"3. Periode, 6. Hauptgruppe",k:true},{t:"6. Periode, 3. Hauptgruppe",k:false},{t:"3. Periode, 16. Hauptgruppe",k:false},{t:"8. Periode, 6. Hauptgruppe",k:false}]},
- {id:"w3",block:"wdh_lb3",titel:"Binäre Verbindung benennen",typ:"single",frage:"Wie heißt die Verbindung P₂O₃ nach den Regeln der Nomenklatur?",
+ {id:"w3",block:"wdh_lb3",skill:"Formelsprache: benennen und aufstellen",titel:"Binäre Verbindung benennen",typ:"single",frage:"Wie heißt die Verbindung P₂O₃ nach den Regeln der Nomenklatur?",
   optionen:[{t:"Phosphortrioxid",k:false},{t:"Diphosphortrioxid",k:true},{t:"Diphosphoroxid",k:false},{t:"Phosphor(II)-oxid",k:false}]},
- {id:"w4",block:"wdh_lb3",titel:"Verhältnisformel Atom-Ionen",typ:"single",frage:"Aluminiumsulfid besteht aus Al³⁺-Ionen und S²⁻-Ionen. Welche Verhältnisformel ist richtig?",
+ {id:"w4",block:"wdh_lb3",skill:"Formelsprache: benennen und aufstellen",titel:"Verhältnisformel Atom-Ionen",typ:"single",frage:"Aluminiumsulfid besteht aus Al³⁺-Ionen und S²⁻-Ionen. Welche Verhältnisformel ist richtig?",
   optionen:[{t:"AlS",k:false},{t:"Al₃S₂",k:false},{t:"Al₂S",k:false},{t:"Al₂S₃",k:true}]}
 ];
 const LSKEY="lernstand_ch11_lb4_v1", DONEKEY="lernstand_ch11_lb4_done_v1", ORDERKEY="lernstand_ch11_lb4_order_v1";
 const BLOCK_INFO={
-  k1:{thema:"Elektronenpaarbindung und Valenzstrichformel",kap:"Kapitel 1, Pool-Aufgaben 1 bis 4"},
-  k2:{thema:"Molekül-Ionen, Formalladung und Mesomerie",kap:"Kapitel 2, Pool-Aufgaben 5 bis 9"},
-  k3:{thema:"Kohlenwasserstoffe und Alkanole benennen",kap:"Kapitel 3, Pool-Aufgaben 10 bis 15"},
-  k4:{thema:"Molekülgestalt und Elektronenpaarabstoßungsmodell",kap:"Kapitel 4, Pool-Aufgaben 16 bis 19"},
-  k5:{thema:"Elektronegativität, polare Bindung und Dipol",kap:"Kapitel 5, Pool-Aufgaben 20 bis 24"},
-  k6:{thema:"Zwischenmolekulare Wechselwirkungen und Siedetemperatur",kap:"Kapitel 6, Pool-Aufgaben 25 bis 30"},
-  k7:{thema:"Löslichkeit und Viskosität",kap:"Kapitel 7, Pool-Aufgaben 31 bis 34"},
+  b1:{thema:"Elektronenpaarbindung, Valenzstrichformel, Formalladung und Mesomerie",kap:"Kapitel 1 und 2, Pool-Aufgaben 1 bis 9"},
+  b2:{thema:"Kohlenwasserstoffe und Alkanole benennen, Molekülgestalt",kap:"Kapitel 3 und 4, Pool-Aufgaben 10 bis 19"},
+  b3:{thema:"Elektronegativität, Dipol und Wasserstoffbrücken",kap:"Kapitel 5 und 6, Pool-Aufgaben 20 bis 30"},
+  b4:{thema:"Siedetemperatur, Löslichkeit und Viskosität",kap:"Kapitel 6 und 7, Pool-Aufgaben 25 bis 34"},
   wdh_lb2:{thema:"Wiederholung LB2: Ionen, Periode und Hauptgruppe",kap:"Pflichtkern Periodensystem, Kapitel 4 und 6"},
   wdh_lb3:{thema:"Wiederholung LB3: Nomenklatur und Verhältnisformeln",kap:"Pflichtkern Salze, Kapitel 2 und 5"}};
 let answers={}, locked=false, orderMap=null;

@@ -106,9 +106,7 @@
 <script>
 "use strict";
 const TEST={testId:"ch11-lb3-salze",titel:"LB3 Salze und Ionenbindung",fach:"CH",stufe:"11",
-  bloecke:{k1:"Stoff- und Teilchenebene, Formelsprache",k2:"Nomenklatur und Reaktionsgleichungen",
-           k3:"Energetik",k4:"Elektronenübertragung und Ionengitter",k5:"Verhältnisformeln",
-           wdh_lb2:"Wiederholung: Aufbau des Periodensystems (LB2)"}};
+  bloecke:{b1:"Formelsprache und Teilchenebene",b2:"Reaktionsgleichungen und Energiebilanz",b3:"Energetik und Elektronenübertragung",b4:"Ionengitter und Verhältnisformeln",wdh_lb2:"Wiederholung: Aufbau des Periodensystems (LB2)"}};
 
 // ============================================================
 // ERGEBNIS-CODE
@@ -185,7 +183,7 @@ async function buildCode(name,aufgaben){
 // Aufruf mit ?manifest an der Adresse, nur fuer die Lehrkraft gedacht.
 function buildManifest(){
   const m={m:1,t:TEST.testId,tv:TEST_VERSION,ti:TEST.titel,f:TEST.fach,s:TEST.stufe,
-    a:ITEMS.map(it=>({id:it.id,titel:it.titel,block:(BLOCK_INFO[it.block]&&BLOCK_INFO[it.block].thema)||it.block,skill:""}))};
+    a:ITEMS.map(it=>({id:it.id,titel:it.titel,block:(BLOCK_INFO[it.block]&&BLOCK_INFO[it.block].thema)||it.block,skill:it.skill||""}))};
   return "SCM1-"+btoa(unescape(encodeURIComponent(JSON.stringify(m))));
 }
 
@@ -196,42 +194,41 @@ function buildManifest(){
 // Optionsreihenfolge wird pro Geraet einmal gemischt (siehe getOrder), im Quelltext steht die richtige Antwort
 // deshalb an wechselnden Positionen.
 const ITEMS=[
- {id:"a1",block:"k1",titel:"Koeffizient und Index deuten",typ:"single",frage:"Was bedeutet die Angabe 4 NH₃?",
+ {id:"a1",block:"b1",titel:"Koeffizient und Index deuten",typ:"single",frage:"Was bedeutet die Angabe 4 NH₃?",
   optionen:[{t:"4 Teilchen, jedes aus 1 Stickstoff-Atom und 3 Wasserstoff-Atomen",k:true},{t:"1 Teilchen aus 4 Stickstoff-Atomen und 3 Wasserstoff-Atomen",k:false},{t:"4 Stickstoff-Atome und 3 Wasserstoff-Atome, nicht miteinander verbunden",k:false},{t:"3 Teilchen, jedes aus 4 Stickstoff-Atomen und 1 Wasserstoff-Atom",k:false}]},
- {id:"a2",block:"k1",titel:"Teilchenebene erkennen",typ:"multi",frage:"Welche Aussagen gehören zur Teilchenebene? (Mehrere sind richtig.)",
+ {id:"a2",block:"b1",titel:"Teilchenebene erkennen",typ:"multi",frage:"Welche Aussagen gehören zur Teilchenebene? (Mehrere sind richtig.)",
   optionen:[{t:"Zwei Sauerstoff-Atome sind zu einem O₂-Teilchen verbunden.",k:true},{t:"Das Gas riecht stechend.",k:false},{t:"Ein Magnesium-Atom gibt zwei Elektronen ab.",k:true},{t:"Auf der Glasplatte schlägt sich eine farblose Flüssigkeit nieder.",k:false},{t:"Die Ionen ordnen sich abwechselnd zu einem Gitter an.",k:true}]},
- {id:"a3",block:"k2",titel:"Binäre Verbindung benennen",typ:"single",frage:"Wie heißt die Verbindung P₂O₃ nach den Regeln der Nomenklatur?",
+ {id:"a3",block:"b1",skill:"Formelsprache: benennen und aufstellen",titel:"Binäre Verbindung benennen",typ:"single",frage:"Wie heißt die Verbindung P₂O₃ nach den Regeln der Nomenklatur?",
   optionen:[{t:"Phosphortrioxid",k:false},{t:"Diphosphortrioxid",k:true},{t:"Diphosphoroxid",k:false},{t:"Phosphor(II)-oxid",k:false}]},
- {id:"a4",block:"k2",titel:"Gleichung ausgleichen",typ:"single",frage:"Aluminium reagiert mit Sauerstoff zu Aluminiumoxid: __ Al + __ O₂ → __ Al₂O₃. Welche kleinsten ganzzahligen Koeffizienten gleichen die Gleichung aus?",
+ {id:"a4",block:"b2",titel:"Gleichung ausgleichen",typ:"single",frage:"Aluminium reagiert mit Sauerstoff zu Aluminiumoxid: __ Al + __ O₂ → __ Al₂O₃. Welche kleinsten ganzzahligen Koeffizienten gleichen die Gleichung aus?",
   optionen:[{t:"2, 3, 1",k:false},{t:"2, 3, 2",k:false},{t:"4, 3, 2",k:true},{t:"1, 3, 1",k:false}]},
- {id:"a5",block:"k2",titel:"Zweiatomige Elemente",typ:"multi",frage:"Welche dieser Elemente liegen elementar als zweiatomige Teilchen vor (X₂)? (Mehrere sind richtig.)",
+ {id:"a5",block:"b2",titel:"Zweiatomige Elemente",typ:"multi",frage:"Welche dieser Elemente liegen elementar als zweiatomige Teilchen vor (X₂)? (Mehrere sind richtig.)",
   optionen:[{t:"Chlor",k:true},{t:"Schwefel",k:false},{t:"Stickstoff",k:true},{t:"Natrium",k:false},{t:"Iod",k:true},{t:"Helium",k:false}]},
- {id:"a6",block:"k3",titel:"Energiediagramm lesen",typ:"single",frage:"In einem Energiediagramm liegen die Produkte höher als die Edukte. Was gilt für diese Reaktion?",
+ {id:"a6",block:"b2",titel:"Energiediagramm lesen",typ:"single",frage:"In einem Energiediagramm liegen die Produkte höher als die Edukte. Was gilt für diese Reaktion?",
   optionen:[{t:"Sie ist exoenergetisch, ΔE ist negativ.",k:false},{t:"Sie ist endoenergetisch, ΔE ist positiv.",k:true},{t:"Sie ist exoenergetisch und braucht keine Aktivierungsenergie.",k:false},{t:"Sie ist endoenergetisch und läuft deshalb ohne Aktivierungsenergie an.",k:false}]},
- {id:"a7",block:"k3",titel:"Aktivierungsenergie und Selbstlauf",typ:"single",frage:"Magnesium brennt weiter, nachdem es aus der Brennerflamme genommen wurde. Welche Erklärung ist richtig?",
+ {id:"a7",block:"b3",titel:"Aktivierungsenergie und Selbstlauf",typ:"single",frage:"Magnesium brennt weiter, nachdem es aus der Brennerflamme genommen wurde. Welche Erklärung ist richtig?",
   optionen:[{t:"Exoenergetische Reaktionen brauchen grundsätzlich keine Aktivierungsenergie.",k:false},{t:"Die Luft liefert die Aktivierungsenergie nach.",k:false},{t:"Das Magnesium hat die Wärme der Flamme gespeichert und gibt sie langsam ab.",k:false},{t:"Die frei werdende Energie liefert die Aktivierungsenergie für die noch nicht umgesetzten Teilchen.",k:true}]},
- {id:"a8",block:"k4",titel:"Redox-Begriffe zuordnen",typ:"zuordnung",frage:"Ordne jedem Vorgang bzw. Teilchen den passenden Fachbegriff zu.",
+ {id:"a8",block:"b3",titel:"Redox-Begriffe zuordnen",typ:"zuordnung",frage:"Ordne jedem Vorgang bzw. Teilchen den passenden Fachbegriff zu.",
   paare:[{l:"Elektronen werden abgegeben",r:"Oxidation"},{l:"Elektronen werden aufgenommen",r:"Reduktion"},{l:"Teilchen, das Elektronen abgibt",r:"Elektronendonator (Reduktionsmittel)"},{l:"Teilchen, das Elektronen aufnimmt",r:"Elektronenakzeptor (Oxidationsmittel)"}]},
- {id:"a9",block:"k4",titel:"Teilgleichung Reduktion",typ:"single",frage:"Chlor wird bei der Salzbildung reduziert. Welche Teilgleichung ist richtig?",
+ {id:"a9",block:"b3",titel:"Teilgleichung Reduktion",typ:"single",frage:"Chlor wird bei der Salzbildung reduziert. Welche Teilgleichung ist richtig?",
   optionen:[{t:"Cl₂ + 2 e⁻ → Cl₂²⁻",k:false},{t:"Cl₂ → 2 Cl⁻ + 2 e⁻",k:false},{t:"Cl₂ + 2 e⁻ → 2 Cl⁻",k:true},{t:"Cl₂ + e⁻ → 2 Cl⁻",k:false}]},
- {id:"a10",block:"k4",titel:"Ionengitter statt Paare",typ:"single",frage:"Ein Mitschüler zeichnet Kochsalz als viele einzelne, getrennte Na⁺Cl⁻-Paare. Was ist an diesem Modell falsch?",
+ {id:"a10",block:"b4",titel:"Ionengitter statt Paare",typ:"single",frage:"Ein Mitschüler zeichnet Kochsalz als viele einzelne, getrennte Na⁺Cl⁻-Paare. Was ist an diesem Modell falsch?",
   optionen:[{t:"Nichts, Kochsalz besteht aus solchen Paaren.",k:false},{t:"Die elektrostatische Anziehung wirkt in alle Richtungen, jedes Ion umgibt sich mit mehreren Gegenionen: Es entsteht ein Gitter, keine Paare.",k:true},{t:"Natrium-Ionen und Chlorid-Ionen stoßen sich ab, deshalb liegen sie weit auseinander.",k:false},{t:"Die Paare müssten Cl⁺Na⁻ heißen, weil das Metall die Elektronen aufnimmt.",k:false}]},
- {id:"a11",block:"k5",titel:"Verhältnisformel Atom-Ionen",typ:"single",frage:"Aluminiumsulfid besteht aus Al³⁺-Ionen und S²⁻-Ionen. Welche Verhältnisformel ist richtig?",
+ {id:"a11",block:"b4",skill:"Formelsprache: benennen und aufstellen",titel:"Verhältnisformel Atom-Ionen",typ:"single",frage:"Aluminiumsulfid besteht aus Al³⁺-Ionen und S²⁻-Ionen. Welche Verhältnisformel ist richtig?",
   optionen:[{t:"AlS",k:false},{t:"Al₃S₂",k:false},{t:"Al₂S",k:false},{t:"Al₂S₃",k:true}]},
- {id:"a12",block:"k5",titel:"Verhältnisformel Molekül-Ion",typ:"single",frage:"Calciumnitrat besteht aus Ca²⁺-Ionen und Nitrat-Ionen NO₃⁻. Welche Verhältnisformel ist richtig?",
+ {id:"a12",block:"b4",titel:"Verhältnisformel Molekül-Ion",typ:"single",frage:"Calciumnitrat besteht aus Ca²⁺-Ionen und Nitrat-Ionen NO₃⁻. Welche Verhältnisformel ist richtig?",
   optionen:[{t:"Ca(NO₃)₂",k:true},{t:"CaNO₃",k:false},{t:"Ca₂NO₃",k:false},{t:"Ca(NO₃)₃",k:false}]},
- {id:"w1",block:"wdh_lb2",titel:"Anion ableiten",typ:"single",frage:"Ein Sauerstoffatom (O) hat 6 Valenzelektronen. Welches Ion bildet es, um die Edelgaskonfiguration (Oktett) zu erreichen?",
+ {id:"w1",block:"wdh_lb2",skill:"Ionen aus dem Periodensystem",titel:"Anion ableiten",typ:"single",frage:"Ein Sauerstoffatom (O) hat 6 Valenzelektronen. Welches Ion bildet es, um die Edelgaskonfiguration (Oktett) zu erreichen?",
   optionen:[{t:"O²⁺",k:false},{t:"O⁶⁻",k:false},{t:"O⁶⁺",k:false},{t:"O²⁻",k:true}]},
- {id:"w2",block:"wdh_lb2",titel:"Periode und Hauptgruppe",typ:"single",frage:"Ein Schwefelatom (S, 16 Elektronen) hat im Energiestufenmodell die Besetzung 2, 8, 6. In welcher Periode und Hauptgruppe steht Schwefel?",
+ {id:"w2",block:"wdh_lb2",skill:"Ionen aus dem Periodensystem",titel:"Periode und Hauptgruppe",typ:"single",frage:"Ein Schwefelatom (S, 16 Elektronen) hat im Energiestufenmodell die Besetzung 2, 8, 6. In welcher Periode und Hauptgruppe steht Schwefel?",
   optionen:[{t:"3. Periode, 6. Hauptgruppe",k:true},{t:"6. Periode, 3. Hauptgruppe",k:false},{t:"3. Periode, 16. Hauptgruppe",k:false},{t:"8. Periode, 6. Hauptgruppe",k:false}]}
 ];
 const LSKEY="lernstand_ch11_lb3_v1", DONEKEY="lernstand_ch11_lb3_done_v1", ORDERKEY="lernstand_ch11_lb3_order_v1";
 const BLOCK_INFO={
-  k1:{thema:"Stoff- und Teilchenebene, Formelsprache",kap:"Kapitel 1"},
-  k2:{thema:"Nomenklatur und Reaktionsgleichungen",kap:"Kapitel 2"},
-  k3:{thema:"Energetik chemischer Reaktionen",kap:"Kapitel 3"},
-  k4:{thema:"Elektronenübertragung und Ionengitter",kap:"Kapitel 4"},
-  k5:{thema:"Verhältnisformeln und Molekül-Ionen",kap:"Kapitel 5"},
+  b1:{thema:"Stoff- und Teilchenebene, Formelsprache, Benennen",kap:"Kapitel 1 und 2"},
+  b2:{thema:"Reaktionsgleichungen und Energiediagramm",kap:"Kapitel 2 und 3"},
+  b3:{thema:"Energetik, Redox und Elektronenübertragung",kap:"Kapitel 3 und 4"},
+  b4:{thema:"Ionengitter, Verhältnisformeln und Molekül-Ionen",kap:"Kapitel 4 und 5"},
   wdh_lb2:{thema:"Wiederholung LB2: Ionen, Periode und Hauptgruppe",kap:"Pflichtkern Periodensystem, Kapitel 4 und 6"}};
 let answers={}, locked=false, orderMap=null;
 function getOrder(item){
