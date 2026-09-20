@@ -357,7 +357,10 @@ function showResult(done,isReplay){
     document.getElementById("card-"+a.id).classList.add("locked");
   });
   document.getElementById("tiles").innerHTML='<div class="tile ok"><b>'+d+'</b>richtig</div><div class="tile part"><b>'+p+'</b>teilweise</div><div class="tile no"><b>'+w+'</b>offen/falsch</div>';
-  const pct=Math.round((d+p*0.5)/ITEMS.length*100);
+  // Nenner aus dem festgehaltenen Versuch, nicht aus der aktuellen Aufgabenliste:
+  // ein abgeschlossenes Ergebnis darf sich nicht aendern, wenn der Test spaeter waechst.
+  const gesamt=done.aufgaben.length||ITEMS.length;
+  const pct=Math.round((d+p*0.5)/gesamt*100);
   let msg="Du hast "+pct+"% erreicht. ";
   if(pct>=80)msg+="Stark, das Fundament sitzt.";
   else if(pct>=55)msg+="Gute Basis. Schau dir die markierten Stellen nochmal an.";
@@ -365,7 +368,8 @@ function showResult(done,isReplay){
   document.getElementById("summary").textContent=msg;
   const schwach=[]; done.aufgaben.forEach(a=>{ if(a.ergebnis!=="done" && schwach.indexOf(a.block)<0) schwach.push(a.block); });
   const emp=document.getElementById("empfehlung"); emp.style.marginTop="12px";
-  if(schwach.length){ const lis=schwach.map(b=>'<li>'+esc(BLOCK_INFO[b].thema)+' <span style="color:var(--muted)">('+esc(BLOCK_INFO[b].kap)+')</span></li>').join(""); emp.className="fb part"; emp.innerHTML='<span class="ic">&#128214;</span><span><b>Das schaust du dir im Pflichtkern nochmal an:</b><ul style="margin:6px 0 0;padding-left:18px">'+lis+'</ul></span>'; }
+  const bekannt=schwach.filter(b=>BLOCK_INFO[b]);   // aeltere Versuche kennen evtl. Bloecke, die es nicht mehr gibt
+  if(bekannt.length){ const lis=bekannt.map(b=>'<li>'+esc(BLOCK_INFO[b].thema)+' <span style="color:var(--muted)">('+esc(BLOCK_INFO[b].kap)+')</span></li>').join(""); emp.className="fb part"; emp.innerHTML='<span class="ic">&#128214;</span><span><b>Das schaust du dir im Pflichtkern nochmal an:</b><ul style="margin:6px 0 0;padding-left:18px">'+lis+'</ul></span>'; }
   else { emp.className="fb ok"; emp.innerHTML='<span class="ic">&#10003;</span><span><b>Alles sitzt. Kein Kapitel musst du nacharbeiten.</b></span>'; }
   document.getElementById("code").value=done.code;
   document.getElementById("lockNote").classList.toggle("hidden",!isReplay);
