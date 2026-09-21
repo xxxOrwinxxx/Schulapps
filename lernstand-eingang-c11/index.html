@@ -329,7 +329,8 @@ async function finish(){
   const name=nameEl().value.trim();
   if(!name){ toast("Bitte trage zuerst deinen Namen ein."); nameEl().focus(); document.getElementById("startCard").scrollIntoView({behavior:"smooth"}); return; }
   const offen=ITEMS.filter(it=>!answered(it)).length;
-  if(offen>0 && !confirm(offen+" Aufgabe(n) sind noch offen und zählen als nicht bearbeitet. Jetzt endgültig auswerten? Es zählt dein erster Versuch."))return;
+  if(offen===ITEMS.length){ toast("Du hast noch keine Aufgabe bearbeitet. Die Aufgaben stehen unter deinem Namen."); const q=document.getElementById("quiz"); if(q) q.scrollIntoView({behavior:"smooth"}); return; }
+  if(offen>0 && !confirm(offen+" Aufgabe(n) sind noch offen und zählen als nicht bearbeitet.\n\nDanach siehst du alle Lösungen und kannst nichts mehr ändern. Jetzt endgültig auswerten?"))return;
   // Nicht bearbeitet bleibt bewusst "nicht bearbeitet" (null) und wird nicht zu "falsch" verdichtet.
   const aufgaben=ITEMS.map(item=>({id:item.id,titel:item.titel,ergebnis:answered(item)?grade(item):null,block:item.block}));
   const btn=document.getElementById("btnEval");
