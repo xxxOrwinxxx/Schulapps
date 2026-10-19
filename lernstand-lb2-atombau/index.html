@@ -193,7 +193,7 @@ function buildManifest(){
 const ITEMS=[
  {id:"a1",block:"b1",titel:"Teilchen zuordnen",typ:"zuordnung",frage:"Ordne jedes Teilchen der passenden Beschreibung zu.",
   paare:[{l:"Proton",r:"im Kern, positiv geladen"},{l:"Neutron",r:"im Kern, ungeladen"},{l:"Elektron",r:"in der Hülle, negativ geladen"}]},
- {id:"a2",block:"b1",titel:"Aluminium ablesen",typ:"single",frage:"Ein neutrales Aluminiumatom wird als ²⁷Al geschrieben (Massenzahl 27). Schlage die Ordnungszahl im Periodensystem nach. Wie viele Elektronen und Neutronen hat es?",
+ {id:"a2",block:"b1",titel:"Aluminium ablesen",typ:"single",frage:"Ein ungeladenes Aluminiumatom wird als ²⁷Al geschrieben (Massenzahl 27). Schlage die Ordnungszahl im Periodensystem nach. Wie viele Elektronen und Neutronen hat es?",
   optionen:[{t:"13 Elektronen, 27 Neutronen",k:false},{t:"13 Elektronen, 14 Neutronen",k:true},{t:"14 Elektronen, 13 Neutronen",k:false},{t:"27 Elektronen, 14 Neutronen",k:false}]},
  {id:"a3",block:"b1",titel:"Isotope erkennen",typ:"single",frage:"Zwei Atome sind Isotope desselben Elements. Was trifft auf sie zu?",
   optionen:[{t:"Gleich viele Neutronen, aber unterschiedlich viele Protonen.",k:false},{t:"Gleiche Massenzahl, aber unterschiedlich viele Protonen.",k:false},{t:"Gleich viele Protonen, aber unterschiedlich viele Neutronen.",k:true},{t:"Sie haben unterschiedlich viele Elektronen.",k:false}]},
@@ -211,12 +211,12 @@ const ITEMS=[
   optionen:[{t:"O²⁺",k:false},{t:"O⁶⁻",k:false},{t:"O⁶⁺",k:false},{t:"O²⁻",k:true}]},
  {id:"a11",block:"b4",titel:"Systematik Ionen",typ:"multi",frage:"Welche Aussagen über die Ionenbildung sind richtig? (Mehrere sind richtig.)",
   optionen:[{t:"Metallatome mit weniger als 4 Valenzelektronen geben Elektronen ab und bilden Kationen.",k:true},{t:"Wenn ein Atom Elektronen aufnimmt, wird es positiv geladen.",k:false},{t:"Nichtmetallatome mit mehr als 4 Valenzelektronen nehmen Elektronen auf und bilden Anionen.",k:true},{t:"Die Ladung eines Kations ist immer +1, egal wie viele Elektronen abgegeben werden.",k:false},{t:"Ein Atom erreicht durch Abgabe oder Aufnahme von Elektronen die Edelgaskonfiguration und wird dadurch zum Ion.",k:true}]},
- {id:"a12",block:"b4",titel:"Flammenfärbung erklären",typ:"single",frage:"Warum zeigt jedes Metallion in der Brennerflamme eine eigene, charakteristische Farbe? Wähle die auf Teilchenebene richtige Erklärung.",
+ {id:"a12",block:"b4",titel:"Flammenfärbung erklären",typ:"single",frage:"Natriumsalze färben die Brennerflamme gelb, Lithiumsalze rot. In der heißen Flamme entstehen aus den Ionen des Salzes einzelne, ungeladene Metallatome. Wähle die auf Teilchenebene richtige Erklärung für die verschiedenen Farben.",
   optionen:[
-    {t:"Die Flamme hebt Elektronen des Metallions auf höhere Energiestufen. Schon dieses Anheben sendet das farbige Licht aus, je nach Metallion in anderer Farbe.",k:false},
+    {t:"Die Flamme hebt ein Valenzelektron des Metallatoms auf eine höhere Energiestufe. Schon dieses Anheben sendet das farbige Licht aus, bei jedem Element in anderer Farbe.",k:false},
     {t:"In der Flamme werden die Elektronen des Nichtmetall-Ions (etwa Chlorid) angeregt. Deren Rückfall bestimmt die Farbe des Salzes.",k:false},
-    {t:"Die Flamme regt Elektronen des Metallions an. Beim Zurückfallen auf eine tiefere Energiestufe geben sie Licht ab, dessen Farbe von den Energiestufenabständen des Metallions abhängt.",k:true},
-    {t:"Alle Metallionen senden beim Zurückfallen dasselbe Licht aus. Die unterschiedliche Farbe entsteht durch die jeweilige Flammentemperatur.",k:false}]}
+    {t:"Die Flamme hebt ein Valenzelektron des Metallatoms auf eine höhere Energiestufe. Beim Zurückfallen gibt es Licht ab, dessen Farbe vom Stufenabstand abhängt. Der ist im Natriumatom anders als im Lithiumatom.",k:true},
+    {t:"Natrium- und Lithiumatome senden beim Zurückfallen dasselbe Licht aus. Die verschiedenen Farben entstehen durch die jeweilige Flammentemperatur.",k:false}]}
 ];
 const LSKEY="lernstand_ch11_lb2_v1", DONEKEY="lernstand_ch11_lb2_done_v1", ORDERKEY="lernstand_ch11_lb2_order_v1";
 const BLOCK_INFO={
