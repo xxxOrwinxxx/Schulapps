@@ -29,7 +29,6 @@ html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--text);
   font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   padding:env(safe-area-inset-top,0) 16px calc(env(safe-area-inset-bottom,0) + 32px)}
-body.mit-leiste{padding-bottom:calc(env(safe-area-inset-bottom,0) + 150px)}
 main{max-width:640px;margin:0 auto}
 a{color:var(--akzent)}
 button,.knopf{font:inherit;color:inherit;cursor:pointer}
@@ -58,6 +57,9 @@ p{margin:.5em 0}
 .liste a.empfohlen{border:2px solid var(--akzent);background:var(--akzent-hell)}
 .liste a.empfohlen .status{color:var(--text);font-weight:700}
 .liste a.erledigt .zeile1::after{content:" ✓";font-weight:700}
+/* Bernstein = Lösung und geschafft; Blau bleibt fürs Handeln („als Nächstes“ gewinnt) */
+.liste a.erledigt:not(.empfohlen){background:var(--loesung);border-color:var(--loesung-rand)}
+.liste a.erledigt:not(.empfohlen) .status{color:var(--text);font-weight:600}
 
 /* Startkarte „Heute“ */
 .heute{display:block;background:var(--akzent);color:var(--akzent-text);border-radius:18px;padding:20px;
@@ -102,6 +104,9 @@ a.sprung{font-weight:700}
 .neben{background:var(--flaeche);color:var(--text);border:1px solid var(--linie);min-height:48px;font-weight:600}
 .reihe{display:flex;gap:8px}
 .reihe>*{flex:1}
+.textknopf{background:none;border:none;color:var(--akzent);font-weight:600;text-decoration:underline;min-height:44px;padding:8px}
+.meldung{background:var(--akzent-hell);border-left:4px solid var(--akzent);border-radius:8px;padding:8px 12px;margin:0 0 12px}
+.ruhig{text-align:center;margin-top:16px}
 </style>
 </head>
 <body>
@@ -123,156 +128,197 @@ const speicher = {
 };
 let erledigt;
 try { erledigt = new Set(JSON.parse(speicher.get("erledigt") || "[]")); } catch (e) { erledigt = new Set(); }
-const merkeErledigt = id => { erledigt.add(id); speicher.set("erledigt", JSON.stringify([...erledigt])); };
+const sichereErledigt = () => speicher.set("erledigt", JSON.stringify([...erledigt]));
 const bestaetigt = new Set();  // „Antwort steht in den Unterlagen“, gilt bis zum Neuladen
+const rueckweg = {};           // Übungskarte -> Lösungskarte, von der ein „Wenn falsch“ hierher geschickt hat
+let vorher = "";               // Adresse vor der aktuellen (für einen Zurück-Pfeil wie die Handy-Taste)
+let meldung = "";              // einmaliger Hinweis nach einer ungültigen Adresse
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
 const ohneTags = s => String(s || "").replace(/<[^>]+>/g, "");
 const datum = iso => iso.split("-").reverse().join(".");
 const lbKurz = lb => (lb.titel.match(/^LB\d+/) || [lb.titel])[0];
+const hash = () => location.hash.slice(1);
 
 function zeige(kopfOrt, zurueck, inhalt, leiste) {
-  app.innerHTML = `<header>${zurueck ? `<a class="zurueck" href="${zurueck}" aria-label="Zurück">←</a>` : ""}` +
-    `<span class="ort">${kopfOrt}</span></header>` + inhalt;
+  const m = meldung ? `<p class="meldung" role="status">${meldung}</p>` : "";
+  meldung = "";
+  app.innerHTML = `<header>${zurueck !== null ? `<a class="zurueck" href="#${zurueck}" data-zurueck="${zurueck}" aria-label="Zurück">←</a>` : ""}` +
+    `<span class="ort">${kopfOrt}</span></header>` + m + inhalt;
   document.querySelector(".leiste")?.remove();
-  document.body.classList.toggle("mit-leiste", !!leiste);
+  document.body.style.paddingBottom = "";
   if (leiste) {
     const l = document.createElement("div");
     l.className = "leiste";
     l.innerHTML = `<div class="innen">${leiste}</div>`;
     document.body.appendChild(l);
+    passeAbstand();
   }
   window.scrollTo(0, 0);
+}
+// Platz unten so groß wie die Leiste, damit sie nie das Ende der Lösung verdeckt
+function passeAbstand() {
+  const l = document.querySelector(".leiste");
+  if (l) document.body.style.paddingBottom = (l.offsetHeight + 24) + "px";
+}
+if ("ResizeObserver" in window) new ResizeObserver(passeAbstand).observe(document.body);
+
+// Ungültige Adresse: kurz sagen und die Adresse in der Leiste richtigstellen
+function umleiten(ziel, text) {
+  meldung = text;
+  location.replace("#" + ziel);
 }
 
 // ------------------------------------------------------------ Start: Klasse wählen
 function start() {
   const kurse = Object.entries(D.kurse).sort((a, b) => a[1].name.localeCompare(b[1].name, "de"));
-  zeige("Karten", "", `<h1>Ihre Klasse</h1><ul class="liste">` +
+  zeige("Karten", null, `<h1>Ihre Klasse</h1><ul class="liste">` +
     kurse.map(([id, k]) => `<li><a href="#${id}"><span class="text"><span class="zeile1">${esc(k.name)}</span></span></a></li>`).join("") +
     `</ul><p class="fuss leise">Stand der Karten: ${datum(D.stand)}</p>`);
 }
 
-// ------------------------------------------------------------ Klasse: Heute, darunter Früheres
+// ------------------------------------------------------------ Klasse: neueste DS je Spur, darunter Früheres
 function dsDerKlasse(k) {
   return k.lbs.flatMap(ref => ref.ds.map(n => lbById[ref.id]?.ds.find(d => d.nr === n)).filter(Boolean)
     .map(ds => ({lb: lbById[ref.id], ds})));
 }
 function kursSeite(kid) {
   const k = D.kurse[kid];
-  if (!k) return start();
+  if (!k) return umleiten("klassen", "Diese Klasse gibt es hier nicht. Bitte wählen Sie Ihre Klasse.");
   speicher.set("kurs", kid);
   const alle = dsDerKlasse(k);
-  // je Spur (Unterricht, Übung) die neueste DS; Listen sind schon neueste zuerst sortiert
   const spuren = alle.some(x => x.lb.uebung) && alle.some(x => !x.lb.uebung);
   const neu = [alle.find(x => !x.lb.uebung), alle.find(x => x.lb.uebung)].filter(Boolean);
   let h = `<h1>${esc(k.name)}</h1>`;
+  if (!neu.length) h += `<p>Für Ihre Klasse sind noch keine Karten freigegeben.</p>`;
   for (const n of neu) {
     const spur = spuren ? (n.lb.uebung ? " in der Übung" : " im Unterricht") : "";
     h += `<a class="heute" href="#${kid}/${n.ds.key}"><span class="klein">Neueste Doppelstunde${spur} · ${esc(lbKurz(n.lb))}</span>` +
       `<span class="gross">DS ${n.ds.nr}${n.ds.titel ? ": " + esc(n.ds.titel) : ""}</span><span class="los">Karten öffnen →</span></a>`;
   }
   if (alle.length > neu.length) h += `<a class="zweit" href="#${kid}/frueher">Frühere Doppelstunden (${alle.length - neu.length})</a>`;
-  h += `<p class="fuss leise"><a href="#">Andere Klasse wählen</a><br>Stand der Karten: ${datum(D.stand)}</p>`;
-  zeige("Karten", "#", h);
+  h += `<p class="ruhig"><a class="zweit" href="#klassen">Andere Klasse wählen</a></p>` +
+    `<p class="fuss leise">Stand der Karten: ${datum(D.stand)}</p>`;
+  zeige("Karten", "klassen", h);
 }
 function fruehereSeite(kid) {
   const k = D.kurse[kid];
-  if (!k) return start();
-  let h = `<h1>Frühere Doppelstunden</h1>`;
-  k.lbs.forEach((ref, i) => {
+  if (!k) return umleiten("klassen", "Diese Klasse gibt es hier nicht. Bitte wählen Sie Ihre Klasse.");
+  let h = `<h1>Frühere Doppelstunden</h1>`, offen = true;
+  for (const ref of k.lbs) {
     const lb = lbById[ref.id];
-    if (!lb) return;
-    const items = ref.ds.map(n => lb.ds.find(d => d.nr === n)).filter(Boolean);
-    h += `<details class="lb"${i === 0 ? " open" : ""}><summary>${esc(lb.titel)}</summary><ul class="liste">` +
+    const items = lb ? ref.ds.map(n => lb.ds.find(d => d.nr === n)).filter(Boolean) : [];
+    if (!items.length) continue;
+    h += `<details class="lb"${offen ? " open" : ""}><summary>${esc(lb.titel)}</summary><ul class="liste">` +
       items.map(ds => `<li><a href="#${kid}/${ds.key}"><span class="text"><span class="zeile1">DS ${ds.nr}</span>` +
         `${ds.titel ? `<span class="zeile2">${esc(ds.titel)}</span>` : ""}</span></a></li>`).join("") + `</ul></details>`;
-  });
-  zeige(esc(k.name), "#" + kid, h);
+    offen = false;
+  }
+  zeige(esc(k.name), kid, h);
 }
 
-// ------------------------------------------------------------ Doppelstunde: zwei Listen
+// ------------------------------------------------------------ Doppelstunde: Lösungskarten, Nachschlagen, Übungskarten
 function holeDs(kid, key) {
   const e = dsByKey[key], k = D.kurse[kid];
   const ref = e && k && k.lbs.find(r => r.id === e.lb.id);
   return ref && ref.ds.includes(e.ds.nr) ? {k, ...e} : null;  // nur DS dieser Klasse
 }
-function empfohlen(ds) {
+// Lösungskarten mit ihrer Adresse (l1, l2 … nach Position in den Daten), Nachschlagekarten getrennt
+function teile(ds) {
+  const alle = ds.loesung.map((c, i) => ({c, teil: "l" + (i + 1)}));
+  return {loes: alle.filter(x => !x.c.nachschlagen), nach: alle.filter(x => x.c.nachschlagen),
+    ueb: ds.uebung.map(c => ({c, teil: "u" + c.nr}))};
+}
+function empfohlen(ds) {  // Skill doppelstunde: ohne Verweis bei Karte 4 (erste Vertiefung) beginnen
   const offen = ds.uebung.filter(c => !erledigt.has(`${ds.key}/u${c.nr}`));
   return (offen.find(c => c.niveau === 2) || offen[0] || {}).nr;
 }
+function zeileHtml(kid, key, x, z1, z2, extra) {
+  const id = `${key}/${x.teil}`, fertig = erledigt.has(id);
+  return `<li><a href="#${kid}/${id}" class="${fertig ? "erledigt" : ""}${extra ? " empfohlen" : ""}"><span class="text">` +
+    `<span class="zeile1">${z1}</span>${z2 ? `<span class="zeile2">${z2}</span>` : ""}</span>` +
+    `${extra ? '<span class="status">→ als Nächstes</span>' : fertig ? '<span class="status">geschafft</span>' : ""}</a></li>`;
+}
 function dsSeite(kid, key) {
   const x = holeDs(kid, key);
-  if (!x) return kursSeite(kid);
+  if (!x) return umleiten(D.kurse[kid] ? kid : "klassen", "Diese Doppelstunde gibt es für Ihre Klasse nicht. Hier ist die Übersicht.");
   const {k, lb, ds} = x;
+  const {loes, nach, ueb} = teile(ds);
   const ort = `${esc(k.name)} · ${esc(lbKurz(lb))} · DS ${ds.nr}`;
   let h = `<h1>${ds.titel ? esc(ds.titel) : "Doppelstunde " + ds.nr}</h1>`;
   h += `<p class="leise">Antworten schreiben Sie in Ihre Unterlagen, nicht hier.</p>`;
-  if (ds.loesung.length) {
-    h += `<h2>① Blatt prüfen: Lösungskarten</h2><ul class="liste">` + ds.loesung.map((c, i) => {
-      const id = `${key}/l${i + 1}`, fertig = erledigt.has(id);
-      return `<li><a href="#${kid}/${id}"${fertig ? ' class="erledigt"' : ""}><span class="text">` +
-        `<span class="zeile1">${c.nachschlagen ? "Zum Nachschlagen" : "Aufgabe " + esc(c.kennung)}</span>` +
-        `<span class="zeile2">${esc(c.nachschlagen ? c.kennung : c.stichwort)}</span></span>` +
-        `${fertig ? '<span class="status">geschafft</span>' : ""}</a></li>`;
-    }).join("") + `</ul>`;
+  if (loes.length) {
+    h += `<h2>① Blatt prüfen: Lösungskarten</h2><ul class="liste">` +
+      loes.map(y => zeileHtml(kid, key, y, "Aufgabe " + esc(y.c.kennung), esc(y.c.stichwort))).join("") + `</ul>`;
   }
-  if (ds.uebung.length) {
+  if (ueb.length) {
     const empf = empfohlen(ds);
-    h += `<h2>${ds.loesung.length ? "② " : ""}Üben: Übungskarten</h2>`;
-    if (ds.loesung.length) h += `<p class="leise">Schickt Sie eine Lösungskarte zu einer Übungskarte, beginnen Sie dort. Sonst bei der markierten Karte.</p>`;
-    h += `<ul class="liste">` + ds.uebung.map(c => {
-      const id = `${key}/u${c.nr}`, fertig = erledigt.has(id), e = c.nr === empf;
-      return `<li><a href="#${kid}/${id}" class="${fertig ? "erledigt" : ""}${e ? " empfohlen" : ""}"><span class="text">` +
-        `<span class="zeile1">Übungskarte ${c.nr} · ${NIV[c.niveau] || ""}</span>` +
-        `<span class="zeile2">${ohneTags(c.stichwort) ? c.stichwort : ""}</span></span>` +
-        `${e ? '<span class="status">→ als Nächstes</span>' : fertig ? '<span class="status">geschafft</span>' : ""}</a></li>`;
-    }).join("") + `</ul>`;
+    h += `<h2>${loes.length ? "② " : ""}Üben: Übungskarten</h2>`;
+    h += `<p class="leise">Beginnen Sie bei der markierten Karte.${loes.length ? " Hat eine Lösungskarte Sie zu einer anderen Übungskarte geschickt, nehmen Sie diese." : ""}</p>`;
+    h += `<ul class="liste">` + ueb.map(y => zeileHtml(kid, key, y, `Übungskarte ${y.c.nr} · ${NIV[y.c.niveau] || ""}`,
+      ohneTags(y.c.stichwort) ? y.c.stichwort : "", y.c.nr === empf)).join("") + `</ul>`;
+  }
+  if (nach.length) {
+    h += `<h2>Zum Nachschlagen</h2><ul class="liste">` +
+      nach.map(y => zeileHtml(kid, key, y, esc(y.c.kennung), esc(y.c.stichwort))).join("") + `</ul>`;
   }
   if (!ds.loesung.length && !ds.uebung.length) h += `<p>Zu dieser Doppelstunde gibt es keine Karten.</p>`;
-  zeige(ort, "#" + kid, h);
+  if ([...erledigt].some(e => e.startsWith(key + "/"))) {
+    h += `<p class="ruhig"><button type="button" class="textknopf" data-zuruecksetzen="${key}">Haken dieser Stunde zurücksetzen</button></p>`;
+  }
+  zeige(ort, kid, h);
 }
 
 // ------------------------------------------------------------ Eine Karte pro Bildschirm
 function karteSeite(kid, key, teil) {
   const x = holeDs(kid, key);
-  const m = /^([lu])(\d+)$/.exec(teil || "");
-  if (!x || !m) return dsSeite(kid, key);
+  if (!x) return dsSeite(kid, key);
   const {k, lb, ds} = x;
-  const art = m[1], nr = +m[2];
-  const liste = art === "l" ? ds.loesung : ds.uebung;
-  const idx = art === "l" ? nr - 1 : liste.findIndex(c => c.nr === nr);
-  const c = liste[idx];
-  if (!c) return dsSeite(kid, key);
+  const {loes, nach, ueb} = teile(ds);
+  const art = teil[0];
+  const liste = art === "u" ? ueb : loes;
+  const nk = nach.find(y => y.teil === teil);
+  const idx = liste.findIndex(y => y.teil === teil);
+  if (!nk && idx < 0) return umleiten(`${kid}/${key}`, "Diese Karte gibt es nicht. Hier ist die Übersicht der Doppelstunde.");
+  const c = nk ? nk.c : liste[idx].c;
   const id = `${key}/${teil}`;
-  const naechste = liste[idx + 1];
-  const naechsteId = naechste ? (art === "l" ? `l${idx + 2}` : `u${naechste.nr}`) : "";
   const ort = `${esc(k.name)} · ${esc(lbKurz(lb))} · DS ${ds.nr}`;
+  const eltern = rueckweg[id] || `${kid}/${key}`;
+  const ueberblick = `<a class="haupt" href="#${kid}/${key}">Zur Übersicht der Doppelstunde</a>`;
+
+  if (nk) {  // Nachschlagen: alles offen, nichts aufzudecken
+    let h = `<p class="position">Zum Nachschlagen</p><h1>${esc(c.kennung)}</h1>` +
+      (c.stichwort ? `<p class="leise">${esc(c.stichwort)}</p>` : "") + `<div class="auftrag">${c.vorn}</div>`;
+    if (c.hinten) h += `<div class="nachschlag"><div class="titel">Zum Nachschlagen</div>${c.hinten}</div>`;
+    return zeige(ort, eltern, h, ueberblick);
+  }
+
+  const naechste = liste[idx + 1];
+  const weiterLabel = naechste ? (art === "l" ? `Lösungskarte ${idx + 2}` : `Übungskarte ${naechste.c.nr}`) : "";
+  const weiterZiel = naechste ? `#${kid}/${key}/${naechste.teil}` : `#${kid}/${key}`;
   let h;
   if (art === "l") {
-    h = `<p class="position">${c.nachschlagen ? "Zum Nachschlagen" : `Lösungskarte ${idx + 1} von ${liste.length}`}</p>` +
-      `<h1>${c.nachschlagen ? esc(c.kennung) : "Aufgabe " + esc(c.kennung) + (c.stichwort ? ": " + esc(c.stichwort) : "")}</h1>`;
+    h = `<p class="position">Lösungskarte ${idx + 1} von ${liste.length}</p><h1>Aufgabe ${esc(c.kennung)}</h1>` +
+      (c.stichwort ? `<p class="leise">${esc(c.stichwort)}</p>` : "");
   } else {
-    h = `<p class="position">Übungskarte ${idx + 1} von ${liste.length} · ${NIV[c.niveau] || ""}</p>` +
-      `<h1>${c.stichwort ? "Das üben Sie hier: " + c.stichwort : "Übungskarte " + c.nr}</h1>`;
+    h = `<p class="position">${NIV[c.niveau] || ""}</p><h1>Übungskarte ${c.nr} von ${ds.uebung.length}</h1>` +
+      (c.stichwort ? `<p class="leise">Das üben Sie hier: ${c.stichwort}</p>` : "");
   }
   h += `<div class="auftrag">${c.vorn}</div>`;
-  const weiterLabel = naechste
-    ? (art === "l" ? `Weiter mit Lösungskarte ${idx + 2}` : `Weiter mit Übungskarte ${naechste.nr}`)
-    : "Zurück zur Übersicht";
-  const weiterZiel = naechste ? `#${kid}/${key}/${naechsteId}` : `#${kid}/${key}`;
-  if (c.nachschlagen) {
-    if (c.hinten) h += `<div class="nachschlag"><div class="titel">Zum Nachschlagen</div>${c.hinten}</div>`;
-    return zeige(ort, `#${kid}/${key}`, h, `<a class="haupt" href="${weiterZiel}">${weiterLabel}</a>`);
-  }
   if (c.hinten) h += `<div class="hinten" id="loesung" hidden><div class="titel">Lösungsvorschlag</div>${c.hinten}</div>`;
-  zeige(ort, `#${kid}/${key}`, h, " ");
+  zeige(ort, eltern, h, " ");
   const leiste = document.querySelector(".leiste .innen");
   const hinten = document.getElementById("loesung");
-  const fertig = `<a class="haupt" data-fertig href="${weiterZiel}">Geschafft. ${weiterLabel}</a>`;
+  // Ziel aus „Wenn falsch: Übungskarte n“ der Lösung
+  const sprung = hinten?.querySelector("a.sprung")?.getAttribute("href").match(/^#(.*)-(u\d+)$/);
+  const richtig = naechste ? `Richtig. Weiter mit ${weiterLabel}` : "Richtig. Zur Übersicht";
+  const falsch = sprung
+    ? `<a class="neben" data-sprung="${sprung[2]}" href="#${kid}/${key}/${sprung[2]}">Falsch: zu Übungskarte ${sprung[2].slice(1)}</a>`
+    : `<a class="neben" href="${weiterZiel}">Noch nicht richtig: korrigiert, ${naechste ? "weiter" : "zur Übersicht"}</a>`;
   function stufe(s) {
-    if (!c.hinten) { leiste.innerHTML = fertig; return; }
-    if (s === "zu") {
+    if (!c.hinten) {
+      leiste.innerHTML = `<a class="haupt" data-fertig href="${weiterZiel}">${naechste ? "Weiter mit " + weiterLabel : "Zur Übersicht"}</a>`;
+    } else if (s === "zu") {
       hinten.hidden = true;
       leiste.innerHTML = `<button type="button" class="haupt" data-schritt="frage">Lösung aufdecken</button>`;
     } else if (s === "frage") {
@@ -284,42 +330,65 @@ function karteSeite(kid, key, teil) {
     } else if (s === "auf") {
       bestaetigt.add(id);
       hinten.hidden = false;
-      leiste.innerHTML = fertig + `<button type="button" class="neben" data-schritt="zu">Lösung wieder zudecken</button>`;
+      leiste.innerHTML = `<p>Vergleichen Sie mit Ihrer Antwort. Wie war es?</p>` +
+        `<a class="haupt" data-fertig href="${weiterZiel}">${richtig}</a>${falsch}` +
+        `<button type="button" class="textknopf" data-schritt="zu">Lösung wieder zudecken</button>`;
       hinten.scrollIntoView({block: "start", behavior: "smooth"});
     }
+    passeAbstand();
   }
   leiste.onclick = ev => {
     const b = ev.target.closest("[data-schritt]");
     if (b) return stufe(b.dataset.schritt === "ja" ? "auf" : b.dataset.schritt);
-    if (ev.target.closest("[data-fertig]")) merkeErledigt(id);
+    if (ev.target.closest("[data-fertig]")) { erledigt.add(id); sichereErledigt(); }
+    const sp = ev.target.closest("[data-sprung]");
+    if (sp) rueckweg[`${key}/${sp.dataset.sprung}`] = `${kid}/${key}/${teil}`;
   };
   stufe(bestaetigt.has(id) ? "auf" : "zu");
 }
 
-// „Wenn falsch: Übungskarte 2“ springt direkt auf die Karte
 app.addEventListener("click", ev => {
+  // „Wenn falsch: Übungskarte 2“ im Lösungstext springt direkt auf die Karte, der Pfeil führt zurück
   const s = ev.target.closest("a.sprung");
-  if (!s) return;
-  ev.preventDefault();
-  const m = s.getAttribute("href").slice(1).match(/^(.*)-(u\d+)$/);
-  if (m) location.hash = `${location.hash.slice(1).split("/")[0]}/${m[1]}/${m[2]}`;
+  if (s) {
+    ev.preventDefault();
+    const m = s.getAttribute("href").slice(1).match(/^(.*)-(u\d+)$/);
+    if (m) {
+      rueckweg[`${m[1]}/${m[2]}`] = hash();
+      location.hash = `${hash().split("/")[0]}/${m[1]}/${m[2]}`;
+    }
+    return;
+  }
+  // Zurück-Pfeil: wie die Handy-Taste, wenn wir von genau dort kamen; sonst zur Elternseite
+  const z = ev.target.closest("[data-zurueck]");
+  if (z && vorher === z.dataset.zurueck) { ev.preventDefault(); history.back(); return; }
+  const r = ev.target.closest("[data-zuruecksetzen]");
+  if (r) {
+    for (const e of [...erledigt]) if (e.startsWith(r.dataset.zuruecksetzen + "/")) erledigt.delete(e);
+    sichereErledigt();
+    route();
+  }
 });
 
 function route() {
   if (!D) { app.innerHTML = "<p>Die Karten konnten nicht geladen werden. Bitte Seite neu laden.</p>"; return; }
   let roh = "";
-  try { roh = decodeURIComponent(location.hash.slice(1)); } catch (e) { return start(); }
+  try { roh = decodeURIComponent(hash()); } catch (e) { return start(); }
   const t = roh.toLowerCase().split("/").filter(Boolean);
   if (!t.length) {
     const k = speicher.get("kurs");
     return k && D.kurse[k] ? kursSeite(k) : start();
   }
+  if (t[0] === "klassen") return start();
   if (t.length === 1) return kursSeite(t[0]);
   if (t[1] === "frueher") return fruehereSeite(t[0]);
   if (t.length === 2) return dsSeite(t[0], t[1]);
   karteSeite(t[0], t[1], t[2]);
 }
-window.addEventListener("hashchange", route);
+window.addEventListener("hashchange", ev => {
+  vorher = decodeURIComponent((ev.oldURL.split("#")[1] || "")).toLowerCase();
+  route();
+});
 route();
 if ("serviceWorker" in navigator && location.protocol === "https:") {
   navigator.serviceWorker.register("sw.js").catch(() => {});

@@ -230,7 +230,7 @@ window.KARTEN = {
 {
 "kennung": "Operatoren",
 "stichwort": "Was der Auftrag von Ihnen will",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Ich suche das erste Wort des Auftrags: den Operator.</p><p>Hinten lese ich, was ich tun soll, und nutze den Satzanfang.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Ich suche das erste Wort des Auftrags: den Operator.</p><p>Hinten lese ich, was ich tun soll, und nutze den Satzanfang.</p></div>",
 "hinten": "<p>Das ist keine Lösung, sondern ein Nachschlagewerk für jede Aufgabe.</p>\n<div class=\"tab\"><table><tr><th><strong>Operator</strong></th><th><strong>Das tun Sie</strong></th><th><strong>So können Sie anfangen</strong></th></tr><tr><td>Nennen</td><td>Begriffe oder Fakten aufzählen, ohne Erklärung</td><td>„Es sind …“</td></tr><tr><td>Beschreiben</td><td>sagen, was man sieht oder was passiert, Schritt für Schritt, ohne „warum“</td><td>„Zuerst …, dann …“</td></tr><tr><td>Erklären</td><td>sagen, warum etwas so ist: Ursache und Folge verbinden</td><td>„Weil …, deshalb …“</td></tr><tr><td>Vergleichen</td><td>Gemeinsamkeiten und Unterschiede nach Merkmalen</td><td>„Beide …; anders ist …“</td></tr><tr><td>Begründen</td><td>eine Aussage mit einem Grund stützen: Messwert, Material, Regel</td><td>„…, denn M1 zeigt …“</td></tr><tr><td>Ankreuzen und begründen</td><td>Kreuz setzen, dann der Grund in einem Satz</td><td>„Ich kreuze … an, weil …“</td></tr><tr><td>Tipp, Vermutung</td><td>sagen, was Sie erwarten, und woran Sie dabei denken; erklären noch nicht</td><td>„Ich tippe …, weil ich … erlebt habe.“</td></tr><tr><td>Beurteilen</td><td>entscheiden, mit Kriterium und Begründung</td><td>„Nach dem Kriterium … halte ich … für besser, weil …“</td></tr></table></div>",
 "nachschlagen": true
 }
@@ -324,7 +324,7 @@ window.KARTEN = {
 {
 "kennung": "Nachschlagen",
 "stichwort": "So lesen Sie ein Diagramm ab",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Keine Lösung, sondern ein Nachschlagewerk für 4.7 und Übungskarte 2.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Keine Lösung, sondern ein Nachschlagewerk für 4.7 und Übungskarte 2.</p></div>",
 "hinten": "<p>1 Achsen lesen: Was steht unten (hier: Alter in Jahren), was links (hier: Nahpunkt in cm)?</p>\n<p>2 Senkrecht hoch: beim gesuchten Wert der unteren Achse bis zur Linie.</p>\n<p>3 Waagrecht: von dort nach links zur senkrechten Achse, Wert mit Einheit notieren.</p>\n<p>4 Zwischen zwei Gitterlinien schätzen: Liegt der Punkt in der Mitte zwischen 15 und 20, schreiben Sie etwa 17 cm.</p>\n<p>Hier steht keine Lösung einer Aufgabe.</p>",
 "nachschlagen": true
 }
@@ -623,7 +623,7 @@ window.KARTEN = {
 {
 "kennung": "Nachschlagen",
 "stichwort": "Fachbegriffe dieser Doppelstunde",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Keine Lösung, sondern ein Nachschlagewerk.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Keine Lösung, sondern ein Nachschlagewerk.</p></div>",
 "hinten": "<p>Ökosystem: Biozönose (Lebensgemeinschaft) plus Biotop (Lebensraum) mit ihren Wechselbeziehungen.</p>\n<p>Produzenten: bauen aus anorganischen Stoffen mit Lichtenergie organische Stoffe auf (grüne Pflanzen).</p>\n<p>Konsumenten: leben von organischen Stoffen anderer Lebewesen (Tiere).</p>\n<p>Destruenten (Zersetzer): bauen tote organische Stoffe zu Kohlenstoffdioxid, Wasser und Mineralstoffen ab (Bodentiere zerkleinern, Bakterien und Pilze bauen vollständig ab).</p>\n<p>Stoffkreislauf: Weg eines Stoffes durch Lebewesen und Umwelt zurück zum Anfang; offen (Austausch mit der Umgebung) und dynamisch (Mengen schwanken).</p>",
 "nachschlagen": true
 }
@@ -778,7 +778,7 @@ window.KARTEN = {
 {
 "kennung": "Operatoren",
 "stichwort": "Was der Auftrag von Ihnen will",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Ich suche das erste Wort des Auftrags: den Operator.</p><p>Hinten lese ich, was ich tun soll, und nutze den Satzanfang.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Ich suche das erste Wort des Auftrags: den Operator.</p><p>Hinten lese ich, was ich tun soll, und nutze den Satzanfang.</p></div>",
 "hinten": "<p>Das ist keine Lösung, sondern ein Nachschlagewerk für jede Aufgabe.</p>\n<div class=\"tab\"><table><tr><th><strong>Operator</strong></th><th><strong>Das tun Sie</strong></th><th><strong>So können Sie anfangen</strong></th></tr><tr><td>Nennen</td><td>Begriffe oder Fakten aufzählen, ohne Erklärung</td><td>„Es sind …“</td></tr><tr><td>Beschreiben</td><td>sagen, was man sieht oder was passiert, Schritt für Schritt</td><td>„Zuerst …, dann …“</td></tr><tr><td>Ergänzen</td><td>die Lücke mit dem passenden Begriff füllen</td><td>(ein Wort, eine Verbindung)</td></tr><tr><td>Zuordnen und begründen</td><td>jedem Teil seinen Platz geben, dann den Grund</td><td>„… gehört zu …, weil …“</td></tr><tr><td>Begründen</td><td>eine Aussage mit einem Grund stützen</td><td>„…, denn …“</td></tr><tr><td>Zeichnen</td><td>Kästen und Pfeile wie im Musterbeispiel, alles beschriftet</td><td>Kasten 1: …</td></tr><tr><td>Vermutung</td><td>sagen, was Sie erwarten; erklären noch nicht nötig</td><td>„Ich tippe …, weil ich …“</td></tr></table></div>\n<p>Wenn unklar: Fragen Sie die Lehrkraft nach dem Operator.</p>",
 "nachschlagen": true
 }
@@ -965,7 +965,7 @@ window.KARTEN = {
 {
 "kennung": "Operatoren",
 "stichwort": "Was der Auftrag von Ihnen will",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Ich suche das erste Wort des Auftrags: den Operator.</p><p>Hinten lese ich, was ich tun soll, und nutze den Satzanfang.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Ich suche das erste Wort des Auftrags: den Operator.</p><p>Hinten lese ich, was ich tun soll, und nutze den Satzanfang.</p></div>",
 "hinten": "<p>Das ist keine Lösung, sondern ein Nachschlagewerk für jede Aufgabe.</p>\n<div class=\"tab\"><table><tr><th><strong>Operator</strong></th><th><strong>Das tun Sie</strong></th><th><strong>So können Sie anfangen</strong></th></tr><tr><td>Kreuzen Sie an</td><td>das Passende markieren, genau so viele Kreuze wie verlangt</td><td>☒</td></tr><tr><td>Nennen</td><td>Begriffe oder Fakten aufzählen, ohne Erklärung</td><td>„Es sind …“</td></tr><tr><td>Ablesen</td><td>einen Wert aus dem Diagramm holen, mit Einheit</td><td>„Im Mai: … ppm“</td></tr><tr><td>Berechnen</td><td>mit den Werten rechnen, Rechnung hinschreiben</td><td>„424,0 − … = …“</td></tr><tr><td>Auswerten</td><td>ablesen, berechnen, dann erklären, Schritt für Schritt</td><td>Schritt 1: …</td></tr><tr><td>Formulieren</td><td>einen eigenen Satz schreiben</td><td>„Der Mensch …“</td></tr><tr><td>Erklären</td><td>sagen, wie etwas zustande kommt, mit Ursache</td><td>„…, weil …“</td></tr><tr><td>Ergänzen</td><td>die angefangenen Sätze zu Ende schreiben</td><td>(Satz fertig)</td></tr><tr><td>Erstellen</td><td>die Kette selbst schreiben, Kasten für Kasten</td><td>Kasten 2: …</td></tr><tr><td>Vermutung</td><td>sagen, was Sie erwarten; erklären noch nicht nötig</td><td>„Ich tippe …, weil ich …“</td></tr></table></div>\n<p>Wenn unklar: Fragen Sie die Lehrkraft nach dem Operator.</p>",
 "nachschlagen": true
 }
@@ -1059,7 +1059,7 @@ window.KARTEN = {
 {
 "kennung": "Operatoren",
 "stichwort": "Was der Auftrag von Ihnen will",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Ich suche das erste Wort des Auftrags: den Operator.</p><p>Hinten lese ich, was ich tun soll, und nutze den Satzanfang.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Ich suche das erste Wort des Auftrags: den Operator.</p><p>Hinten lese ich, was ich tun soll, und nutze den Satzanfang.</p></div>",
 "hinten": "<p>Das ist keine Lösung, sondern ein Nachschlagewerk für jede Aufgabe.</p>\n<div class=\"tab\"><table><tr><th><strong>Operator</strong></th><th><strong>Das tun Sie</strong></th><th><strong>So können Sie anfangen</strong></th></tr><tr><td>Kreuzen Sie an</td><td>das Passende markieren, genau so viele Kreuze wie verlangt</td><td>☒</td></tr><tr><td>Nennen</td><td>Begriffe oder Fakten aufzählen, ohne Erklärung</td><td>„Es ist …“</td></tr><tr><td>Begründen</td><td>einen Grund angeben, mit „weil“</td><td>„…, weil …“</td></tr><tr><td>Belegen</td><td>eine Zahl oder Angabe aus dem Material dazuschreiben</td><td>„laut M1 …“</td></tr><tr><td>Berechnen</td><td>mit den Werten rechnen, Rechnung hinschreiben</td><td>„Wert : Wert = Ergebnis mit Einheit“</td></tr><tr><td>Erklären</td><td>sagen, wie etwas zustande kommt, mit Ursache</td><td>„Weil … , darum …“</td></tr><tr><td>Bewerten</td><td>ein eigenes Urteil fällen, mit Kriterien, eigenem Wert und Gegenargument</td><td>„Ich finde …, weil mir … wichtig ist“</td></tr><tr><td>Formulieren</td><td>einen eigenen Satz schreiben</td><td>„Ob …“</td></tr></table></div>\n<p>Wenn unklar: Fragen Sie die Lehrkraft nach dem Operator.</p>",
 "nachschlagen": true
 }
@@ -1237,7 +1237,7 @@ window.KARTEN = {
 {
 "kennung": "Nachschlagen",
 "stichwort": "Ursache statt Zweck",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Diese Karte ist keine Lösung, sondern ein Nachschlagewerk für 4.7 und 4.8.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Diese Karte ist keine Lösung, sondern ein Nachschlagewerk für 4.7 und 4.8.</p></div>",
 "hinten": "<p>Hier steht keine Lösung, sondern ein Werkzeug für Erklärungen in der Biologie.</p>\n<div class=\"tab\"><table><tr><th><strong>Zweck (trägt nicht)</strong></th><th><strong>Ursache (trägt)</strong></th></tr><tr><td>… hat eine Membran, damit …</td><td>Weil die Membran … trennt, …</td></tr><tr><td>… um die Zelle zu schützen</td><td>…; deshalb bleibt … erhalten.</td></tr><tr><td>Die Zelle will …</td><td>In der Zelle geschieht …, weil …</td></tr></table></div>\n<p>So prüfen Sie Ihren Satz: Steht vorn der Bau (die Membran, der Raum) und hinten die Folge? Dann ist es eine Ursache.</p>",
 "nachschlagen": true
 }
@@ -1669,7 +1669,7 @@ window.KARTEN = {
 {
 "kennung": "Nachschlagen",
 "stichwort": "Sätze ohne Absicht bauen",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Ich schlage hier nach, wenn ich unsicher bin, ob mein Satz eine Absicht enthält.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Ich schlage hier nach, wenn ich unsicher bin, ob mein Satz eine Absicht enthält.</p></div>",
 "hinten": "<p>Keine Lösung, sondern ein Nachschlagewerk.</p>\n<div class=\"tab\"><table><tr><th><strong>Statt …</strong></th><th><strong>besser …</strong></th></tr><tr><td>Der Hals wurde länger, um an die Blätter zu kommen.</td><td>Tiere mit längerem Hals kamen an mehr Blätter und hatten mehr Nachkommen.</td></tr><tr><td>Die Kakteen bekamen Dornen, um nicht gefressen zu werden.</td><td>Kakteen mit Dornen wurden seltener gefressen und hatten im Mittel mehr Nachkommen.</td></tr><tr><td>Die Wüstenmäuse wurden sandfarben, weil sie sich vor Eulen tarnen mussten.</td><td>Sandfarbene Mäuse wurden seltener gefangen und hinterließen im Mittel mehr Nachkommen.</td></tr></table></div>\n<p>Drei Fragen an jeden eigenen Satz: Wer hatte mehr Nachkommen? Wovon hängt das ab? Ändert sich ein einzelnes Tier oder die Population?</p>",
 "nachschlagen": true
 }
@@ -1921,7 +1921,7 @@ window.KARTEN = {
 {
 "kennung": "Nachschlagen",
 "stichwort": "Evolutionsfaktoren auf einen Blick",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Ich nutze diese Karte erst, wenn ich 5.6 Schritt 2 selbst versucht habe.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Ich nutze diese Karte erst, wenn ich 5.6 Schritt 2 selbst versucht habe.</p></div>",
 "hinten": "<p>Diese Karte ist keine Lösung, sondern ein Nachschlagewerk.</p>\n<div class=\"tab\"><table><tr><th><strong>Faktor</strong></th><th><strong>Was er im Genpool tut</strong></th></tr><tr><td>Mutation</td><td>erzeugt neue Allele, zufällig in Bezug auf den Nutzen</td></tr><tr><td>Rekombination</td><td>mischt vorhandene Allele in der Meiose neu, keine neuen Allele</td></tr><tr><td>Selektion</td><td>Träger bestimmter erblicher Merkmale haben mehr Nachkommen, ihre Allele werden häufiger</td></tr><tr><td>Gendrift</td><td>Allelfrequenzen ändern sich zufällig, stark in kleinen Populationen</td></tr><tr><td>Genfluss</td><td>Zu- und Abwanderung trägt Allele zwischen Populationen und gleicht sie an</td></tr></table></div>\n<p>Separation trennt Populationen räumlich und stoppt den Genfluss. Isolation heißt: auch bei Kontakt keine fruchtbaren gemeinsamen Nachkommen.</p>",
 "nachschlagen": true
 }
@@ -2015,7 +2015,7 @@ window.KARTEN = {
 {
 "kennung": "Nachschlagen",
 "stichwort": "Homolog, analog, Rudiment, Atavismus",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Ich nutze diese Karte erst, wenn ich die Aufgabe selbst versucht habe.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Ich nutze diese Karte erst, wenn ich die Aufgabe selbst versucht habe.</p></div>",
 "hinten": "<p>Diese Karte ist keine Lösung, sondern ein Nachschlagewerk.</p>\n<div class=\"tab\"><table><tr><th><strong>Begriff</strong></th><th><strong>Bedeutung</strong></th><th><strong>Entwicklungsweg</strong></th></tr><tr><td>homolog</td><td>gleicher Grundbauplan, gemeinsame Herkunft; Aussehen und Aufgabe dürfen verschieden sein</td><td>Divergenz</td></tr><tr><td>analog</td><td>ähnliche Form oder Aufgabe, verschiedener Bauplan, unabhängig entstanden</td><td>Konvergenz</td></tr><tr><td>Rudiment</td><td>zurückgebildeter Rest, bei allen Individuen einer Art</td><td>Beleg für Abstammung</td></tr><tr><td>Atavismus</td><td>Merkmal der Vorfahren, bei einzelnen Individuen wieder da</td><td>Beleg für Abstammung</td></tr></table></div>\n<p>Homologiekriterien: Lage (gleiche Stelle, gleiche Reihenfolge) · spezifische Qualität (gleicher Feinbau) · Stetigkeit (Zwischenformen). Ein erfülltes Kriterium genügt.</p>",
 "nachschlagen": true
 }
@@ -2769,7 +2769,7 @@ window.KARTEN = {
 {
 "kennung": "Übersicht",
 "stichwort": "Die fünf Stoffklassen auf einen Blick",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<p><strong>Darum ging es: </strong>Diese Karte ist keine Lösung, sondern ein Nachschlagewerk. Sie darf jederzeit geholt werden.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Ich habe zuerst selbst gesucht und erst dann nachgeschlagen.</p><p>Ich habe die Karte nach dem Nachschlagen wieder zurückgelegt.</p></div>",
+"vorn": "<p><strong>Darum ging es: </strong>Diese Karte ist keine Lösung, sondern ein Nachschlagewerk. Sie darf jederzeit geholt werden.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Ich habe zuerst selbst gesucht und erst dann nachgeschlagen.</p></div>",
 "hinten": "<p><img src=\"bilder/f75d677078c6f25e.png\" alt=\"Abbildung der Karte\" style=\"max-width:min(100%,16.0cm)\" loading=\"lazy\"></p>\n<div class=\"tab\"><table><tr><th><strong>Frage</strong></th><th><strong>Antwort</strong></th></tr><tr><td>Wo sitzt die C=O-Gruppe?</td><td>am Kettenende mit einem H-Atom: <strong>Aldehyd</strong> · in der Kette zwischen zwei C-Atomen: <strong>Keton</strong></td></tr><tr><td>Hängen zwei O-Atome am selben C-Atom?</td><td>ja, und am zweiten O-Atom sitzt ein H-Atom: <strong>Carbonsäure</strong> · ein weiterer Rest: <strong>Ester</strong></td></tr><tr><td>Nur ein O-Atom, keine Doppelbindung?</td><td>OH an einem C-Atom der Kette: <strong>Alkohol</strong></td></tr></table></div>\n<p>Am einzeln stehenden Sauerstoffatom (C=O, Ester-Sauerstoff) stehen zwei freie Elektronenpaare; an einer OH-Gruppe werden sie nicht gezeichnet.</p>",
 "nachschlagen": true
 }
@@ -2875,7 +2875,7 @@ window.KARTEN = {
 {
 "kennung": "Nachschlagen",
 "stichwort": "Stammnamen und Endungen",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<p><strong>Darum ging es: </strong>Keine Lösung, sondern ein Nachschlagewerk. Nutzen Sie es, wenn Ihnen ein Stammname oder eine Endung fehlt.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Ich habe alle Teilaufgaben bearbeitet, auch die, bei denen ich unsicher war.</p><p>Ich habe begründet, nicht nur ein Ergebnis notiert.</p></div>",
+"vorn": "<p><strong>Darum ging es: </strong>Keine Lösung, sondern ein Nachschlagewerk. Nutzen Sie es, wenn Ihnen ein Stammname oder eine Endung fehlt.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Ich habe alle Teilaufgaben bearbeitet, auch die, bei denen ich unsicher war.</p><p>Ich habe begründet, nicht nur ein Ergebnis notiert.</p></div>",
 "hinten": "<div class=\"tab\"><table><tr><th><strong>Kohlenstoffatome</strong></th><th><strong>1</strong></th><th><strong>2</strong></th><th><strong>3</strong></th><th><strong>4</strong></th><th><strong>5</strong></th><th><strong>6</strong></th></tr><tr><td>Stammname</td><td>Meth-</td><td>Eth-</td><td>Prop-</td><td>But-</td><td>Pent-</td><td>Hex-</td></tr></table></div>\n<div class=\"tab\"><table><tr><th><strong>funktionelle Gruppe</strong></th><th><strong>Endung</strong></th><th><strong>funktionelle Gruppe</strong></th><th><strong>Endung</strong></th></tr><tr><td>Hydroxygruppe</td><td>-ol</td><td>Carbonylgruppe in der Kette</td><td>-on</td></tr><tr><td>Aldehydgruppe am Kettenende</td><td>-al</td><td>Carboxygruppe am Kettenende</td><td>-säure</td></tr></table></div>\n<p>Rangfolge:  Carbonsäure &gt; Ester &gt; Aldehyd &gt; Keton &gt; Alkohol. Die zurücktretende Gruppe wird zur Vorsilbe: Hydroxy- für die Hydroxygruppe, Oxo- für eine Carbonylgruppe.</p>\n<p>Ester: Alkylrest + Säurestamm auf -oat (Ethylbutanoat), oder Säurename + Alkylrest + -ester (Buttersäureethylester).</p>",
 "nachschlagen": true
 }
@@ -2957,7 +2957,7 @@ window.KARTEN = {
 {
 "kennung": "Nachschlagen",
 "stichwort": "Namen bilden (keine Lösung, ein Nachschlagewerk)",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Ab Aufgabe 3.5 darf diese Karte jederzeit geholt werden.</p><p>Für 3.1 bis 3.3 nicht: Die gehören aus dem Kopf.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Ab Aufgabe 3.5 darf diese Karte jederzeit geholt werden.</p><p>Für 3.1 bis 3.3 nicht: Die gehören aus dem Kopf.</p></div>",
 "hinten": "<p>Endungen:  -ol Alkohol · -al Aldehyd · -on Keton · -säure Carbonsäure · -oat Ester.   Als Vorsilbe:  Hydroxy- für -OH, Oxo- für ein =O.</p>\n<p>Rangfolge:  Carbonsäure &gt; Ester &gt; Aldehyd &gt; Keton &gt; Alkohol. Die höhere Gruppe gibt Endung und kleinere Nummer, die andere wird zur Vorsilbe.</p>\n<p>Ester: entsteht aus Carbonsäure und Alkohol, dabei wird Wasser frei. Butansäure + Ethanol → Ethylbutanoat + Wasser.</p>\n<p>Der Name hat zwei Teile: Ethyl- kommt vom Alkohol, -butanoat von der Säure. Zweite Variante: Buttersäureethylester.</p>",
 "nachschlagen": true
 }
@@ -3124,7 +3124,7 @@ window.KARTEN = {
 {
 "kennung": "Nachschlagen",
 "stichwort": "Zeichen im Mechanismus (keine Lösung, ein Nachschlagewerk)",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Diese Karte darf ab 5.5 jederzeit geholt werden.</p><p>Sie bleibt für die nächsten Stunden am Kartentisch.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Diese Karte darf ab 5.5 jederzeit geholt werden.</p><p>Sie bleibt für die nächsten Stunden am Kartentisch.</p></div>",
 "hinten": "<div class=\"tab\"><table><tr><th><strong>Zeichen</strong></th><th><strong>bedeutet</strong></th></tr><tr><td>Strich zwischen zwei Atomen</td><td>Bindung: ein gemeinsames Elektronenpaar</td></tr><tr><td>Strich am Atom</td><td>freies Elektronenpaar</td></tr><tr><td>Punkt am Atom</td><td>einzelnes Elektron: Das Teilchen ist ein Radikal</td></tr><tr><td>Halbpfeil (halbe Spitze)</td><td>ein einzelnes Elektron wandert; er beginnt am Punkt und zeigt auf das Atom der neuen Bindung</td></tr><tr><td>„Licht“ über dem Reaktionspfeil</td><td>die Energie kommt aus dem Licht</td></tr></table></div>\n<p>Homolyse: Eine Bindung wird so gespalten, dass jedes Atom eines der beiden Bindungselektronen behält. Es entstehen zwei Radikale.</p>\n<p>Diese Karte ist keine Lösung, sondern ein Nachschlagewerk.</p>",
 "nachschlagen": true
 }
@@ -3224,7 +3224,7 @@ window.KARTEN = {
 {
 "kennung": "Nachschlagen",
 "stichwort": "Zeichen im Mechanismus (ab DS6, ersetzt die Karte aus DS5)",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Nachsehen, wenn ein Zeichen im Mechanismus unklar ist, dann weiterarbeiten.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Nachsehen, wenn ein Zeichen im Mechanismus unklar ist, dann weiterarbeiten.</p></div>",
 "hinten": "<div class=\"tab\"><table><tr><th><strong>Zeichen</strong></th><th><strong>bedeutet</strong></th></tr><tr><td>Strich zwischen zwei Atomen</td><td>Bindung: ein gemeinsames Elektronenpaar</td></tr><tr><td>Strich am Atom</td><td>freies Elektronenpaar</td></tr><tr><td>Punkt am Atom</td><td>einzelnes Elektron: Das Teilchen ist ein Radikal</td></tr><tr><td>Halbpfeil (halbe Spitze)</td><td>ein einzelnes Elektron wandert</td></tr><tr><td>Vollpfeil (ganze Spitze)</td><td>ein Elektronenpaar wandert</td></tr><tr><td>δ+ und δ−</td><td>Partialladungen: Elektronen sind zu einem Atom hin verschoben</td></tr><tr><td>⊕ und ⊖</td><td>Ladung eines Ions am Atom</td></tr><tr><td>„Licht“ über dem Reaktionspfeil</td><td>die Energie kommt aus dem Licht</td></tr></table></div>\n<p>Jeder Pfeil beginnt an Elektronen und zeigt auf das Atom, zu dem sie wandern. Homolyse: jedes Atom behält ein Bindungselektron. Heterolyse: ein Atom erhält beide. Elektrophil nimmt ein Elektronenpaar auf, Nukleophil stellt eines zur Verfügung.</p>\n<p>Diese Karte ist keine Lösung; sie ersetzt die Nachschlagekarte aus DS5.</p>",
 "nachschlagen": true
 }
@@ -3318,7 +3318,7 @@ window.KARTEN = {
 {
 "kennung": "Nachschlagen",
 "stichwort": "Wer greift an? (ab DS7)",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Keine Lösung, sondern ein Nachschlagewerk.</p></div>",
+"vorn": "<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Keine Lösung, sondern ein Nachschlagewerk.</p></div>",
 "hinten": "<p>Diese Karte ist keine Lösung, sondern ein Nachschlagewerk.</p>\n<div class=\"tab\"><table><tr><th><strong>Begriff</strong></th><th><strong>Merkmal</strong></th></tr><tr><td>Nukleophil</td><td>stellt ein freies Elektronenpaar für eine neue Bindung (Hydroxidion, Bromidion, O-Atom eines Alkohols)</td></tr><tr><td>Elektrophil</td><td>nimmt ein Elektronenpaar auf (δ+-C-Atom im Halogenalkan und in der Carbonylgruppe, Proton; in DS6 das δ+-Bromatom)</td></tr><tr><td>Brønsted-Säure</td><td>gibt ein Proton ab</td></tr><tr><td>Brønsted-Base</td><td>nimmt ein Proton auf</td></tr><tr><td>Katalysator</td><td>beschleunigt, liegt am Ende unverändert vor</td></tr><tr><td>Vollpfeil</td><td>ein Elektronenpaar wandert; Start an Bindung oder freiem Paar</td></tr></table></div>",
 "nachschlagen": true
 }
@@ -3617,7 +3617,7 @@ window.KARTEN = {
 {
 "kennung": "Nachschlagen",
 "stichwort": "Masse und Gewichtskraft",
-"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<p><strong>Darum ging es: </strong>Keine Lösung, sondern ein Nachschlagewerk.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><p>Ich schlage erst nach, wenn ich es selbst versucht habe.</p></div>",
+"vorn": "<p><strong>Darum ging es: </strong>Keine Lösung, sondern ein Nachschlagewerk.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">So nutzen Sie diese Karte</div><p>Ich schlage erst nach, wenn ich es selbst versucht habe.</p></div>",
 "hinten": "<p>Masse m in kg: wie viel Stoff. Überall gleich.</p>\n<p>Gewichtskraft F<sub>G</sub> in N: F<sub>G</sub> = m · g (Erde 9,81 N/kg, Mond 1,62 N/kg).</p>\n<p>Ruht ein Körper, ist die Kräftesumme null: Die Kräfte auf ihn heben sich auf.</p>",
 "nachschlagen": true
 }
