@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Karten</title>
+<meta name="theme-color" content="#1f3a5f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{
+  --bg:#f6f5f2; --flaeche:#ffffff; --text:#1d1d1f; --leise:#55555a; --linie:#d9d6cf;
+  --akzent:#1f3a5f; --akzent-text:#ffffff; --akzent-hell:#e6edf5;
+  --pruefen:#eaf1f8; --pruefen-rand:#9db6d0; --fehler:#fbefe6; --fehler-rand:#d9a77a;
+  --loesung:#fffaf0; --loesung-rand:#e2cf9e; --schatten:0 1px 3px rgba(0,0,0,.08);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#16181b; --flaeche:#212429; --text:#ececec; --leise:#b0b3b8; --linie:#3a3e45;
+    --akzent:#8fb4e0; --akzent-text:#10151c; --akzent-hell:#22303f;
+    --pruefen:#1f2c3a; --pruefen-rand:#3f5d7e; --fehler:#3a2a1d; --fehler-rand:#8a6440;
+    --loesung:#2c2719; --loesung-rand:#6b5a2e; --schatten:none; color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);
+  font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  padding:env(safe-area-inset-top,0) 16px calc(env(safe-area-inset-bottom,0) + 32px)}
+body.mit-leiste{padding-bottom:calc(env(safe-area-inset-bottom,0) + 150px)}
+main{max-width:640px;margin:0 auto}
+a{color:var(--akzent)}
+button,.knopf{font:inherit;color:inherit;cursor:pointer}
+
+/* Kopfzeile: Zurück links, Position daneben, immer gleich */
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 8px;
+  border-bottom:1px solid var(--linie);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+header .ort{flex:1;min-width:0;font-weight:700;font-size:1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.zurueck{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--linie);
+  background:var(--flaeche);border-radius:12px;min-width:48px;min-height:48px;text-decoration:none;color:var(--text);font-size:1.2rem}
+
+h1{font-size:1.35rem;line-height:1.3;margin:4px 0 6px}
+h2{font-size:1.05rem;margin:28px 0 10px}
+p{margin:.5em 0}
+.leise{color:var(--leise);font-size:1rem}
+.fuss{margin-top:36px;text-align:center}
+
+/* Listen: eine Zeile pro Eintrag, große Tippflächen */
+.liste{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.liste a{display:flex;gap:12px;align-items:center;background:var(--flaeche);border:1px solid var(--linie);
+  border-radius:14px;padding:12px 14px;text-decoration:none;color:inherit;box-shadow:var(--schatten);min-height:56px}
+.liste .text{flex:1;min-width:0}
+.liste .zeile1{display:block;font-weight:700}
+.liste .zeile2{display:block;color:var(--leise)}
+.liste .status{flex:none;font-size:.95rem;color:var(--leise);white-space:nowrap}
+.liste a.empfohlen{border:2px solid var(--akzent);background:var(--akzent-hell)}
+.liste a.empfohlen .status{color:var(--text);font-weight:700}
+.liste a.erledigt .zeile1::after{content:" ✓";font-weight:700}
+
+/* Startkarte „Heute“ */
+.heute{display:block;background:var(--akzent);color:var(--akzent-text);border-radius:18px;padding:20px;
+  text-decoration:none;box-shadow:var(--schatten);margin:8px 0 18px}
+.heute .klein{display:block;font-size:1rem;opacity:.9}
+.heute .gross{display:block;font-size:1.35rem;font-weight:700;line-height:1.3;margin:4px 0 10px}
+.heute .los{display:inline-block;font-weight:700}
+.zweit{display:flex;align-items:center;justify-content:center;min-height:48px;border:1px solid var(--linie);
+  border-radius:12px;background:var(--flaeche);color:var(--text);text-decoration:none;font-weight:600}
+
+details.lb{margin:12px 0}
+details.lb>summary{font-weight:700;padding:12px 0;cursor:pointer;min-height:48px}
+details.lb .liste{margin-bottom:8px}
+
+/* Einzelkarte */
+.position{color:var(--leise);font-size:1rem;margin:0}
+.auftrag{background:var(--flaeche);border:1px solid var(--linie);border-radius:16px;padding:6px 16px 10px;box-shadow:var(--schatten)}
+.hinten{background:var(--loesung);border:1px solid var(--loesung-rand);border-radius:16px;padding:6px 16px 10px;margin-top:16px;scroll-margin-top:80px}
+.hinten>.titel,.nachschlag>.titel{font-weight:700;margin:10px 0 4px}
+.kasten{border:1px solid var(--linie);border-radius:12px;padding:8px 12px;margin:12px 0}
+.kasten.pruefen{background:var(--pruefen);border-color:var(--pruefen-rand)}
+.kasten.fehler{background:var(--fehler);border-color:var(--fehler-rand)}
+.klabel{font-weight:700;font-size:1rem;margin-bottom:4px}
+.haken{display:flex;gap:12px;align-items:flex-start;padding:8px 0;min-height:44px}
+.haken input{width:24px;height:24px;margin-top:2px;flex:none;accent-color:var(--akzent)}
+.tab{overflow-x:auto;margin:10px 0}
+.tab table{border-collapse:collapse;width:100%;font-size:1rem}
+.tab th,.tab td{border:1px solid var(--linie);padding:6px;vertical-align:top;text-align:left;overflow-wrap:anywhere;hyphens:auto}
+.tab th{background:var(--bg)}
+.tab img{margin:2px auto}
+img{max-width:100%;height:auto;display:block;margin:10px auto;background:#fff;border-radius:6px}
+a.sprung{font-weight:700}
+
+/* Leiste unten in der Daumenzone: eine Haupthandlung */
+.leiste{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--bg);border-top:1px solid var(--linie);
+  padding:10px 16px calc(env(safe-area-inset-bottom,0) + 12px)}
+.leiste .innen{max-width:640px;margin:0 auto;display:grid;gap:8px}
+.leiste p{margin:0 0 2px;font-weight:700}
+.haupt,.neben{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;border-radius:14px;
+  font-weight:700;text-decoration:none;text-align:center;padding:8px 12px}
+.haupt{background:var(--akzent);color:var(--akzent-text);border:none}
+.neben{background:var(--flaeche);color:var(--text);border:1px solid var(--linie);min-height:48px;font-weight:600}
+.reihe{display:flex;gap:8px}
+.reihe>*{flex:1}
+</style>
+</head>
+<body>
+<main id="app"><p>Karten werden geladen …</p></main>
+<noscript><p>Bitte JavaScript einschalten, sonst lassen sich die Karten nicht anzeigen.</p></noscript>
+<script src="daten.js"></script>
+<script>
+"use strict";
+const D = window.KARTEN;
+const app = document.getElementById("app");
+const NIV = {1: "● Grundlagen", 2: "●● Vertiefung", 3: "●●● Transfer"};
+const lbById = {}, dsByKey = {};
+if (D) for (const lb of D.lbs) { lbById[lb.id] = lb; for (const ds of lb.ds) dsByKey[ds.key] = {lb, ds}; }
+
+// Nur auf diesem Gerät: gewählte Klasse und geschaffte Karten (keine Übertragung, kein Server)
+const speicher = {
+  get(k) { try { return localStorage.getItem("karten.v1." + k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem("karten.v1." + k, v); } catch (e) {} }
+};
+let erledigt;
+try { erledigt = new Set(JSON.parse(speicher.get("erledigt") || "[]")); } catch (e) { erledigt = new Set(); }
+const merkeErledigt = id => { erledigt.add(id); speicher.set("erledigt", JSON.stringify([...erledigt])); };
+const bestaetigt = new Set();  // „Antwort steht in den Unterlagen“, gilt bis zum Neuladen
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const ohneTags = s => String(s || "").replace(/<[^>]+>/g, "");
+const datum = iso => iso.split("-").reverse().join(".");
+const lbKurz = lb => (lb.titel.match(/^LB\d+/) || [lb.titel])[0];
+
+function zeige(kopfOrt, zurueck, inhalt, leiste) {
+  app.innerHTML = `<header>${zurueck ? `<a class="zurueck" href="${zurueck}" aria-label="Zurück">←</a>` : ""}` +
+    `<span class="ort">${kopfOrt}</span></header>` + inhalt;
+  document.querySelector(".leiste")?.remove();
+  document.body.classList.toggle("mit-leiste", !!leiste);
+  if (leiste) {
+    const l = document.createElement("div");
+    l.className = "leiste";
+    l.innerHTML = `<div class="innen">${leiste}</div>`;
+    document.body.appendChild(l);
+  }
+  window.scrollTo(0, 0);
+}
+
+// ------------------------------------------------------------ Start: Klasse wählen
+function start() {
+  const kurse = Object.entries(D.kurse).sort((a, b) => a[1].name.localeCompare(b[1].name, "de"));
+  zeige("Karten", "", `<h1>Ihre Klasse</h1><ul class="liste">` +
+    kurse.map(([id, k]) => `<li><a href="#${id}"><span class="text"><span class="zeile1">${esc(k.name)}</span></span></a></li>`).join("") +
+    `</ul><p class="fuss leise">Stand der Karten: ${datum(D.stand)}</p>`);
+}
+
+// ------------------------------------------------------------ Klasse: Heute, darunter Früheres
+function dsDerKlasse(k) {
+  return k.lbs.flatMap(ref => ref.ds.map(n => lbById[ref.id]?.ds.find(d => d.nr === n)).filter(Boolean)
+    .map(ds => ({lb: lbById[ref.id], ds})));
+}
+function kursSeite(kid) {
+  const k = D.kurse[kid];
+  if (!k) return start();
+  speicher.set("kurs", kid);
+  const alle = dsDerKlasse(k);
+  // je Spur (Unterricht, Übung) die neueste DS; Listen sind schon neueste zuerst sortiert
+  const spuren = alle.some(x => x.lb.uebung) && alle.some(x => !x.lb.uebung);
+  const neu = [alle.find(x => !x.lb.uebung), alle.find(x => x.lb.uebung)].filter(Boolean);
+  let h = `<h1>${esc(k.name)}</h1>`;
+  for (const n of neu) {
+    const spur = spuren ? (n.lb.uebung ? " in der Übung" : " im Unterricht") : "";
+    h += `<a class="heute" href="#${kid}/${n.ds.key}"><span class="klein">Neueste Doppelstunde${spur} · ${esc(lbKurz(n.lb))}</span>` +
+      `<span class="gross">DS ${n.ds.nr}${n.ds.titel ? ": " + esc(n.ds.titel) : ""}</span><span class="los">Karten öffnen →</span></a>`;
+  }
+  if (alle.length > neu.length) h += `<a class="zweit" href="#${kid}/frueher">Frühere Doppelstunden (${alle.length - neu.length})</a>`;
+  h += `<p class="fuss leise"><a href="#">Andere Klasse wählen</a><br>Stand der Karten: ${datum(D.stand)}</p>`;
+  zeige("Karten", "#", h);
+}
+function fruehereSeite(kid) {
+  const k = D.kurse[kid];
+  if (!k) return start();
+  let h = `<h1>Frühere Doppelstunden</h1>`;
+  k.lbs.forEach((ref, i) => {
+    const lb = lbById[ref.id];
+    if (!lb) return;
+    const items = ref.ds.map(n => lb.ds.find(d => d.nr === n)).filter(Boolean);
+    h += `<details class="lb"${i === 0 ? " open" : ""}><summary>${esc(lb.titel)}</summary><ul class="liste">` +
+      items.map(ds => `<li><a href="#${kid}/${ds.key}"><span class="text"><span class="zeile1">DS ${ds.nr}</span>` +
+        `${ds.titel ? `<span class="zeile2">${esc(ds.titel)}</span>` : ""}</span></a></li>`).join("") + `</ul></details>`;
+  });
+  zeige(esc(k.name), "#" + kid, h);
+}
+
+// ------------------------------------------------------------ Doppelstunde: zwei Listen
+function holeDs(kid, key) {
+  const e = dsByKey[key], k = D.kurse[kid];
+  const ref = e && k && k.lbs.find(r => r.id === e.lb.id);
+  return ref && ref.ds.includes(e.ds.nr) ? {k, ...e} : null;  // nur DS dieser Klasse
+}
+function empfohlen(ds) {
+  const offen = ds.uebung.filter(c => !erledigt.has(`${ds.key}/u${c.nr}`));
+  return (offen.find(c => c.niveau === 2) || offen[0] || {}).nr;
+}
+function dsSeite(kid, key) {
+  const x = holeDs(kid, key);
+  if (!x) return kursSeite(kid);
+  const {k, lb, ds} = x;
+  const ort = `${esc(k.name)} · ${esc(lbKurz(lb))} · DS ${ds.nr}`;
+  let h = `<h1>${ds.titel ? esc(ds.titel) : "Doppelstunde " + ds.nr}</h1>`;
+  h += `<p class="leise">Antworten schreiben Sie in Ihre Unterlagen, nicht hier.</p>`;
+  if (ds.loesung.length) {
+    h += `<h2>① Blatt prüfen: Lösungskarten</h2><ul class="liste">` + ds.loesung.map((c, i) => {
+      const id = `${key}/l${i + 1}`, fertig = erledigt.has(id);
+      return `<li><a href="#${kid}/${id}"${fertig ? ' class="erledigt"' : ""}><span class="text">` +
+        `<span class="zeile1">${c.nachschlagen ? "Zum Nachschlagen" : "Aufgabe " + esc(c.kennung)}</span>` +
+        `<span class="zeile2">${esc(c.nachschlagen ? c.kennung : c.stichwort)}</span></span>` +
+        `${fertig ? '<span class="status">geschafft</span>' : ""}</a></li>`;
+    }).join("") + `</ul>`;
+  }
+  if (ds.uebung.length) {
+    const empf = empfohlen(ds);
+    h += `<h2>${ds.loesung.length ? "② " : ""}Üben: Übungskarten</h2>`;
+    if (ds.loesung.length) h += `<p class="leise">Schickt Sie eine Lösungskarte zu einer Übungskarte, beginnen Sie dort. Sonst bei der markierten Karte.</p>`;
+    h += `<ul class="liste">` + ds.uebung.map(c => {
+      const id = `${key}/u${c.nr}`, fertig = erledigt.has(id), e = c.nr === empf;
+      return `<li><a href="#${kid}/${id}" class="${fertig ? "erledigt" : ""}${e ? " empfohlen" : ""}"><span class="text">` +
+        `<span class="zeile1">Übungskarte ${c.nr} · ${NIV[c.niveau] || ""}</span>` +
+        `<span class="zeile2">${ohneTags(c.stichwort) ? c.stichwort : ""}</span></span>` +
+        `${e ? '<span class="status">→ als Nächstes</span>' : fertig ? '<span class="status">geschafft</span>' : ""}</a></li>`;
+    }).join("") + `</ul>`;
+  }
+  if (!ds.loesung.length && !ds.uebung.length) h += `<p>Zu dieser Doppelstunde gibt es keine Karten.</p>`;
+  zeige(ort, "#" + kid, h);
+}
+
+// ------------------------------------------------------------ Eine Karte pro Bildschirm
+function karteSeite(kid, key, teil) {
+  const x = holeDs(kid, key);
+  const m = /^([lu])(\d+)$/.exec(teil || "");
+  if (!x || !m) return dsSeite(kid, key);
+  const {k, lb, ds} = x;
+  const art = m[1], nr = +m[2];
+  const liste = art === "l" ? ds.loesung : ds.uebung;
+  const idx = art === "l" ? nr - 1 : liste.findIndex(c => c.nr === nr);
+  const c = liste[idx];
+  if (!c) return dsSeite(kid, key);
+  const id = `${key}/${teil}`;
+  const naechste = liste[idx + 1];
+  const naechsteId = naechste ? (art === "l" ? `l${idx + 2}` : `u${naechste.nr}`) : "";
+  const ort = `${esc(k.name)} · ${esc(lbKurz(lb))} · DS ${ds.nr}`;
+  let h;
+  if (art === "l") {
+    h = `<p class="position">${c.nachschlagen ? "Zum Nachschlagen" : `Lösungskarte ${idx + 1} von ${liste.length}`}</p>` +
+      `<h1>${c.nachschlagen ? esc(c.kennung) : "Aufgabe " + esc(c.kennung) + (c.stichwort ? ": " + esc(c.stichwort) : "")}</h1>`;
+  } else {
+    h = `<p class="position">Übungskarte ${idx + 1} von ${liste.length} · ${NIV[c.niveau] || ""}</p>` +
+      `<h1>${c.stichwort ? "Das üben Sie hier: " + c.stichwort : "Übungskarte " + c.nr}</h1>`;
+  }
+  h += `<div class="auftrag">${c.vorn}</div>`;
+  const weiterLabel = naechste
+    ? (art === "l" ? `Weiter mit Lösungskarte ${idx + 2}` : `Weiter mit Übungskarte ${naechste.nr}`)
+    : "Zurück zur Übersicht";
+  const weiterZiel = naechste ? `#${kid}/${key}/${naechsteId}` : `#${kid}/${key}`;
+  if (c.nachschlagen) {
+    if (c.hinten) h += `<div class="nachschlag"><div class="titel">Zum Nachschlagen</div>${c.hinten}</div>`;
+    return zeige(ort, `#${kid}/${key}`, h, `<a class="haupt" href="${weiterZiel}">${weiterLabel}</a>`);
+  }
+  if (c.hinten) h += `<div class="hinten" id="loesung" hidden><div class="titel">Lösungsvorschlag</div>${c.hinten}</div>`;
+  zeige(ort, `#${kid}/${key}`, h, " ");
+  const leiste = document.querySelector(".leiste .innen");
+  const hinten = document.getElementById("loesung");
+  const fertig = `<a class="haupt" data-fertig href="${weiterZiel}">Geschafft. ${weiterLabel}</a>`;
+  function stufe(s) {
+    if (!c.hinten) { leiste.innerHTML = fertig; return; }
+    if (s === "zu") {
+      hinten.hidden = true;
+      leiste.innerHTML = `<button type="button" class="haupt" data-schritt="frage">Lösung aufdecken</button>`;
+    } else if (s === "frage") {
+      if (bestaetigt.has(id)) return stufe("auf");
+      leiste.innerHTML = `<p>Steht Ihre eigene Antwort schon in Ihren Unterlagen?</p><div class="reihe">` +
+        `<button type="button" class="haupt" data-schritt="ja">Ja, aufdecken</button>` +
+        `<button type="button" class="neben" data-schritt="zu">Noch nicht</button></div>`;
+      leiste.querySelector(".haupt").focus();
+    } else if (s === "auf") {
+      bestaetigt.add(id);
+      hinten.hidden = false;
+      leiste.innerHTML = fertig + `<button type="button" class="neben" data-schritt="zu">Lösung wieder zudecken</button>`;
+      hinten.scrollIntoView({block: "start", behavior: "smooth"});
+    }
+  }
+  leiste.onclick = ev => {
+    const b = ev.target.closest("[data-schritt]");
+    if (b) return stufe(b.dataset.schritt === "ja" ? "auf" : b.dataset.schritt);
+    if (ev.target.closest("[data-fertig]")) merkeErledigt(id);
+  };
+  stufe(bestaetigt.has(id) ? "auf" : "zu");
+}
+
+// „Wenn falsch: Übungskarte 2“ springt direkt auf die Karte
+app.addEventListener("click", ev => {
+  const s = ev.target.closest("a.sprung");
+  if (!s) return;
+  ev.preventDefault();
+  const m = s.getAttribute("href").slice(1).match(/^(.*)-(u\d+)$/);
+  if (m) location.hash = `${location.hash.slice(1).split("/")[0]}/${m[1]}/${m[2]}`;
+});
+
+function route() {
+  if (!D) { app.innerHTML = "<p>Die Karten konnten nicht geladen werden. Bitte Seite neu laden.</p>"; return; }
+  let roh = "";
+  try { roh = decodeURIComponent(location.hash.slice(1)); } catch (e) { return start(); }
+  const t = roh.toLowerCase().split("/").filter(Boolean);
+  if (!t.length) {
+    const k = speicher.get("kurs");
+    return k && D.kurse[k] ? kursSeite(k) : start();
+  }
+  if (t.length === 1) return kursSeite(t[0]);
+  if (t[1] === "frueher") return fruehereSeite(t[0]);
+  if (t.length === 2) return dsSeite(t[0], t[1]);
+  karteSeite(t[0], t[1], t[2]);
+}
+window.addEventListener("hashchange", route);
+route();
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+</script>
+</body>
+</html>
