@@ -1,5 +1,5 @@
 window.KARTEN = {
-"stand": "2026-11-19",
+"stand": "2026-11-20",
 "lbs": [
 {
 "id": "b13lb2",
@@ -1051,6 +1051,99 @@ window.KARTEN = {
 "hinten": "<p>Scheitholz: 18 000 : 14 = 1286 kg; Kette 1,286 · 180 = 231 MJ (1,3 % von 18 000 MJ). Pellets: 18 000 : 18 = 1000 kg; Kette 700 MJ (3,9 %).</p>\n<p>Tragfähig ist zum Beispiel: Kriterium Energieaufwand der Kette im Verhältnis zur gelieferten Energie: Pellets brauchen tatsächlich etwa dreimal so viel, aber beide unter 4 %; der Unterschied entscheidet die Wahl kaum. Weitere Kriterien (Feinstaub, Lagerplatz, Herkunft des Holzes) können wichtiger sein.</p>\n<p>Nicht trägt: nur „700 ist mehr als 231“ ohne Bezug auf die gelieferte Energie.</p>"
 }
 ]
+},
+{
+"nr": 7,
+"key": "nw13lb2-ds7",
+"titel": "Wie viel von der Energie der Quelle kommt im Elektroauto am Rad an, und wie viel CO₂ kostet ein Kilometer, verglichen mit dem Diesel?",
+"loesung": [
+{
+"kennung": "7.1 bis 7.3",
+"stichwort": "Aus dem Kopf, Reichweite",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Ich habe ohne Unterlagen geantwortet.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Zahlen mit Einheit oder in Prozent.</span></label></div>",
+"hinten": "<p>7.1 η = 168 kJ : 200 kJ = 0,84 = 84 %.</p>\n<p>7.2 Erdöl fördern und Raffinerie. Verbrennen und Auspuff gehören zur Nutzung.</p>\n<p>7.3 252 : 4,6 ≈ 55 Jahre. „Statisch“ heißt: als ob Förderung und Reserven gleich blieben. Beides ändert sich (neue Funde, mehr oder weniger Förderung), die Zahl ist eine Momentaufnahme.</p>\n<p>Wenn falsch: Antwort Schritt für Schritt mit dieser Karte vergleichen, dann nachfragen.</p>"
+},
+{
+"kennung": "7.5",
+"stichwort": "Warum multiplizieren",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Mein Satz nennt, welche Energie beim Netz ankommt.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Ich sage, wovon die 95 % gerechnet werden.</span></label></div>",
+"hinten": "<p>Beim Netz kommen nur 57 J an, und davon gibt es 95 % weiter: 57 J · 0,95 = 54,2 J. Jeder Teilwirkungsgrad gilt für die Energie, die bei seiner Stufe ankommt.</p>\n<div class=\"kasten fehler\"><div class=\"klabel\">⚠ Typischer Fehler</div><p>Viele denken: Prozente einer Kette addiert man. Das stimmt nicht, weil 57 % + 95 % mehr als 100 % ergäbe, mehr Energie, als hineinging. Fachlich gilt: Teilwirkungsgrade werden multipliziert.</p></div>\n<p>Wenn falsch: erst Übungskarte <a class=\"sprung\" href=\"#nw13lb2-ds7-u3\">3</a>, dann weiter.</p>"
+},
+{
+"kennung": "7.6 und 7.4",
+"stichwort": "Gesamtwirkungsgrade, zurück zur Vorhersage",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Ich habe multipliziert, nicht addiert.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Jedes Ergebnis liegt unter dem kleinsten Teilwirkungsgrad.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Ergebnis in Prozent.</span></label></div>",
+"hinten": "<div class=\"tab\"><table><tr><th><strong>Antrieb</strong></th><th><strong>Rechnung</strong></th><th><strong>Gesamt</strong></th></tr><tr><td>Diesel</td><td>0,82 · 0,30 · 0,95 = 0,234</td><td>23 %</td></tr><tr><td>Braunkohlestrom</td><td>0,40 · 0,95 · 0,90 · 0,85 · 0,95 = 0,276</td><td>28 %</td></tr><tr><td>Windstrom</td><td>0,95 · 0,90 · 0,85 · 0,95 = 0,690</td><td>69 %</td></tr></table></div>\n<p>Ebenso richtig: 27 % bei Braunkohle, wenn Zwischenergebnisse gerundet wurden.</p>\n<p>Zurück zu 7.4: Richtig ist „etwa gleich viel“ (28 J gegen 23 J von 100 J). Mit Braunkohle entwertet schon das Kraftwerk 60 %, beim Diesel der Motor 70 %. Mit Windstrom kommt fast dreimal so viel an.</p>\n<p>Wenn falsch: erst Übungskarte <a class=\"sprung\" href=\"#nw13lb2-ds7-u1\">1</a>, dann weiter.</p>"
+},
+{
+"kennung": "7.7",
+"stichwort": "CO₂ je Kilometer",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Ich habe kWh je 100 km mal g je kWh gerechnet und durch 100 geteilt.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Jede Zeile hat einen Vergleich mit 178 g.</span></label></div>",
+"hinten": "<div class=\"tab\"><table><tr><th><strong>Strom</strong></th><th><strong>Rechnung</strong></th><th><strong>je km</strong></th><th><strong>Vergleich</strong></th></tr><tr><td>Braunkohle</td><td>17 · 1119 g = 19 023 g je 100 km</td><td>190 g</td><td>etwas mehr, etwa gleich (+7 %)</td></tr><tr><td>Strommix 2025</td><td>17 · 344 g = 5848 g je 100 km</td><td>58 g</td><td>etwa ein Drittel</td></tr><tr><td>Wind</td><td>17 · 18 g = 306 g je 100 km</td><td>3 g</td><td>fast nichts, unter 2 %</td></tr></table></div>\n<div class=\"kasten fehler\"><div class=\"klabel\">⚠ Typischer Fehler</div><p>Viele denken: Elektroauto heißt 0 g, wie auf dem Label. Das stimmt nicht, weil das Label nur den Auspuff zählt. Fachlich gilt: Das CO₂ entsteht im Kraftwerk, je kWh verschieden viel.</p></div>\n<p>Wenn falsch: erst Übungskarte <a class=\"sprung\" href=\"#nw13lb2-ds7-u2\">2</a>, dann weiter.</p>"
+},
+{
+"kennung": "7.8 und 7.9",
+"stichwort": "Wasserstoff gegen Batterie, Antwort auf die Leitfrage",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Bei 7.8 je ein Kreuz bei Aussage und Grund.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>7.9: Mehrere Antworten gelten. Mein Satz nennt das Produkt der Teilwirkungsgrade und den Strommix.</span></label></div>",
+"hinten": "<div class=\"kasten geloest\"><div class=\"klabel\">So sieht die Aufgabe gelöst aus</div><p>☐ Beide Autos brauchen etwa gleich viel Windstrom.</p><p>☐ Das Wasserstoffauto braucht etwa halb so viel Strom.</p><p><strong>☒</strong> Das Batterieauto braucht weniger als halb so viel Strom.</p><p>☐ Das Wasserstoffauto braucht weniger als halb so viel Strom.</p><p>Kreuzen Sie den entscheidenden Grund an (genau ein Kreuz):</p><p>☐ Wasserstoff enthält je Kilogramm mehr Energie als Diesel oder Benzin.</p><p><strong>☒</strong> Beim Wasserstoff kommen Stufen dazu, und alle Teilwirkungsgrade multiplizieren sich.</p><p>☐ Teilwirkungsgrade werden addiert, und die Wasserstoffkette hat mehr Stufen.</p><p>☐ Windstrom ist erneuerbar, deshalb spielt der Wirkungsgrad hier keine Rolle.</p></div>\n<p>7.8 Aussage 3, Grund 2. Batterieauto: 0,95 · 0,90 · 0,85 · 0,95 = 69 %. Wasserstoffauto: 0,95 · 0,70 · 0,80 · 0,60 · 0,85 · 0,95 = 26 %. Für dieselbe Energie am Rad braucht das Batterieauto nur 0,26 : 0,69, also etwa 37 % des Windstroms.</p>\n<p>7.9 Tragfähig ist zum Beispiel: Den Anteil, der von der Quelle bis zum Rad ankommt, erhält man als Produkt der Teilwirkungsgrade: beim Elektroauto mit Braunkohlestrom etwa so viel wie beim Diesel (28 % gegen 23 %), mit Windstrom fast dreimal so viel. Das CO₂ je Kilometer hängt vom Strommix ab: mit Braunkohlestrom etwa so viel wie beim Diesel, mit dem Strommix 2025 etwa ein Drittel, mit Windstrom fast nichts.</p>\n<p>Nicht trägt: „Das Elektroauto ist besser.“ Ohne Strommix und Zahl fehlt die Begründung.</p>\n<p>Wenn falsch: Übungskarte <a class=\"sprung\" href=\"#nw13lb2-ds7-u1\">1</a>.</p>"
+},
+{
+"kennung": "7.10",
+"stichwort": "Prüfaspekt",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Mehrere Antworten gelten.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Meine erste Spalte enthält eine Prüffrage.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Ich nenne mindestens eine Quelle.</span></label></div>",
+"hinten": "<div class=\"kasten geloest\"><div class=\"klabel\">So sieht die Aufgabe gelöst aus</div><div class=\"tab\"><table><tr><th><strong>Prüfaspekt: Was haben Sie geprüft, mit welcher Frage?</strong></th><th><strong>Daten und Einflussfaktoren: Was brauchten Sie dafür?</strong></th><th><strong>Belege: Woher stammen die Angaben?</strong></th></tr><tr><td><em>Gesamte Energiekette: Wie viel Energie und CO₂ kostet derselbe Nutzen (100 km) von der Quelle bis zum Rad?</em></td><td><em>Teilwirkungsgrade, Gesamtwirkungsgrad, Verbrauch, Strommix (g CO₂ je kWh); Herstellung noch offen</em></td><td><em>Agora Verkehrswende, Umweltbundesamt, ADAC-Test, eigene Rechnung</em></td></tr></table></div></div>\n<p>Tragfähig ist zum Beispiel: Gesamte Energiekette: Wie viel Energie und CO₂ kostet derselbe Nutzen (100 km) von der Quelle bis zum Rad? · Teilwirkungsgrade, Gesamtwirkungsgrad, Verbrauch, Strommix in g CO₂ je kWh · Studie (Agora Verkehrswende), Umweltbundesamt, ADAC-Test, eigene Rechnung.</p>\n<p>Noch offen: die Herstellung (Batterie). Sie gehört auch in diese Zeile.</p>\n<p>Nicht trägt: eine Zeile ohne Prüffrage, etwa nur „Wirkungsgrad“.</p>\n<p>Wenn falsch: Ergänzen Sie Ihre Zeile mit dieser Lösung.</p>"
+}
+],
+"uebung": [
+{
+"nr": 1,
+"niveau": 1,
+"niveau_wort": "Grundlagen",
+"stichwort": "Ich berechne den Gesamtwirkungsgrad einer Kette als Produkt der Teilwirkungsgrade.",
+"vorn": "<p>Eine Leuchte hängt am Stromnetz, der Strom kommt aus einem Steinkohlekraftwerk.</p>\n<p>Berechnen Sie den Gesamtwirkungsgrad von der Kohle bis zum Licht: Kraftwerk 44 %, Netz 95 %, LED 40 % (gerundeter Beispielwert).</p>\n<p>Berechnen Sie dasselbe für eine Glühlampe (5 %, Beispielwert).</p>\n<p>Geben Sie an, wie viel J von 100 J Kohle-Energie jeweils als Licht ankommen.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Multipliziert, nicht addiert?</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Ergebnis kleiner als 40 % bzw. 5 %?</span></label></div>",
+"hinten": "<p>LED: 0,44 · 0,95 · 0,40 = 0,167, also 17 %: 17 J Licht.</p>\n<p>Glühlampe: 0,44 · 0,95 · 0,05 = 0,021, also 2 %: 2 J Licht.</p>\n<p>Der Rest wird entwertet, vor allem im Kraftwerk (56 J) und in der Lampe.</p>"
+},
+{
+"nr": 2,
+"niveau": 1,
+"niveau_wort": "Grundlagen",
+"stichwort": "Ich berechne aus Verbrauch und Strommix das CO₂ je Kilometer und vergleiche mit dem Diesel.",
+"vorn": "<p>Ein durchschnittliches neues Elektroauto braucht im Alltag 19,5 kWh je 100 km, ein neuer Diesel 7,1 Liter (ifeu, 2025). Diesel: 3,3 kg CO₂ je Liter mit Kette.</p>\n<p>Berechnen Sie das CO₂ je km für das Elektroauto mit Strommix 2025 (344 g je kWh) und mit Steinkohlestrom (860 g je kWh).</p>\n<p>Berechnen Sie das CO₂ je km für den Diesel und geben Sie beide Elektroauto-Werte in Prozent des Diesels an.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Durch 100 geteilt (je km, nicht je 100 km)?</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Gramm, nicht Kilogramm?</span></label></div>",
+"hinten": "<p>Strommix: 19,5 · 344 g = 6708 g je 100 km, also 67 g je km.</p>\n<p>Steinkohle: 19,5 · 860 g = 16 770 g je 100 km, also 168 g je km.</p>\n<p>Diesel: 7,1 · 3,3 kg = 23,4 kg je 100 km, also 234 g je km.</p>\n<p>Vergleich: Strommix 67 : 234 = 29 % des Diesels, Steinkohlestrom 168 : 234 = 72 %.</p>"
+},
+{
+"nr": 3,
+"niveau": 1,
+"niveau_wort": "Grundlagen",
+"stichwort": "Ich berechne den Gesamtwirkungsgrad einer Kette als Produkt der Teilwirkungsgrade.",
+"vorn": "<p>Tim rechnet für ein Elektroauto mit Steinkohlestrom: „44 % + 95 % + 90 % + 85 % + 95 % = 409 %. Das ist zu viel, also teile ich durch 5: 82 %.“</p>\n<p>Beschreiben Sie Tims Fehler in einem Satz.</p>\n<p>Berechnen Sie den Gesamtwirkungsgrad richtig.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Mein Satz sagt, was Tim statt Multiplizieren macht.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Mein Ergebnis ist kleiner als 44 %.</span></label></div>",
+"hinten": "<p>Tim addiert und mittelt. Jede Stufe gibt aber nur einen Anteil von dem weiter, was bei ihr ankommt, deshalb wird multipliziert.</p>\n<p>0,44 · 0,95 · 0,90 · 0,85 · 0,95 = 0,304, also 30 %.</p>\n<div class=\"kasten fehler\"><div class=\"klabel\">⚠ Typischer Fehler</div><p>Viele denken: Der Mittelwert der Stufen ist der Gesamtwirkungsgrad. Das stimmt nicht, weil jede Stufe nur weitergibt, was bei ihr ankommt. Fachlich gilt: Der Gesamtwirkungsgrad liegt immer unter dem kleinsten Teilwirkungsgrad.</p></div>"
+},
+{
+"nr": 4,
+"niveau": 2,
+"niveau_wort": "Vertiefung",
+"stichwort": "Strommix",
+"vorn": "<p>Das Elektroauto aus 7.7 braucht 17 kWh je 100 km, der Diesel verursacht 178 g CO₂ je km.</p>\n<p>Berechnen Sie, wie viel g CO₂ je kWh der Strom höchstens haben darf, damit das Elektroauto nicht mehr CO₂ je km verursacht als der Diesel. Rechnen Sie erst auf 1 km um.</p>\n<p>Nennen Sie, welche Stromart aus M1 (Blatt S. 2) darüber liegt.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Ergebnis in g je kWh?</span></label></div>",
+"hinten": "<p>17 kWh je 100 km = 0,17 kWh je km. 178 g : 0,17 kWh = 1047 g je kWh.</p>\n<p>Aus M1 liegt nur Braunkohlestrom (1119 g) darüber.</p>"
+},
+{
+"nr": 5,
+"niveau": 2,
+"niveau_wort": "Vertiefung",
+"stichwort": "Gesamtwirkungsgrad",
+"vorn": "<p>Elektroauto mit Braunkohlestrom: Kraftwerk 40 % · Netz 95 % · Akku 90 % · Elektromotor 85 % · Getriebe 95 % (gesamt 28 %).</p>\n<p>Berechnen Sie den Gesamtwirkungsgrad, wenn statt Braunkohle ein Erdgaskraftwerk (57 %) liefert.</p>\n<p>Berechnen Sie ihn, wenn es beim Braunkohlestrom bleibt, aber der Elektromotor besser wird (95 % statt 85 %).</p>\n<p>Begründen Sie, welche Verbesserung mehr bringt.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Zwei Ergebnisse in Prozent.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Meine Begründung vergleicht, um wie viel sich jede Stufe verbessert.</span></label></div>",
+"hinten": "<p>Erdgas: 0,57 · 0,95 · 0,90 · 0,85 · 0,95 = 0,394, also 39 %.</p>\n<p>Besserer Motor: 0,40 · 0,95 · 0,90 · 0,95 · 0,95 = 0,309, also 31 %.</p>\n<p>Das Kraftwerk bringt mehr: Es steigt auf das 1,4-Fache (40 auf 57 %), der Motor nur auf das 1,1-Fache (85 auf 95 %). Im Produkt wirkt jede Stufe mit ihrem Faktor.</p>"
+},
+{
+"nr": 6,
+"niveau": 3,
+"niveau_wort": "Transfer",
+"stichwort": "Herstellung mitzählen",
+"vorn": "<p>Die Frage aus der letzten Stunde war: Ist ein Elektroauto wirklich nachhaltiger? Bisher fehlt die Herstellung. Die Batterie eines Elektroautos verursacht bei der Herstellung etwa 84 kg CO₂ je kWh Speicher (ifeu, 2025).</p>\n<p>Berechnen Sie das CO₂ für eine Batterie mit 50 kWh Speicher.</p>\n<p>Berechnen Sie, nach wie vielen km das Elektroauto mit Strommix 2025 (58 g je km) diesen Rucksack (das CO₂ aus der Herstellung, das es mitbringt) gegenüber dem Diesel (178 g je km) ausgeglichen hat. Nehmen Sie an, der Rest des Autos ist gleich.</p>\n<p>Beurteilen Sie in einem Satz, ob die Herstellung das Ergebnis der Stunde umdreht. Ein Auto fährt in seinem Leben etwa 220 000 km (ifeu, 2025).</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Ersparnis je km als Differenz gerechnet?</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Mein Urteil nennt eine Zahl.</span></label></div>",
+"hinten": "<p>50 · 84 kg = 4200 kg CO₂.</p>\n<p>Ersparnis je km: 178 g − 58 g = 120 g. 4 200 000 g : 120 g = 35 000 km.</p>\n<p>Tragfähig ist zum Beispiel: Nein. Nach etwa 35 000 von 220 000 km hat das Elektroauto den Rucksack eingeholt; danach spart es je km 120 g.</p>"
+}
+]
 }
 ]
 }
@@ -1078,6 +1171,7 @@ window.KARTEN = {
 {
 "id": "nw13lb2",
 "ds": [
+7,
 6,
 5,
 4,
