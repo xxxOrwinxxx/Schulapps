@@ -4,109 +4,131 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Karten</title>
-<meta name="theme-color" content="#1f3a5f">
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111114" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>
+/* Stil „Klar und ruhig“ mit Fortschrittsbalken (Design-Leitfaden Abschnitt 4) */
 :root{
-  --bg:#f6f5f2; --flaeche:#ffffff; --text:#1d1d1f; --leise:#55555a; --linie:#d9d6cf;
-  --akzent:#1f3a5f; --akzent-text:#ffffff; --akzent-hell:#e6edf5;
-  --pruefen:#eaf1f8; --pruefen-rand:#9db6d0; --fehler:#fbefe6; --fehler-rand:#d9a77a;
-  --loesung:#fffaf0; --loesung-rand:#e2cf9e; --schatten:0 1px 3px rgba(0,0,0,.08);
+  --bg:#f2f2f7; --fl:#ffffff; --text:#1c1c1e; --leise:#5e5e66; --linie:#d8d8de; --pfeil:#8e8e96;
+  --akzent:#0a5bc4; --akzent-text:#ffffff; --akzent-hell:#e8f0fb;
+  --warn:#9a4a00; --warn-hell:#fbf0e6; --rand-stark:#6e6e78;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --bg:#16181b; --flaeche:#212429; --text:#ececec; --leise:#b0b3b8; --linie:#3a3e45;
-    --akzent:#8fb4e0; --akzent-text:#10151c; --akzent-hell:#22303f;
-    --pruefen:#1f2c3a; --pruefen-rand:#3f5d7e; --fehler:#3a2a1d; --fehler-rand:#8a6440;
-    --loesung:#2c2719; --loesung-rand:#6b5a2e; --schatten:none; color-scheme:dark;
+    --bg:#111114; --fl:#1f1f23; --text:#f2f2f7; --leise:#a8a8b2; --linie:#38383e; --pfeil:#8e8e96;
+    --akzent:#6aa5ff; --akzent-text:#0b1220; --akzent-hell:#1b2638;
+    --warn:#f0a35a; --warn-hell:#2e2218; --rand-stark:#9a9aa4;
+    color-scheme:dark;
   }
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--text);
-  font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font:17px/1.47 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   padding:env(safe-area-inset-top,0) 16px calc(env(safe-area-inset-bottom,0) + 32px)}
 main{max-width:640px;margin:0 auto}
 a{color:var(--akzent)}
-button,.knopf{font:inherit;color:inherit;cursor:pointer}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--akzent);outline-offset:2px}
 
-/* Kopfzeile: Zurück links, Position daneben, immer gleich */
-header{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 8px;
-  border-bottom:1px solid var(--linie);margin-bottom:16px;display:flex;align-items:center;gap:12px}
-header .ort{flex:1;min-width:0;font-weight:700;font-size:1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.zurueck{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--linie);
-  background:var(--flaeche);border-radius:12px;min-width:48px;min-height:48px;text-decoration:none;color:var(--text);font-size:1.2rem}
+/* Kopfzeile: Zurück links, Ort daneben, immer gleich */
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0 6px;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px}
+header .ort{flex:1;min-width:0;font-size:15px;font-weight:600;color:var(--leise);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.zurueck{display:inline-flex;align-items:center;min-width:44px;min-height:44px;text-decoration:none;color:var(--akzent);font-size:28px;line-height:1}
 
-h1{font-size:1.35rem;line-height:1.3;margin:4px 0 6px}
-h2{font-size:1.05rem;margin:28px 0 10px}
+.etikett,.position{margin:6px 0 0;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--leise);font-weight:600}
+h1{font-size:30px;line-height:1.15;margin:2px 0 4px;font-weight:700;letter-spacing:-.01em;overflow-wrap:anywhere}
+h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--leise);font-weight:600;margin:28px 0 8px}
 p{margin:.5em 0}
-.leise{color:var(--leise);font-size:1rem}
-.fuss{margin-top:36px;text-align:center}
+.leise{color:var(--leise)}
+.stichwort{margin:0 0 16px;color:var(--leise)}
+.fuss{margin-top:32px;text-align:center;font-size:13px;color:var(--leise)}
 
-/* Listen: eine Zeile pro Eintrag, große Tippflächen */
-.liste{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.liste a{display:flex;gap:12px;align-items:center;background:var(--flaeche);border:1px solid var(--linie);
-  border-radius:14px;padding:12px 14px;text-decoration:none;color:inherit;box-shadow:var(--schatten);min-height:56px}
-.liste .text{flex:1;min-width:0}
-.liste .zeile1{display:block;font-weight:700}
-.liste .zeile2{display:block;color:var(--leise)}
-.liste .status{flex:none;font-size:.95rem;color:var(--leise);white-space:nowrap}
-.liste a.empfohlen{border:2px solid var(--akzent);background:var(--akzent-hell)}
-.liste a.empfohlen .status{color:var(--text);font-weight:700}
-.liste a.erledigt .zeile1::after{content:" ✓";font-weight:700}
-/* Bernstein = Lösung und geschafft; Blau bleibt fürs Handeln („als Nächstes“ gewinnt) */
-.liste a.erledigt:not(.empfohlen){background:var(--loesung);border-color:var(--loesung-rand)}
-.liste a.erledigt:not(.empfohlen) .status{color:var(--text);font-weight:600}
+/* Fortschritt: je Karte ein Segment; gefüllt = geschafft, gestreift = jetzt, nur Rand = offen */
+.kopf-fort{display:flex;align-items:center;gap:10px;margin:4px 0 2px}
+.fortschritt{flex:1;display:flex;gap:4px}
+.fortschritt span{flex:1;height:10px;border-radius:5px;background:var(--akzent)}
+.fortschritt .jetzt{background:repeating-linear-gradient(45deg,var(--akzent) 0 4px,transparent 4px 8px);box-shadow:inset 0 0 0 1.5px var(--akzent)}
+.fortschritt .offen{background:transparent;box-shadow:inset 0 0 0 1.5px var(--rand-stark)}
+.kopf-fort .zahl{flex:none;font-size:15px;font-weight:600;color:var(--leise)}
 
-/* Startkarte „Heute“ */
-.heute{display:block;background:var(--akzent);color:var(--akzent-text);border-radius:18px;padding:20px;
-  text-decoration:none;box-shadow:var(--schatten);margin:8px 0 18px}
-.heute .klein{display:block;font-size:1rem;opacity:.9}
-.heute .gross{display:block;font-size:1.35rem;font-weight:700;line-height:1.3;margin:4px 0 10px}
-.heute .los{display:inline-block;font-weight:700}
-.zweit{display:flex;align-items:center;justify-content:center;min-height:48px;border:1px solid var(--linie);
-  border-radius:12px;background:var(--flaeche);color:var(--text);text-decoration:none;font-weight:600}
+/* Gruppierte Liste: ein Kasten, Zeilen durch dünne Linien getrennt */
+.liste{list-style:none;margin:0;padding:0;background:var(--fl);border-radius:14px;overflow:hidden}
+.liste li+li{border-top:1px solid var(--linie)}
+.zeile{display:flex;gap:14px;align-items:center;width:100%;min-height:60px;padding:10px 14px 10px 16px;
+  text-decoration:none;color:inherit;background:none;border:none;text-align:left}
+.zeile::after{content:"›";color:var(--pfeil);font-size:24px;flex:none}
+.zeile .text{flex:1;min-width:0}
+.zeile b{display:block;font-weight:600}
+.zeile small{display:block;color:var(--leise);font-size:15px}
+.zeile small.weiter{color:var(--akzent);font-weight:600}
+.sym{flex:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:16px;color:var(--akzent-text);background:var(--akzent)}
+.sym.warn{background:var(--warn);color:var(--fl)}
+.sym.frage{background:var(--leise);color:var(--fl)}
+.sym.offen{background:transparent;box-shadow:inset 0 0 0 1.5px var(--rand-stark)}
+.zeile.empfohlen{background:var(--akzent-hell)}
 
+/* Startkarte „Neueste Doppelstunde“: die eine Haupthandlung */
+.heute{display:block;background:var(--akzent);color:var(--akzent-text);border-radius:14px;padding:18px;text-decoration:none;margin:12px 0 14px}
+.heute .klein{display:block;font-size:15px;opacity:.95}
+.heute .gross{display:block;font-size:22px;font-weight:700;line-height:1.25;margin:4px 0 10px}
+.heute .los{font-weight:700}
 details.lb{margin:12px 0}
-details.lb>summary{font-weight:700;padding:12px 0;cursor:pointer;min-height:48px}
-details.lb .liste{margin-bottom:8px}
+details.lb>summary{font-weight:600;padding:12px 0;cursor:pointer;min-height:48px}
 
-/* Einzelkarte */
-.position{color:var(--leise);font-size:1rem;margin:0}
-.auftrag{background:var(--flaeche);border:1px solid var(--linie);border-radius:16px;padding:6px 16px 10px;box-shadow:var(--schatten)}
-.hinten{background:var(--loesung);border:1px solid var(--loesung-rand);border-radius:16px;padding:6px 16px 10px;margin-top:16px;scroll-margin-top:80px}
-.hinten>.titel,.nachschlag>.titel{font-weight:700;margin:10px 0 4px}
-.kasten{border:1px solid var(--linie);border-radius:12px;padding:8px 12px;margin:12px 0}
-.kasten.pruefen{background:var(--pruefen);border-color:var(--pruefen-rand)}
-.kasten.fehler{background:var(--fehler);border-color:var(--fehler-rand)}
-.klabel{font-weight:700;font-size:1rem;margin-bottom:4px}
+/* Karte */
+.auftrag,.hinten,.kontrolle,.ergebnis,.nachschlag{background:var(--fl);border-radius:14px;padding:6px 16px 10px;margin:0 0 14px}
+.hinten,#mitte,#unten{scroll-margin-top:70px}
+.titel{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--leise);font-weight:600;margin:10px 0 6px}
+.hinten>.titel{color:var(--akzent)}
+.kasten{border-radius:10px;padding:8px 12px;margin:12px 0;background:var(--bg)}
+.kasten.pruefen{background:var(--akzent-hell)}
+.kasten.fehler{background:var(--warn-hell)}
+.kasten.fehler .klabel{color:var(--warn)}
+.klabel{font-weight:700;font-size:15px;margin-bottom:4px}
 .haken{display:flex;gap:12px;align-items:flex-start;padding:8px 0;min-height:44px}
 .haken input{width:24px;height:24px;margin-top:2px;flex:none;accent-color:var(--akzent)}
 .tab{overflow-x:auto;margin:10px 0}
-.tab table{border-collapse:collapse;width:100%;font-size:1rem}
+.tab table{border-collapse:collapse;width:100%;font-size:15px}
 .tab th,.tab td{border:1px solid var(--linie);padding:6px;vertical-align:top;text-align:left;overflow-wrap:break-word;hyphens:auto}
 .tab th{background:var(--bg)}
-.tab img{margin:2px auto}
 img{max-width:100%;height:auto;display:block;margin:10px auto;background:#fff;border-radius:6px}
 a.sprung{font-weight:700}
+
+/* Kontrollfrage und Ergebnis */
+.kontrolle{padding:0;background:none}
+.kontrolle .frage{font-size:20px;line-height:1.3;font-weight:700;margin:6px 0 10px}
+.ergebnis{display:flex;gap:14px;align-items:flex-start;padding:14px 16px}
+.ergebnis .text{flex:1;min-width:0}
+.ergebnis b{display:block;font-size:18px}
+.ergebnis p{margin:4px 0 0}
+.ergebnis.warn b{color:var(--warn)}
 
 /* Leiste unten in der Daumenzone: eine Haupthandlung */
 .leiste{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--bg);border-top:1px solid var(--linie);
   padding:10px 16px calc(env(safe-area-inset-bottom,0) + 12px)}
 .leiste .innen{max-width:640px;margin:0 auto;display:grid;gap:8px}
-.leiste p{margin:0 0 2px;font-weight:700}
+.leiste p{margin:0 0 2px;font-weight:600}
 .haupt,.neben{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;border-radius:14px;
-  font-weight:700;text-decoration:none;text-align:center;padding:8px 12px}
+  font-weight:600;text-decoration:none;text-align:center;padding:8px 12px}
 .haupt{background:var(--akzent);color:var(--akzent-text);border:none}
-.neben{background:var(--flaeche);color:var(--text);border:1px solid var(--linie);min-height:48px;font-weight:600}
+.neben{background:var(--fl);color:var(--akzent);border:none;min-height:48px}
+.abzweig{display:flex;align-items:center;min-height:44px;margin:0 0 8px;font-weight:600;color:var(--akzent);text-decoration:none}
+.schritte{margin:6px 0 0;padding-left:22px}.schritte li{margin:4px 0}
 .reihe{display:flex;gap:8px}
 .reihe>*{flex:1}
-.textknopf{background:none;border:none;color:var(--akzent);font-weight:600;text-decoration:underline;min-height:44px;padding:8px}
-.meldung{background:var(--akzent-hell);border-left:4px solid var(--akzent);border-radius:8px;padding:8px 12px;margin:0 0 12px}
+.textknopf{background:none;border:none;color:var(--akzent);font-weight:600;min-height:44px;padding:8px}
+a.textknopf{display:flex;align-items:center;justify-content:center;text-decoration:none}
+.meldung{background:var(--akzent-hell);border-radius:10px;padding:10px 12px;margin:0 0 12px}
 .ruhig{text-align:center;margin-top:16px}
+.zweit{display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:14px;background:var(--fl);
+  color:var(--akzent);text-decoration:none;font-weight:600}
 </style>
 </head>
 <body>
@@ -118,66 +140,81 @@ a.sprung{font-weight:700}
 const D = window.KARTEN;
 const app = document.getElementById("app");
 const NIV = {1: "● Grundlagen", 2: "●● Vertiefung", 3: "●●● Transfer"};
+const WEG_AB = 4;  // Übungsweg ohne Fehler: ab dieser Kartennummer (Skill doppelstunde: 4, 5, 6)
 const lbById = {}, dsByKey = {};
 if (D) for (const lb of D.lbs) { lbById[lb.id] = lb; for (const ds of lb.ds) dsByKey[ds.key] = {lb, ds}; }
 
-// Nur auf diesem Gerät: gewählte Klasse und geschaffte Karten (keine Übertragung, kein Server)
-const speicher = {
-  get(k) { try { return localStorage.getItem("karten.v1." + k); } catch (e) { return null; } },
-  set(k, v) { try { localStorage.setItem("karten.v1." + k, v); } catch (e) {} }
+// ------------------------------------------------------------ Speicher, nur auf diesem Gerät
+// v2: Klasse, geschaffte Karten, Diagnose je Lösungskarte. Einmalige Übernahme aus v1 (idempotent).
+const V = "karten.v2.";
+const roh = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 };
-let erledigt;
-try { erledigt = new Set(JSON.parse(speicher.get("erledigt") || "[]")); } catch (e) { erledigt = new Set(); }
-const sichereErledigt = () => speicher.set("erledigt", JSON.stringify([...erledigt]));
+const speicher = {get: k => roh.get(V + k), set: (k, v) => roh.set(V + k, v)};
+if (roh.get(V + "erledigt") === null) {
+  const altK = roh.get("karten.v1.kurs"), altE = roh.get("karten.v1.erledigt");
+  if (altK !== null) speicher.set("kurs", altK);
+  speicher.set("erledigt", altE !== null ? altE : "[]");
+}
+const lies = (k, leer) => { try { return JSON.parse(speicher.get(k)) ?? leer; } catch (e) { return leer; } };
+const erledigt = new Set(lies("erledigt", []));
+const diagnose = lies("diagnose", {});  // "<dskey>/l3": {ok, uebung:[n], fehler, wahl}
+const sichern = () => { speicher.set("erledigt", JSON.stringify([...erledigt])); speicher.set("diagnose", JSON.stringify(diagnose)); };
+
 const bestaetigt = new Set();  // „Antwort steht in den Unterlagen“, gilt bis zum Neuladen
-const rueckweg = {};           // Übungskarte -> Lösungskarte, von der ein „Wenn falsch“ hierher geschickt hat
-let vorher = "";               // Adresse vor der aktuellen (für einen Zurück-Pfeil wie die Handy-Taste)
-let meldung = "";              // einmaliger Hinweis nach einer ungültigen Adresse
+const rueckweg = {};           // Übungskarte -> Lösungskarte, von der ein Verweis hierher geschickt hat
+// Weg zur Klärung einer offenen Frage; wer den Sitznachbarn schon gefragt hat, geht gleich zur Lehrkraft (Lehrkraft 22.11.2026)
+const klaeren = nachbar => `<ol class="schritte"><li>Schreiben Sie neben die Aufgabe in Ihre Unterlagen, was genau unklar ist.</li>` +
+  (nachbar ? "" : `<li>Fragen Sie zuerst Ihre Sitznachbarin oder Ihren Sitznachbarn.</li>`) +
+  `<li>${nachbar ? "Zeigen Sie" : "Bleibt es unklar, zeigen Sie"} die Stelle jetzt in der Stunde Ihrer Lehrkraft.</li></ol>`;
+let vorher = "", meldung = "";
+let leisteKlick = null;        // Klicks in der Leiste gehen an die gerade gezeigte Karte
+document.addEventListener("click", ev => { if (leisteKlick && ev.target.closest(".leiste")) leisteKlick(ev); });
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
-const ohneTags = s => String(s || "").replace(/<[^>]+>/g, "");
+const ohneTags = s => String(s || "").replace(/<[^>]+>/g, "").trim();
 const datum = iso => iso.split("-").reverse().join(".");
 const lbKurz = lb => (lb.titel.match(/^LB\d+/) || [lb.titel])[0];
 const hash = () => location.hash.slice(1);
+const mischen = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 
 function zeige(kopfOrt, zurueck, inhalt, leiste) {
   const m = meldung ? `<p class="meldung" role="status">${meldung}</p>` : "";
   meldung = "";
-  app.innerHTML = `<header>${zurueck !== null ? `<a class="zurueck" href="#${zurueck}" data-zurueck="${zurueck}" aria-label="Zurück">←</a>` : ""}` +
+  leisteKlick = null;
+  app.innerHTML = `<header>${zurueck !== null ? `<a class="zurueck" href="#${zurueck}" data-zurueck="${zurueck}" aria-label="Zurück">‹</a>` : ""}` +
     `<span class="ort">${kopfOrt}</span></header>` + m + inhalt;
-  document.querySelector(".leiste")?.remove();
-  document.body.style.paddingBottom = "";
-  if (leiste) {
-    const l = document.createElement("div");
-    l.className = "leiste";
-    l.innerHTML = `<div class="innen">${leiste}</div>`;
-    document.body.appendChild(l);
-    passeAbstand();
-  }
+  setzeLeiste(leiste);
   window.scrollTo(0, 0);
 }
-// Platz unten so groß wie die Leiste, damit sie nie das Ende der Lösung verdeckt
-function passeAbstand() {
+function setzeLeiste(html) {
+  let l = document.querySelector(".leiste");
+  if (!html) { l?.remove(); document.body.style.paddingBottom = ""; return null; }
+  if (!l) { l = document.createElement("div"); l.className = "leiste"; l.innerHTML = `<div class="innen"></div>`; document.body.appendChild(l); }
+  l.firstChild.innerHTML = html;
+  passeAbstand();
+  return l.firstChild;
+}
+function passeAbstand() {  // Platz unten so groß wie die Leiste, damit sie nie das Ende verdeckt
   const l = document.querySelector(".leiste");
-  if (l) document.body.style.paddingBottom = (l.offsetHeight + 24) + "px";
+  document.body.style.paddingBottom = l ? (l.offsetHeight + 24) + "px" : "";
 }
 if ("ResizeObserver" in window) new ResizeObserver(passeAbstand).observe(document.body);
-
-// Ungültige Adresse: kurz sagen und die Adresse in der Leiste richtigstellen
-function umleiten(ziel, text) {
-  meldung = text;
-  location.replace("#" + ziel);
+function umleiten(ziel, text) { meldung = text; location.replace("#" + ziel); }
+function fortschritt(anzahl, jetzt, fertig) {  // fertig(i) -> bool
+  let s = "";
+  for (let i = 0; i < anzahl; i++) s += `<span class="${i === jetzt ? "jetzt" : fertig(i) ? "" : "offen"}"></span>`;
+  return `<div class="kopf-fort"><div class="fortschritt" aria-hidden="true">${s}</div><span class="zahl">${jetzt + 1} von ${anzahl}</span></div>`;
 }
 
-// ------------------------------------------------------------ Start: Klasse wählen
+// ------------------------------------------------------------ Start und Klasse
 function start() {
   const kurse = Object.entries(D.kurse).sort((a, b) => a[1].name.localeCompare(b[1].name, "de"));
   zeige("Karten", null, `<h1>Ihre Klasse</h1><ul class="liste">` +
-    kurse.map(([id, k]) => `<li><a href="#${id}"><span class="text"><span class="zeile1">${esc(k.name)}</span></span></a></li>`).join("") +
-    `</ul><p class="fuss leise">Stand der Karten: ${datum(D.stand)}</p>`);
+    kurse.map(([id, k]) => `<li><a class="zeile" href="#${id}"><span class="text"><b>${esc(k.name)}</b></span></a></li>`).join("") +
+    `</ul><p class="fuss">Stand der Karten: ${datum(D.stand)}</p>`);
 }
-
-// ------------------------------------------------------------ Klasse: neueste DS je Spur, darunter Früheres
 function dsDerKlasse(k) {
   return k.lbs.flatMap(ref => ref.ds.map(n => lbById[ref.id]?.ds.find(d => d.nr === n)).filter(Boolean)
     .map(ds => ({lb: lbById[ref.id], ds})));
@@ -194,11 +231,10 @@ function kursSeite(kid) {
   for (const n of neu) {
     const spur = spuren ? (n.lb.uebung ? " in der Übung" : " im Unterricht") : "";
     h += `<a class="heute" href="#${kid}/${n.ds.key}"><span class="klein">Neueste Doppelstunde${spur} · ${esc(lbKurz(n.lb))}</span>` +
-      `<span class="gross">DS ${n.ds.nr}${n.ds.titel ? ": " + esc(n.ds.titel) : ""}</span><span class="los">Karten öffnen →</span></a>`;
+      `<span class="gross">DS ${n.ds.nr}${n.ds.titel ? ": " + esc(n.ds.titel) : ""}</span><span class="los">Karten öffnen ›</span></a>`;
   }
   if (alle.length > neu.length) h += `<a class="zweit" href="#${kid}/frueher">Frühere Doppelstunden (${alle.length - neu.length})</a>`;
-  h += `<p class="ruhig"><a class="zweit" href="#klassen">Andere Klasse wählen</a></p>` +
-    `<p class="fuss leise">Stand der Karten: ${datum(D.stand)}</p>`;
+  h += `<p class="ruhig"><a class="textknopf" href="#klassen">Andere Klasse wählen</a></p><p class="fuss">Stand der Karten: ${datum(D.stand)}</p>`;
   zeige("Karten", "klassen", h);
 }
 function fruehereSeite(kid) {
@@ -210,34 +246,59 @@ function fruehereSeite(kid) {
     const items = lb ? ref.ds.map(n => lb.ds.find(d => d.nr === n)).filter(Boolean) : [];
     if (!items.length) continue;
     h += `<details class="lb"${offen ? " open" : ""}><summary>${esc(lb.titel)}</summary><ul class="liste">` +
-      items.map(ds => `<li><a href="#${kid}/${ds.key}"><span class="text"><span class="zeile1">DS ${ds.nr}</span>` +
-        `${ds.titel ? `<span class="zeile2">${esc(ds.titel)}</span>` : ""}</span></a></li>`).join("") + `</ul></details>`;
+      items.map(ds => `<li><a class="zeile" href="#${kid}/${ds.key}"><span class="text"><b>DS ${ds.nr}</b>` +
+        `${ds.titel ? `<small>${esc(ds.titel)}</small>` : ""}</span></a></li>`).join("") + `</ul></details>`;
     offen = false;
   }
   zeige(esc(k.name), kid, h);
 }
 
-// ------------------------------------------------------------ Doppelstunde: Lösungskarten, Nachschlagen, Übungskarten
+// ------------------------------------------------------------ Doppelstunde
 function holeDs(kid, key) {
   const e = dsByKey[key], k = D.kurse[kid];
   const ref = e && k && k.lbs.find(r => r.id === e.lb.id);
-  return ref && ref.ds.includes(e.ds.nr) ? {k, ...e} : null;  // nur DS dieser Klasse
+  return ref && ref.ds.includes(e.ds.nr) ? {k, ...e} : null;
 }
-// Lösungskarten mit ihrer Adresse (l1, l2 … nach Position in den Daten), Nachschlagekarten getrennt
 function teile(ds) {
   const alle = ds.loesung.map((c, i) => ({c, teil: "l" + (i + 1)}));
   return {loes: alle.filter(x => !x.c.nachschlagen), nach: alle.filter(x => x.c.nachschlagen),
     ueb: ds.uebung.map(c => ({c, teil: "u" + c.nr}))};
 }
-function empfohlen(ds) {  // Skill doppelstunde: ohne Verweis bei Karte 4 (erste Vertiefung) beginnen
-  const offen = ds.uebung.filter(c => !erledigt.has(`${ds.key}/u${c.nr}`));
-  return (offen.find(c => c.niveau === 2) || offen[0] || {}).nr;
+// Übungsweg, die eine Regel: erst Karten aus Fehlerdiagnosen (Kartenfolge), dann ab Karte 4
+function uebungsweg(ds) {
+  const da = new Set(ds.uebung.map(c => c.nr));
+  const aus = new Set();
+  for (const x of teile(ds).loes) {
+    const d = diagnose[`${ds.key}/${x.teil}`];
+    if (d && !d.ok) for (const n of d.uebung || []) if (da.has(n)) aus.add(n);
+  }
+  const fehler = [...aus].sort((a, b) => a - b);
+  let rest = ds.uebung.map(c => c.nr).filter(n => n >= WEG_AB && !aus.has(n));
+  if (!fehler.length && !rest.length) rest = ds.uebung.map(c => c.nr);
+  return {fehler, weg: [...fehler, ...rest]};
 }
-function zeileHtml(kid, key, x, z1, z2, extra) {
-  const id = `${key}/${x.teil}`, fertig = erledigt.has(id);
-  return `<li><a href="#${kid}/${id}" class="${fertig ? "erledigt" : ""}${extra ? " empfohlen" : ""}"><span class="text">` +
-    `<span class="zeile1">${z1}</span>${z2 ? `<span class="zeile2">${z2}</span>` : ""}</span>` +
-    `${extra ? '<span class="status">→ als Nächstes</span>' : fertig ? '<span class="status">geschafft</span>' : ""}</a></li>`;
+function naechsteImWeg(ds, ausser) {
+  return uebungsweg(ds).weg.find(n => n !== ausser && !erledigt.has(`${ds.key}/u${n}`));
+}
+// Die Lösungskarte, an der es nach einem Abstecher in die Übungskarten weitergeht:
+// die erste ungeprüfte nach der zuletzt geprüften, sonst die erste ungeprüfte überhaupt
+function abzweig(ds) {
+  const l = teile(ds).loes, frei = i => !diagnose[`${ds.key}/${l[i].teil}`];
+  let letzte = -1, zeit = -1;  // zuletzt geprüfte Karte (Zeitstempel; ältere Einträge ohne Zeit nach Reihenfolge)
+  l.forEach((x, i) => { const t = (diagnose[`${ds.key}/${x.teil}`] || {}).t; if (!frei(i) && (t || 0) >= zeit) { letzte = i; zeit = t || 0; } });
+  if (letzte < 0) return null;  // noch nichts geprüft: kein Abstecher, normaler Übungsweg
+  for (let i = letzte + 1; i < l.length; i++) if (frei(i)) return l[i];
+  for (let i = 0; i < l.length; i++) if (frei(i)) return l[i];
+  return null;
+}
+function zeileHtml(href, sym, z1, z2, klasse) {
+  return `<li><a class="zeile${klasse ? " " + klasse : ""}" href="${href}">${sym}<span class="text"><b>${z1}</b>${z2 || ""}</span></a></li>`;
+}
+function symFuer(id, art) {
+  const d = diagnose[id];
+  if (art === "l" && d) return d.ok ? `<span class="sym" aria-label="richtig">✓</span>` : d.offen ? `<span class="sym frage" aria-label="offene Frage">?</span>` : `<span class="sym warn" aria-label="Fehler">!</span>`;
+  if (erledigt.has(id)) return `<span class="sym" aria-label="geschafft">✓</span>`;
+  return `<span class="sym offen" aria-hidden="true"></span>`;
 }
 function dsSeite(kid, key) {
   const x = holeDs(kid, key);
@@ -245,25 +306,48 @@ function dsSeite(kid, key) {
   const {k, lb, ds} = x;
   const {loes, nach, ueb} = teile(ds);
   const ort = `${esc(k.name)} · ${esc(lbKurz(lb))} · DS ${ds.nr}`;
-  let h = `<h1>${ds.titel ? esc(ds.titel) : "Doppelstunde " + ds.nr}</h1>`;
-  h += `<p class="leise">Antworten schreiben Sie in Ihre Unterlagen, nicht hier.</p>`;
+  let h = `<h1>${ds.titel ? esc(ds.titel) : "Doppelstunde " + ds.nr}</h1>` +
+    `<p class="leise">Antworten schreiben Sie in Ihre Unterlagen, nicht hier.</p>`;
   if (loes.length) {
-    h += `<h2>① Blatt prüfen: Lösungskarten</h2><ul class="liste">` +
-      loes.map(y => zeileHtml(kid, key, y, "Aufgabe " + esc(y.c.kennung), esc(y.c.stichwort))).join("") + `</ul>`;
+    h += `<h2>① Blatt prüfen</h2><ul class="liste">` + loes.map(y => {
+      const id = `${key}/${y.teil}`, d = diagnose[id];
+      const z2 = d && !d.ok ? `<small>${esc(d.fehler || "Nicht richtig")}${(d.uebung || []).length ? " → Übungskarte " + d.uebung.join(" und ") : ""}</small>`
+        : `<small>${esc(y.c.stichwort)}</small>`;
+      return zeileHtml(`#${kid}/${id}`, symFuer(id, "l"), "Aufgabe " + esc(y.c.kennung), z2);
+    }).join("") + `</ul>`;
+  }
+  const offen = loes.filter(y => (diagnose[`${key}/${y.teil}`] || {}).offen);
+  if (offen.length) {
+    h += `<h2>Ihre offenen Fragen</h2><ul class="liste">` + offen.map(y => zeileHtml(`#${kid}/${key}/${y.teil}`,
+      `<span class="sym frage" aria-hidden="true">?</span>`, "Aufgabe " + esc(y.c.kennung), `<small>${esc(y.c.stichwort)}</small>`)).join("") +
+      `</ul><details class="lb"><summary>So klären Sie offene Fragen</summary>${klaeren(false)}</details>`;
   }
   if (ueb.length) {
-    const empf = empfohlen(ds);
-    h += `<h2>${loes.length ? "② " : ""}Üben: Übungskarten</h2>`;
-    h += `<p class="leise">Beginnen Sie bei der markierten Karte.${loes.length ? " Hat eine Lösungskarte Sie zu einer anderen Übungskarte geschickt, nehmen Sie diese." : ""}</p>`;
-    h += `<ul class="liste">` + ueb.map(y => zeileHtml(kid, key, y, `Übungskarte ${y.c.nr} · ${NIV[y.c.niveau] || ""}`,
-      ohneTags(y.c.stichwort) ? y.c.stichwort : "", y.c.nr === empf)).join("") + `</ul>`;
+    const {fehler, weg} = uebungsweg(ds);
+    const naechste = naechsteImWeg(ds);
+    const nachNr = n => ueb.find(y => y.c.nr === n);
+    h += `<h2>${loes.length ? "② " : ""}Ihr Übungsweg</h2>`;
+    h += `<p class="leise">${fehler.length ? "Zuerst die Karten zu Ihren Fehlern, dann weiter ab Karte " + WEG_AB + "."
+      : loes.length ? "Ohne Fehler beginnen Sie bei Karte " + WEG_AB + ". Prüfen Sie zuerst Ihr Blatt." : "Beginnen Sie bei der markierten Karte."}</p>`;
+    const zeileU = y => {
+      const id = `${key}/${y.teil}`, jetzt = y.c.nr === naechste;
+      const grund = fehler.includes(y.c.nr) ? "wegen Ihres Fehlers · " : "";
+      return zeileHtml(`#${kid}/${id}`, jetzt ? `<span class="sym" aria-hidden="true">›</span>` : symFuer(id, "u"),
+        `Übungskarte ${y.c.nr} · ${NIV[y.c.niveau] || ""}`,
+        jetzt ? `<small class="weiter">${grund}als Nächstes</small>${ohneTags(y.c.stichwort) ? `<small>${y.c.stichwort}</small>` : ""}` : erledigt.has(id) ? `<small>${grund}geschafft</small>`
+          : (ohneTags(y.c.stichwort) ? `<small>${grund}${y.c.stichwort}</small>` : ""), jetzt ? "empfohlen" : "");
+    };
+    h += `<ul class="liste">` + weg.map(nachNr).filter(Boolean).map(zeileU).join("") + `</ul>`;
+    const uebrig = ueb.filter(y => !weg.includes(y.c.nr));
+    if (uebrig.length) h += `<details class="lb"><summary>Weitere Übungskarten (${uebrig.length})</summary><ul class="liste">` +
+      uebrig.map(zeileU).join("") + `</ul></details>`;
   }
   if (nach.length) {
     h += `<h2>Zum Nachschlagen</h2><ul class="liste">` +
-      nach.map(y => zeileHtml(kid, key, y, esc(y.c.kennung), esc(y.c.stichwort))).join("") + `</ul>`;
+      nach.map(y => zeileHtml(`#${kid}/${key}/${y.teil}`, `<span class="sym frage" aria-hidden="true">i</span>`, esc(y.c.kennung), `<small>${esc(y.c.stichwort)}</small>`)).join("") + `</ul>`;
   }
   if (!ds.loesung.length && !ds.uebung.length) h += `<p>Zu dieser Doppelstunde gibt es keine Karten.</p>`;
-  if ([...erledigt].some(e => e.startsWith(key + "/"))) {
+  if ([...erledigt, ...Object.keys(diagnose)].some(e => e.startsWith(key + "/"))) {
     h += `<p class="ruhig"><button type="button" class="textknopf" data-zuruecksetzen="${key}">Haken dieser Stunde zurücksetzen</button></p>`;
   }
   zeige(ort, kid, h);
@@ -276,109 +360,242 @@ function karteSeite(kid, key, teil) {
   const {k, lb, ds} = x;
   const {loes, nach, ueb} = teile(ds);
   const art = teil[0];
-  const liste = art === "u" ? ueb : loes;
   const nk = nach.find(y => y.teil === teil);
+  const liste = art === "u" ? ueb : loes;
   const idx = liste.findIndex(y => y.teil === teil);
   if (!nk && idx < 0) return umleiten(`${kid}/${key}`, "Diese Karte gibt es nicht. Hier ist die Übersicht der Doppelstunde.");
   const c = nk ? nk.c : liste[idx].c;
   const id = `${key}/${teil}`;
   const ort = `${esc(k.name)} · ${esc(lbKurz(lb))} · DS ${ds.nr}`;
   const eltern = rueckweg[id] || `${kid}/${key}`;
-  const ueberblick = `<a class="haupt" href="#${kid}/${key}">Zur Übersicht der Doppelstunde</a>`;
+  const uebersicht = `#${kid}/${key}`;
 
-  if (nk) {  // Nachschlagen: alles offen, nichts aufzudecken
+  if (nk) {
     let h = `<p class="position">Zum Nachschlagen</p><h1>${esc(c.kennung)}</h1>` +
-      (c.stichwort ? `<p class="leise">${esc(c.stichwort)}</p>` : "") + `<div class="auftrag">${c.vorn}</div>`;
+      (c.stichwort ? `<p class="stichwort">${esc(c.stichwort)}</p>` : "") + `<div class="auftrag">${c.vorn}</div>`;
     if (c.hinten) h += `<div class="nachschlag"><div class="titel">Zum Nachschlagen</div>${c.hinten}</div>`;
-    return zeige(ort, eltern, h, ueberblick);
+    return zeige(ort, eltern, h, `<a class="haupt" href="${uebersicht}">Zur Übersicht der Doppelstunde</a>`);
   }
 
-  const naechste = liste[idx + 1];
-  const weiterLabel = naechste ? (art === "l" ? `Lösungskarte ${idx + 2}` : `Übungskarte ${naechste.c.nr}`) : "";
-  const weiterZiel = naechste ? `#${kid}/${key}/${naechste.teil}` : `#${kid}/${key}`;
+  // Wohin nach dieser Karte
+  let weiterZiel, weiterLabel, nochEine = "";
+  if (art === "l") {
+    const n = liste[idx + 1];
+    weiterZiel = n ? `#${kid}/${key}/${n.teil}` : uebersicht;
+    weiterLabel = n ? `Weiter mit Aufgabe ${esc(n.c.kennung)}` : "Zu Ihrem Übungsweg";
+  } else {
+    const n = naechsteImWeg(ds, c.nr);
+    const r = abzweig(ds);  // Lösungskarten noch nicht fertig: nach der Übung dorthin zurück, wo abgebogen wurde
+    weiterZiel = r ? `#${kid}/${key}/${r.teil}` : n ? `#${kid}/${key}/u${n}` : uebersicht;
+    weiterLabel = r ? `Zurück zu Aufgabe ${esc(r.c.kennung)}` : n ? `Weiter mit Übungskarte ${n}` : "Zur Übersicht";
+    if (r && n) nochEine = `<a class="textknopf" href="#${kid}/${key}/u${n}">Lieber noch Übungskarte ${n}</a>`;
+  }
+
   let h;
   if (art === "l") {
-    h = `<p class="position">Lösungskarte ${idx + 1} von ${liste.length}</p><h1>Aufgabe ${esc(c.kennung)}</h1>` +
-      (c.stichwort ? `<p class="leise">${esc(c.stichwort)}</p>` : "");
+    h = fortschritt(liste.length, idx, i => diagnose[`${key}/${liste[i].teil}`] || erledigt.has(`${key}/${liste[i].teil}`)) +
+      `<p class="position">Lösungskarte</p><h1>Aufgabe ${esc(c.kennung)}</h1>` + (c.stichwort ? `<p class="stichwort">${esc(c.stichwort)}</p>` : "");
   } else {
-    h = `<p class="position">${NIV[c.niveau] || ""}</p><h1>Übungskarte ${c.nr} von ${ds.uebung.length}</h1>` +
-      (c.stichwort ? `<p class="leise">Das üben Sie hier: ${c.stichwort}</p>` : "");
+    const {weg, fehler} = uebungsweg(ds);
+    const pos = weg.indexOf(c.nr);
+    h = (pos >= 0 ? fortschritt(weg.length, pos, i => erledigt.has(`${key}/u${weg[i]}`)) : "") +
+      `<p class="position">${NIV[c.niveau] || ""}${fehler.includes(c.nr) ? " · wegen Ihres Fehlers" : ""}</p><h1>Übungskarte ${c.nr}</h1>` +
+      (c.stichwort ? `<p class="stichwort">Das üben Sie hier: ${c.stichwort}</p>` : "") +
+      (abzweig(ds) ? `<a class="abzweig" href="${weiterZiel}">‹ ${weiterLabel} (Lösungskarten)</a>` : "");
   }
-  h += `<div class="auftrag">${c.vorn}</div>`;
+  h += `<div class="auftrag">${c.vorn}</div><div id="mitte"></div>`;
   if (c.hinten) h += `<div class="hinten" id="loesung" hidden><div class="titel">Lösungsvorschlag</div>${c.hinten}</div>`;
-  zeige(ort, eltern, h, " ");
-  const leiste = document.querySelector(".leiste .innen");
+  h += `<div id="unten"></div>`;
+  zeige(ort, eltern, h, null);
+  const mitte = document.getElementById("mitte"), unten = document.getElementById("unten");
   const hinten = document.getElementById("loesung");
-  // Ziel aus „Wenn falsch: Übungskarte n“ der Lösung
-  const sprung = hinten?.querySelector("a.sprung")?.getAttribute("href").match(/^#(.*)-(u\d+)$/);
-  const richtig = naechste ? `Richtig. Weiter mit ${weiterLabel}` : "Richtig. Zur Übersicht";
-  const falsch = sprung
-    ? `<a class="neben" data-sprung="${sprung[2]}" href="#${kid}/${key}/${sprung[2]}">Falsch: zu Übungskarte ${sprung[2].slice(1)}</a>`
-    : `<a class="neben" href="${weiterZiel}">Noch nicht richtig: korrigiert, ${naechste ? "weiter" : "zur Übersicht"}</a>`;
+  // Ziele nur aus der Zeile „Wenn falsch: Übungskarte n“; Verweise im Lösungstext („warum: Übungskarte 4“)
+  // sind Lesehinweise, keine Fehlerziele (Lehrkraft 22.11.2026)
+  const ziele = hinten ? [...new Set([...hinten.querySelectorAll("p")].filter(p => /^\s*Wenn falsch/.test(p.textContent)).flatMap(p => [...p.querySelectorAll("a.sprung")])
+    .map(a => +((a.getAttribute("href").match(/-u(\d+)$/) || [])[1])).filter(n => ds.uebung.some(u => u.nr === n)))] : [];
+  const stich = n => ohneTags(ds.uebung.find(u => u.nr === n)?.stichwort);
+
+  function diagnostiziere(d) {
+    diagnose[id] = {...d, t: Date.now()};
+    erledigt.add(id);
+    sichern();
+    stufe("ergebnis");
+  }
+  // Jede Wahl hat eine Folge: richtig → nächste Karte; falsch → korrigieren und Übungskarte jetzt;
+  // offen → Frage notieren, mit Weg zur Klärung (Lehrkraft 22.11.2026)
+  const ueb1 = d => (d.uebung || []).find(n => ds.uebung.some(u => u.nr === n));
+  function ergebnisHtml(d) {
+    if (d.ok) return `<div class="ergebnis" role="status"><span class="sym" aria-hidden="true">✓</span><div class="text"><b>Richtig</b>` +
+      `<p>${c.kontrolle ? "Vergleichen Sie trotzdem Ihre Begründung mit dem Lösungsvorschlag." : "Gut. Weiter geht es mit der nächsten Karte."}</p></div></div>`;
+    const n = ueb1(d);
+    if (d.offen) return `<div class="ergebnis warn" role="status"><span class="sym frage" aria-hidden="true">?</span><div class="text"><b>Offene Frage notiert</b>` +
+      `<p>Sie steht jetzt in der Übersicht der Doppelstunde unter „Ihre offenen Fragen“. So klären Sie sie:</p>${klaeren(d.nachbar)}` +
+      (n ? `<p>Übungskarte ${n} übt genau diese Stelle. Sie steht in Ihrem Übungsweg.</p>` : "") + `</div></div>`;
+    return `<div class="ergebnis warn" role="status"><span class="sym warn" aria-hidden="true">!</span><div class="text"><b>${esc(d.fehler || "Noch nicht richtig")}</b>` +
+      (d.wahl ? `<p>Sie haben gewählt: „${esc(d.wahl)}“</p>` : "") +
+      `<ol class="schritte"><li>Korrigieren Sie Ihre Antwort in einer anderen Farbe, so wie im Lösungsvorschlag.</li>` +
+      (n ? `<li>Üben Sie jetzt mit Übungskarte ${n}. Danach geht es ${liste[idx + 1] ? "mit Aufgabe " + esc(liste[idx + 1].c.kennung) : "mit Ihrem Übungsweg"} weiter.</li>`
+        : `<li>Lesen Sie den Lösungsvorschlag, bis Sie ihn ohne Hinsehen erklären können.</li>`) + `</ol></div></div>`;
+  }
+  function zurUebung(n) {  // Übungskarte jetzt; danach führt „weiter“ zurück in die Lösungskarten
+    const u = `${key}/u${n}`;
+    rueckweg[u] = `${kid}/${id}`;
+    location.hash = `${kid}/${u}`;
+  }
+  function typischerFehler() {  // „Viele denken: …“ aus dem Kasten der Lösung, falls vorhanden
+    const k = hinten && hinten.querySelector(".kasten.fehler p");
+    return k ? k.textContent.split(" · ")[0].trim() : "";
+  }
+
   function stufe(s) {
+    mitte.innerHTML = ""; unten.innerHTML = "";
     if (!c.hinten) {
-      leiste.innerHTML = `<a class="haupt" data-fertig href="${weiterZiel}">${naechste ? "Weiter mit " + weiterLabel : "Zur Übersicht"}</a>`;
+      setzeLeiste(`<a class="haupt" data-fertig href="${weiterZiel}">${weiterLabel}</a>`);
     } else if (s === "zu") {
       hinten.hidden = true;
-      leiste.innerHTML = `<button type="button" class="haupt" data-schritt="frage">Lösung aufdecken</button>`;
+      setzeLeiste(`<button type="button" class="haupt" data-schritt="frage">${art === "l" && c.kontrolle ? "Antwort prüfen" : "Lösung aufdecken"}</button>`);
     } else if (s === "frage") {
-      if (bestaetigt.has(id)) return stufe("auf");
-      leiste.innerHTML = `<p>Steht Ihre eigene Antwort schon in Ihren Unterlagen?</p><div class="reihe">` +
-        `<button type="button" class="haupt" data-schritt="ja">Ja, aufdecken</button>` +
-        `<button type="button" class="neben" data-schritt="zu">Noch nicht</button></div>`;
-      leiste.querySelector(".haupt").focus();
-    } else if (s === "auf") {
+      if (bestaetigt.has(id)) return stufe("weiter");
+      const l = setzeLeiste(`<p>Steht Ihre eigene Antwort schon in Ihren Unterlagen?</p><div class="reihe">` +
+        `<button type="button" class="haupt" data-schritt="weiter">Ja</button>` +
+        `<button type="button" class="neben" data-schritt="zu">Noch nicht</button></div>`);
+      l.querySelector(".haupt").focus();
+    } else if (s === "weiter") {
       bestaetigt.add(id);
+      if (art === "l" && c.kontrolle) return stufe(diagnose[id] ? "ergebnis" : "kontrolle");
+      return stufe("auf");
+    } else if (s === "kontrolle") {
+      hinten.hidden = true;
+      const opt = mischen(c.kontrolle.optionen);
+      mitte.innerHTML = `<section class="kontrolle"><div class="titel">Kontrollfrage</div><p class="frage">${esc(c.kontrolle.frage)}</p>` +
+        `<p class="leise">Wählen Sie, was zu Ihrer Antwort passt. Danach sehen Sie die Lösung.</p><ul class="liste">` +
+        opt.map((o, i) => `<li><button type="button" class="zeile" data-opt="${i}"><span class="sym offen" aria-hidden="true"></span>` +
+          `<span class="text"><b>${esc(o.text)}</b></span></button></li>`).join("") + `</ul></section>`;
+      mitte.onclick = ev => {
+        const b = ev.target.closest("[data-opt]");
+        if (!b) return;
+        const o = opt[+b.dataset.opt];
+        diagnostiziere(o.richtig ? {ok: true, wahl: o.text} : {ok: false, fehler: o.fehler, uebung: [o.uebung], wahl: o.text});
+      };
+      setzeLeiste(`<button type="button" class="neben" data-schritt="zu">Zurück zur Aufgabe</button>`);
+      mitte.scrollIntoView({block: "start", behavior: "smooth"});
+    } else if (s === "auf") {
       hinten.hidden = false;
-      leiste.innerHTML = `<p>Vergleichen Sie mit Ihrer Antwort. Wie war es?</p>` +
-        `<a class="haupt" data-fertig href="${weiterZiel}">${richtig}</a>${falsch}` +
-        `<button type="button" class="textknopf" data-schritt="zu">Lösung wieder zudecken</button>`;
+      if (art === "l") {
+        // Fehlerwahl ohne Kontrollfrage: benannte Fehlerbilder aus „Wenn falsch“ statt „War es richtig?“
+        const zeile = (diag, sym, b, small) => `<li><button type="button" class="zeile" data-diag="${diag}">${sym}<span class="text"><b>${b}</b><small>${small}</small></span></button></li>`;
+        const z = [zeile("ok", `<span class="sym" aria-hidden="true">✓</span>`, "Stimmt", `Alles wie im Lösungsvorschlag. → ${weiterLabel}`)];
+        for (const n of ziele) z.push(zeile("u" + n, `<span class="sym warn" aria-hidden="true">!</span>`,
+          ziele.length > 1 ? `Nicht richtig bei: ${esc(stich(n) || "Übungskarte " + n)}` : "Nicht richtig",
+          `Korrigieren, dann gleich Übungskarte ${n}${ziele.length > 1 || !stich(n) ? "" : ": " + esc(stich(n))}`));
+        if (!ziele.length) z.push(zeile("falsch", `<span class="sym warn" aria-hidden="true">!</span>`, "Nicht richtig", "Korrigieren und verstehen, dann weiter"));
+        z.push(zeile("unsicher", `<span class="sym frage" aria-hidden="true">?</span>`, "Unsicher, ob meine Antwort passt", "Mit einem zweiten Blick klären"));
+        unten.innerHTML = `<section class="kontrolle"><p class="frage">Vergleichen Sie mit Ihrer Antwort. Was trifft zu?</p><ul class="liste">${z.join("")}</ul></section>`;
+        unten.onclick = ev => {
+          const b = ev.target.closest("[data-diag]");
+          if (!b) return;
+          const v = b.dataset.diag;
+          if (v === "ok") { diagnose[id] = {ok: true, t: Date.now()}; erledigt.add(id); sichern(); location.hash = weiterZiel; }
+          else if (v === "unsicher") stufe("unsicher");
+          else if (v === "falsch") diagnostiziere({ok: false, fehler: "Nicht richtig", uebung: []});
+          else { const n = +v.slice(1); diagnostiziere({ok: false, fehler: "Nicht richtig", uebung: [n]}); }
+        };
+        setzeLeiste(null);
+      } else {
+        setzeLeiste(`<a class="haupt" data-fertig href="${weiterZiel}">Geschafft. ${weiterLabel}</a>` +
+          `<a class="neben" href="${weiterZiel}">Noch nicht richtig: korrigiert, ${weiterLabel.replace(/^Weiter/, "weiter").replace(/^Zurück/, "zurück")}</a>` + nochEine);
+      }
       hinten.scrollIntoView({block: "start", behavior: "smooth"});
+    } else if (s === "unsicher") {
+      // Kein zweites Mal dieselben Prüfpunkte: neuer Blick über den typischen Fehler und den Sitznachbarn
+      hinten.hidden = false;
+      const tf = typischerFehler();
+      unten.innerHTML = `<section class="kontrolle"><p class="frage">Holen Sie sich einen zweiten Blick:</p><ol class="schritte">` +
+        (tf ? `<li>Steckt dieser typische Fehler in Ihrer Antwort? <i>${esc(tf)}</i></li>` : "") +
+        `<li>Zeigen Sie Ihre Antwort und den Lösungsvorschlag Ihrer Sitznachbarin oder Ihrem Sitznachbarn. Sagen beide dasselbe, auch wenn die Worte anders sind?</li></ol></section>`;
+      setzeLeiste(`<p>Und jetzt?</p><div class="reihe">` +
+        `<button type="button" class="haupt" data-schritt="passt">Passt doch</button>` +
+        `<button type="button" class="neben" data-schritt="passtnicht">Passt nicht</button></div>` +
+        `<button type="button" class="textknopf" data-schritt="offennachbar">Bleibt unklar: Lehrkraft fragen</button>`);
+      unten.scrollIntoView({block: "start", behavior: "smooth"});
+    } else if (s === "passt") {
+      diagnose[id] = {ok: true, t: Date.now()}; erledigt.add(id); sichern(); location.hash = weiterZiel; return;
+    } else if (s === "passtnicht") {
+      if (ziele.length > 1) return stufe("auf");   // mehrere Fehlerbilder: genau wählen lassen
+      return diagnostiziere({ok: false, fehler: "Nicht richtig", uebung: ziele.slice(0, 1)});
+    } else if (s === "offen" || s === "offennachbar") {
+      const d = diagnose[id];
+      return diagnostiziere({ok: false, offen: true, nachbar: s === "offennachbar", fehler: "Offene Frage", uebung: d && d.uebung && d.uebung.length ? d.uebung : ziele.slice(0, 1), wahl: d && d.wahl});
+    } else if (s === "geklaert") {
+      const d = diagnose[id]; d.offen = false; d.fehler = d.fehler === "Offene Frage" ? "Frage geklärt" : d.fehler; sichern(); return stufe("ergebnis");
+    } else if (s === "uebung") {
+      return zurUebung(ueb1(diagnose[id]));
+    } else if (s === "ergebnis") {
+      hinten.hidden = false;
+      const d = diagnose[id];
+      const n = d.ok ? null : ueb1(d);
+      (c.kontrolle ? mitte : unten).innerHTML = ergebnisHtml(d);
+      let l;
+      if (d.ok) l = `<a class="haupt" href="${weiterZiel}">${weiterLabel}</a>` +
+        // Die Kontrollfrage prüft den Kern; findet die Schülerin beim Vergleichen doch einen Fehler, wählt sie ihn nach
+        (c.kontrolle ? `<button type="button" class="textknopf" data-schritt="nachwahl">Beim Vergleichen doch einen Fehler gefunden</button>` : "");
+      else if (d.offen) l = `<a class="haupt" href="${weiterZiel}">${weiterLabel}</a>` +
+        (n ? `<button type="button" class="neben" data-schritt="uebung">Erst Übungskarte ${n}</button>` : "") +
+        `<button type="button" class="textknopf" data-schritt="geklaert">Frage ist geklärt</button>`;
+      else if (n) l = `<button type="button" class="haupt" data-schritt="uebung">Korrigiert. Jetzt Übungskarte ${n}</button>` +
+        `<a class="neben" href="${weiterZiel}">Übungskarte später, erst ${weiterLabel.replace(/^Weiter mit /, "")}</a>` +
+        `<button type="button" class="textknopf" data-schritt="offen">Trotz Lösung unklar: als offene Frage notieren</button>`;
+      else l = `<a class="haupt" href="${weiterZiel}">Korrigiert und verstanden. ${weiterLabel}</a>` +
+        `<button type="button" class="textknopf" data-schritt="offen">Noch unklar: als offene Frage notieren</button>`;
+      setzeLeiste(l + `<button type="button" class="textknopf" data-schritt="neu">Diese Karte noch einmal</button>`);
+      (c.kontrolle ? mitte : unten).scrollIntoView({block: "start", behavior: "smooth"});  // das Ergebnis, nicht die Lösung
+    } else if (s === "nachwahl") {
+      return stufe("auf");
+    } else if (s === "neu") {
+      delete diagnose[id]; erledigt.delete(id); sichern();
+      return stufe("zu");
     }
     passeAbstand();
   }
-  leiste.onclick = ev => {
+  leisteKlick = ev => {
     const b = ev.target.closest("[data-schritt]");
-    if (b) return stufe(b.dataset.schritt === "ja" ? "auf" : b.dataset.schritt);
-    if (ev.target.closest("[data-fertig]")) { erledigt.add(id); sichereErledigt(); }
-    const sp = ev.target.closest("[data-sprung]");
-    if (sp) rueckweg[`${key}/${sp.dataset.sprung}`] = `${kid}/${key}/${teil}`;
+    if (b) return stufe(b.dataset.schritt);
+    if (ev.target.closest("[data-fertig]")) { erledigt.add(id); sichern(); }
   };
-  stufe(bestaetigt.has(id) ? "auf" : "zu");
+  stufe(art === "l" && diagnose[id] ? "ergebnis" : bestaetigt.has(id) ? "weiter" : "zu");
 }
 
 app.addEventListener("click", ev => {
-  // „Wenn falsch: Übungskarte 2“ im Lösungstext springt direkt auf die Karte, der Pfeil führt zurück
-  const s = ev.target.closest("a.sprung");
+  // Verweis auf eine Übungskarte (im Lösungstext oder im Ergebnis): direkt hin, der Pfeil führt zurück
+  const s = ev.target.closest("a.sprung, a[data-von]");
   if (s) {
     ev.preventDefault();
-    const m = s.getAttribute("href").slice(1).match(/^(.*)-(u\d+)$/);
+    const h = s.getAttribute("href").slice(1);
+    const m = s.classList.contains("sprung") ? h.match(/^(.*)-(u\d+)$/) : h.match(/^[^/]+\/([^/]+)\/(u\d+)$/);
     if (m) {
       rueckweg[`${m[1]}/${m[2]}`] = hash();
       location.hash = `${hash().split("/")[0]}/${m[1]}/${m[2]}`;
     }
     return;
   }
-  // Zurück-Pfeil: wie die Handy-Taste, wenn wir von genau dort kamen; sonst zur Elternseite
   const z = ev.target.closest("[data-zurueck]");
   if (z && vorher === z.dataset.zurueck) { ev.preventDefault(); history.back(); return; }
   const r = ev.target.closest("[data-zuruecksetzen]");
   if (r) {
-    for (const e of [...erledigt]) if (e.startsWith(r.dataset.zuruecksetzen + "/")) erledigt.delete(e);
-    sichereErledigt();
+    const p = r.dataset.zuruecksetzen + "/";
+    for (const e of [...erledigt]) if (e.startsWith(p)) erledigt.delete(e);
+    for (const e of Object.keys(diagnose)) if (e.startsWith(p)) delete diagnose[e];
+    sichern();
     route();
   }
 });
 
 function route() {
   if (!D) { app.innerHTML = "<p>Die Karten konnten nicht geladen werden. Bitte Seite neu laden.</p>"; return; }
-  let roh = "";
-  try { roh = decodeURIComponent(hash()); } catch (e) { return start(); }
-  const t = roh.toLowerCase().split("/").filter(Boolean);
-  if (!t.length) {
-    const k = speicher.get("kurs");
-    return k && D.kurse[k] ? kursSeite(k) : start();
-  }
+  let r = "";
+  try { r = decodeURIComponent(hash()); } catch (e) { return start(); }
+  const t = r.toLowerCase().split("/").filter(Boolean);
+  if (!t.length) { const k = speicher.get("kurs"); return k && D.kurse[k] ? kursSeite(k) : start(); }
   if (t[0] === "klassen") return start();
   if (t.length === 1) return kursSeite(t[0]);
   if (t[1] === "frueher") return fruehereSeite(t[0]);
@@ -386,7 +603,7 @@ function route() {
   karteSeite(t[0], t[1], t[2]);
 }
 window.addEventListener("hashchange", ev => {
-  vorher = decodeURIComponent((ev.oldURL.split("#")[1] || "")).toLowerCase();
+  try { vorher = decodeURIComponent((ev.oldURL.split("#")[1] || "")).toLowerCase(); } catch (e) { vorher = ""; }
   route();
 });
 route();

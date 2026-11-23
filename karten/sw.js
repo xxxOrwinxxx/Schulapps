@@ -1,6 +1,6 @@
 // Offline-Fallback: immer zuerst das Netz (ohne Browser-Zwischenspeicher, damit geänderte Karten sofort
 // ankommen), sonst der eigene Speicher. Neuer Name bei Formatwechsel, alte Speicher räumt activate weg.
-const CACHE = "karten-v2";
+const CACHE = "karten-v3";
 // Gerüst und Daten gleich beim ersten Besuch speichern, damit die Karten auch ohne WLAN aufgehen;
 // Bilder kommen erst in den Speicher, wenn sie einmal angesehen wurden.
 self.addEventListener("install", e => e.waitUntil(
