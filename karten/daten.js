@@ -1,5 +1,5 @@
 window.KARTEN = {
-"stand": "2026-11-23",
+"stand": "2026-11-24",
 "lbs": [
 {
 "id": "b13lb2",
@@ -560,6 +560,99 @@ window.KARTEN = {
 "stichwort": "Entwicklungswege in einem neuen Fall",
 "vorn": "<p>Im Sommer melden viele Menschen in Deutschland einen „Kolibri“ im Garten. Meist ist es das Taubenschwänzchen, ein Schmetterling (Schwärmer). Es steht im Schwirrflug vor Blüten und saugt mit einem langen Rüssel Nektar. Kolibris sind Vögel mit Knochen und Federn und trinken Nektar mit Schnabel und Zunge.</p>\n<p>Ordnen Sie die Ähnlichkeit einem Entwicklungsweg zu und begründen Sie.</p>\n<p>Erklären Sie, wie die Ähnlichkeit entstanden ist, ohne eine Absicht zu unterstellen.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Ich begründe mit Bauplan und Herkunft.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Kein „um zu“, kein „wollten“.</span></label></div>",
 "hinten": "<p>Konvergenz: Insekt (Außenskelett, sechs Beine, Rüssel) und Vogel (Knochen, Federn, Schnabel) sind ganz verschieden gebaut und haben keine gemeinsame Ausgangsform mit Schwirrflug.</p>\n<p>Entstehung: In beiden Linien hatten Varianten, die im Flug an Blüten Nektar erreichten, mehr Nachkommen. Über viele Generationen wurden diese Merkmale unabhängig voneinander häufiger (ähnlicher Selektionsdruck).</p>"
+}
+]
+},
+{
+"nr": 7,
+"key": "b13lb2-ds7",
+"titel": "Wie zeigt das Erbgut, wer mit wem verwandt ist?",
+"loesung": [
+{
+"kennung": "7.1 bis 7.3",
+"stichwort": "Aus dem Kopf",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Ich habe ohne Unterlagen geantwortet.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>In 7.3 nenne ich, was genau ein Codon festlegt.</span></label></div>",
+"hinten": "<div class=\"kasten geloest\"><div class=\"klabel\">7.1</div><div class=\"tab\"><table><tr><th></th><th><strong>Aussage</strong></th><th><strong>homolog oder analog?</strong></th></tr><tr><td>a</td><td>ähnliche Form bei verschiedenem Bauplan, unabhängig entstanden</td><td>☐ homolog <strong>☒</strong> analog</td></tr><tr><td>b</td><td>gleicher Grundbauplan, von einem gemeinsamen Vorfahren geerbt</td><td><strong>☒</strong> homolog ☐ analog</td></tr></table></div></div>\n<p>7.2 Eine Mutation ist eine zufällige Veränderung der Basenfolge der DNA, die vererbt werden kann. Sie entsteht nicht gezielt und nicht durch Gebrauch.</p>\n<p>7.3 Ein Codon (drei aufeinanderfolgende Basen der mRNA) legt eine Aminosäure fest (oder Start oder Stopp der Übersetzung).</p>\n<p>Wenn falsch: Antwort Schritt für Schritt mit dieser Karte vergleichen, dann nachfragen.</p>"
+},
+{
+"kennung": "7.5",
+"stichwort": "Warum das ganze Protein?",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Ich nenne, dass ein Ausschnitt nur einen Teil der Unterschiede zeigt.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Ich nenne, was das für den Vergleich bedeutet.</span></label></div>",
+"hinten": "<p>Ein Ausschnitt zeigt nur einen Teil der Unterschiede, und sie sind ungleich über das Protein verteilt: Im Musterbeispiel liegen 6 der 12 Unterschiede des Pferds in nur 20 von 104 Positionen. Ein Ausschnitt kann also zu viele oder zu wenige zeigen; erst das ganze Protein gibt eine verlässliche Zahl.</p>\n<div class=\"kasten fehler\"><div class=\"klabel\">⚠ Typischer Fehler</div><p>Viele denken: Der Ausschnitt reicht, er zeigt ja schon, wer mehr Unterschiede hat. · Das stimmt nicht, weil die Zahlen im Ausschnitt verzerrt sein können (Pferd 6 statt 12). · Fachlich gilt: Je mehr Positionen verglichen werden, desto verlässlicher der Schluss.</p></div>\n<p>Wenn falsch: erst Übungskarte <a class=\"sprung\" href=\"#b13lb2-ds7-u4\">4</a>, dann weiter.</p>"
+},
+{
+"kennung": "7.6 und 7.4",
+"stichwort": "Wer ist der nächste Verwandte des Wals? Zurück zur Vorhersage",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>a) Ich habe Position für Position verglichen.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>b) Meine Reihenfolge folgt der Tabelle, nicht dem Ausschnitt.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>c) Ich begründe mit der Zahl der Unterschiede und der Zeit seit der Trennung.</span></label></div>",
+"hinten": "<div class=\"kasten geloest\"><div class=\"klabel\">7.6</div><div class=\"tab\"><table><tr><th><strong>Schritt</strong></th><th><strong>Ihre Antwort</strong></th></tr><tr><td>a) Zählen Sie in Abbildung 1 die Unterschiede zum Blauwal.</td><td>Flusspferd <em> 2 </em>   Rind <em> 4 </em>   Seekuh <em> 7 </em></td></tr><tr><td>b) Ordnen Sie Flusspferd, Rind, Schwein und Seekuh mit der Tabelle in M1.</td><td><em>Flusspferd, Rind, Schwein, Seekuh</em></td></tr><tr><td>c) Begründen Sie, welches der vier Tiere aus b) mit dem Blauwal am nächsten verwandt ist.</td><td><br><em>Flusspferd: wenigste Unterschiede, Trennung am kürzesten her (nur ein Hinweis).</em></td></tr></table></div></div>\n<p><img src=\"bilder/5b35cf28c5a50fb3.png\" alt=\"Abbildung der Karte\" style=\"max-width:min(100%,10.0cm)\" loading=\"lazy\"></p>\n<p>c) Das Flusspferd: Es hat die wenigsten Unterschiede, die Trennung vom gemeinsamen Vorfahren liegt am kürzesten zurück. Der Vorsprung ist klein (42 gegen 45 und 46); ein Protein ist nur ein Hinweis, gesichert ist es durch viele Gene und weitere Belege (warum: Übungskarte <a class=\"sprung\" href=\"#b13lb2-ds7-u4\">4</a>). Die Seekuh hat mit Abstand die meisten Unterschiede; ihre Walform ist analog (Konvergenz).</p>\n<p>Der Tümmler zählt nicht mit: Er ist selbst ein Wal.</p>\n<div class=\"kasten fehler\"><div class=\"klabel\">⚠ Typischer Fehler</div><p>Viele denken: die Seekuh, weil sie wie ein Wal aussieht. · Das stimmt nicht: Ähnliche Form kann unabhängig entstehen (DS6). · Fachlich gilt: Verwandtschaft zeigt das Erbgut.</p></div>\n<p>Zurück zu 7.4: Nach diesem Protein ist das Flusspferd der nächste Verwandte; viele weitere Gene bestätigen das. Vergleichen Sie mit Ihrer Vorhersage.</p>\n<p>Wenn falsch: erst Übungskarte <a class=\"sprung\" href=\"#b13lb2-ds7-u1\">1</a>, dann weiter.</p>"
+},
+{
+"kennung": "7.7",
+"stichwort": "Insulin aus Bakterien",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>a) Sechs Aminosäuren, in der Reihenfolge der Codons.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>b) Ich nenne den gemeinsamen genetischen Code.</span></label></div>",
+"hinten": "<div class=\"kasten geloest\"><div class=\"klabel\">7.7</div><div class=\"tab\"><table><tr><th><strong>Codon (mRNA)</strong></th><th><strong>UUU</strong></th><th><strong>GUG</strong></th><th><strong>AAC</strong></th><th><strong>CAA</strong></th><th><strong>CAC</strong></th><th><strong>CUG</strong></th></tr><tr><td>Aminosäure</td><td><em>Phe</em></td><td><em>Val</em></td><td><em>Asn</em></td><td><em>Gln</em></td><td><em>His</em></td><td><em>Leu</em></td></tr></table></div></div>\n<p>a) Phe · Val · Asn · Gln · His · Leu (Phenylalanin, Valin, Asparagin, Glutamin, Histidin, Leucin).</p>\n<p>b) Das Bakterium übersetzt die eingebaute Basenfolge mit demselben genetischen Code wie der Mensch: Jedes Codon steht für dieselbe Aminosäure, deshalb entsteht dieselbe Aminosäurefolge, also menschliches Insulin.</p>\n<div class=\"kasten fehler\"><div class=\"klabel\">⚠ Typischer Fehler</div><p>Viele denken: Bakterium und Mensch sind eng verwandt, deshalb klappt es. · Das stimmt nicht: Sie sind sehr entfernt verwandt. · Fachlich gilt: Es klappt, weil beide denselben Code nutzen.</p></div>\n<p>Wenn falsch: erst Übungskarte <a class=\"sprung\" href=\"#b13lb2-ds7-u2\">2</a>, dann weiter.</p>"
+},
+{
+"kennung": "7.8",
+"stichwort": "Nur dieser Code funktioniert?",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Mehrere Antworten gelten.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Schritt 1 stützt sich auf den Satz über die Beliebigkeit des Codes.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Schritt 3 verbindet Befund und Erwartung zu einem Schluss auf gemeinsame Abstammung.</span></label></div>",
+"hinten": "<div class=\"kasten geloest\"><div class=\"klabel\">7.8</div><div class=\"tab\"><table><tr><th><strong>Schritt</strong></th><th><strong>Ihre Antwort</strong></th></tr><tr><td>1 Prüfen Sie die Aussage mit dem Kasten in M2.</td><td><br><br><em>Falsch: anderer Code ginge auch.</em></td></tr><tr><td>2 Nennen Sie, welche Codes man erwarten müsste, wenn das Leben mehrmals unabhängig entstanden wäre.</td><td><br><em>Verschiedene Codes.</em></td></tr><tr><td>3 Folgern Sie, worauf der gemeinsame Code hinweist.</td><td><br><br><em>Von gemeinsamen Vorfahren geerbt.</em></td></tr></table></div></div>\n<p>Tragfähig ist zum Beispiel: 1 Die Aussage trifft nicht zu: Laut Kasten in M2 gibt es keinen chemischen Grund für die Zuordnung, eine andere wäre ebenfalls brauchbar. 2 Wäre das Leben mehrmals unabhängig entstanden, müsste man verschiedene Codes erwarten. 3 Fast alle Lebewesen nutzen denselben beliebigen Code: Das spricht dafür, dass alle ihn von gemeinsamen Vorfahren geerbt haben.</p>\n<p>Nicht trägt: „Der Code ist gleich, weil alle Lebewesen Proteine brauchen.“ Proteine bräuchten sie auch mit einem anderen Code.</p>\n<p>Wenn falsch: erst Übungskarte <a class=\"sprung\" href=\"#b13lb2-ds7-u2\">2</a>, dann weiter.</p>"
+},
+{
+"kennung": "7.9 und 7.10",
+"stichwort": "Ohne Nachsehen: Leuchtende Würmer, Antwort auf die Leitfrage",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>7.9: genau ein Kreuz in a) und eines in b).</span></label><label class=\"haken\"><input type=\"checkbox\"><span>7.10: Mehrere Antworten gelten. Mein erster Satz nennt Unterschiede und Zeit seit der Trennung, mein zweiter den genetischen Code.</span></label></div>",
+"hinten": "<div class=\"kasten geloest\"><div class=\"klabel\">7.9</div><p>☐ A ein eigenes Wurmprotein, das zufällig ganz ähnlich leuchtet</p><p>☐ B ein verändertes GFP, weil der Wurm die Codons anders übersetzt</p><p><strong>☒</strong> C dasselbe Protein GFP mit derselben Aminosäurefolge wie bei der Qualle</p><p>☐ D gar kein Protein; die mRNA des Quallen-Gens leuchtet selbst</p><p>b) Kreuzen Sie den entscheidenden Grund an (genau ein Kreuz):</p><p>☐ 1 Qualle und Fadenwurm sind eng verwandt und lesen ihre Gene deshalb auf dieselbe Weise.</p><p>☐ 2 Das Gen enthält das Leuchten als fertiges Merkmal, das der Wurm von der Qualle übernimmt.</p><p>☐ 3 Der Wurm stellt sein Erbgut auf das neue Gen um, weil er es sonst nicht nutzen könnte.</p><p><strong>☒</strong> 4 Wurm und Qualle ordnen jedem Codon dieselbe Aminosäure zu, das Gen ergibt so dasselbe Protein.</p></div>\n<p>a) C · b) Grund 4. Grund 1 stimmt nicht, Qualle und Wurm sind entfernt verwandt. Grund 2: Ein Gen legt eine Aminosäurefolge fest, kein fertiges Merkmal. Grund 3 unterstellt eine Absicht. A und B übersehen den gemeinsamen Code, D verwechselt mRNA und Protein.</p>\n<p>7.10 Tragfähig ist zum Beispiel: Man vergleicht die Sequenz desselben Proteins oder Gens: Je weniger Unterschiede, desto kürzer ist die Trennung vom gemeinsamen Vorfahren her, weil sich seitdem Mutationen ansammeln. Dass fast alle Lebewesen denselben beliebigen genetischen Code nutzen, weist auf eine gemeinsame Abstammung allen Lebens hin.</p>\n<p>Wenn falsch: Übungskarte <a class=\"sprung\" href=\"#b13lb2-ds7-u2\">2</a> (7.9) oder Übungskarte <a class=\"sprung\" href=\"#b13lb2-ds7-u1\">1</a> (7.10).</p>"
+}
+],
+"uebung": [
+{
+"nr": 1,
+"niveau": 1,
+"niveau_wort": "Grundlagen",
+"stichwort": "Ich werte einen Sequenzvergleich aus: Ich zähle die Unterschiede und schließe daraus begründet, welche Arten näher verwandt sind.",
+"vorn": "<p>Cytochrom c bei Mensch, Huhn und Neunauge (ein urtümliches, kieferloses Wirbeltier).</p>\n<p><img src=\"bilder/73036888e08031a4.png\" alt=\"Abbildung der Karte\" style=\"max-width:min(100%,13.0cm)\" loading=\"lazy\"></p>\n<p>a) Zählen Sie im Ausschnitt die Unterschiede zum Menschen.</p>\n<p>b) Im ganzen Protein sind es: Huhn 13, Neunauge 20. Begründen Sie, welche Art näher mit dem Menschen verwandt ist.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Position für Position verglichen?</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Begründung mit Unterschieden und Zeit seit der Trennung?</span></label></div>",
+"hinten": "<p><img src=\"bilder/670ecc70c568f410.png\" alt=\"Abbildung der Karte\" style=\"max-width:min(100%,13.0cm)\" loading=\"lazy\"></p>\n<p>a) Huhn 4, Neunauge 7.</p>\n<p>b) Das Huhn: weniger Unterschiede im ganzen Protein (13 gegen 20), die Trennung der Linien von Mensch und Huhn liegt kürzer zurück; seitdem hatten weniger Mutationen Zeit, sich anzusammeln.</p>"
+},
+{
+"nr": 2,
+"niveau": 1,
+"niveau_wort": "Grundlagen",
+"stichwort": "Ich erläutere, warum der gemeinsame genetische Code ein Hinweis auf eine gemeinsame Abstammung aller Lebewesen ist.",
+"vorn": "<p>Ein Bakterium und eine Buche haben in je einem Gen denselben Abschnitt (mRNA): GCA AAA GUG.</p>\n<p>a) Übersetzen Sie den Abschnitt für beide Lebewesen. Code-Tabelle: GCA Alanin, AAA Lysin, GUG Valin.</p>\n<p>b) Erklären Sie, warum Bakterium und Buche dieselbe Aminosäurefolge bilden.</p>\n<p>c) Nennen Sie, was man erwarten müsste, wenn Bakterien und Pflanzen unabhängig voneinander entstanden wären.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Drei Aminosäuren je Lebewesen?</span></label><label class=\"haken\"><input type=\"checkbox\"><span>In b) steht der Code, nicht die Verwandtschaft?</span></label></div>",
+"hinten": "<p>a) Bakterium: Ala · Lys · Val. Buche: Ala · Lys · Val.</p>\n<p>b) Beide übersetzen mit demselben genetischen Code: Jedes Codon steht für dieselbe Aminosäure.</p>\n<p>c) Verschiedene Codes: Eine Zuordnung ist beliebig, unabhängig entstandene Lebewesen hätten kaum zufällig dieselbe. Der gemeinsame Code spricht deshalb für gemeinsame Vorfahren.</p>"
+},
+{
+"nr": 3,
+"niveau": 1,
+"niveau_wort": "Grundlagen",
+"stichwort": "Ich begründe, warum weniger Unterschiede im Erbgut eine kürzere Zeit seit der Trennung zweier Linien bedeuten.",
+"vorn": "<p>Im Cytochrom c gibt es zwischen Mensch und Schimpanse keinen Unterschied, zwischen Mensch und Pferd 12. Im ganzen Erbgut sind zwischen Mensch und Schimpanse etwa 1,2 % der Basen ausgetauscht (Schimpansen-Genomprojekt 2005).</p>\n<p>a) Erklären Sie, wie zwei Arten im Cytochrom c gleich sein können und trotzdem verschiedene Arten sind.</p>\n<p>b) Begründen Sie mit Mutationen, warum Mensch und Pferd mehr Unterschiede haben als Mensch und Schimpanse.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>In a) unterscheide ich ein Protein vom ganzen Erbgut?</span></label><label class=\"haken\"><input type=\"checkbox\"><span>In b) kommen Mutation und Zeit seit der Trennung vor?</span></label></div>",
+"hinten": "<p>a) Ein Protein ist nur ein kleiner Teil des Erbguts. Cytochrom c verändert sich sehr langsam; in anderen Genen unterscheiden sich Mensch und Schimpanse (etwa 1,2 % der Basen).</p>\n<p>b) Die Linien von Mensch und Pferd trennten sich viel früher als die von Mensch und Schimpanse. In jeder Linie sammeln sich seit der Trennung zufällige Mutationen an, also bei Mensch und Pferd mehr.</p>"
+},
+{
+"nr": 4,
+"niveau": 2,
+"niveau_wort": "Vertiefung",
+"stichwort": "Verlässlichkeit: Reicht ein Gen?",
+"vorn": "<p>Ein zweites Protein der Mitochondrien (ND2, 347 Aminosäuren), gleiche Methode wie in 7.6.</p>\n<div class=\"tab\"><table><tr><th><strong>Unterschiede zum Blauwal</strong></th><th><strong>Flusspferd</strong></th><th><strong>Rind</strong></th><th><strong>Schwein</strong></th><th><strong>Seekuh</strong></th></tr><tr><td>Cytochrom b (aus 7.6)</td><td>42</td><td>45</td><td>46</td><td>68</td></tr><tr><td>ND2</td><td>77</td><td>73</td><td>85</td><td>114</td></tr></table></div>\n<p>a) Vergleichen Sie die Reihenfolge in beiden Proteinen.</p>\n<p>b) Beurteilen Sie, ob ein einzelnes Gen ausreicht, um den nächsten Verwandten des Wals zu bestimmen.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>In a) nenne ich, was gleich bleibt und was sich ändert?</span></label><label class=\"haken\"><input type=\"checkbox\"><span>In b) steht ein Urteil mit Grund?</span></label></div>",
+"hinten": "<p>a) In beiden Proteinen hat die Seekuh mit Abstand die meisten Unterschiede. Flusspferd und Rind tauschen die Plätze; ihre Zahlen liegen in beiden Proteinen dicht beieinander.</p>\n<p>b) Nein. Ein Gen ist ein Hinweis; liegen die Zahlen dicht beieinander, kann der Zufall der Mutationen die Reihenfolge vertauschen. Forschende vergleichen deshalb viele Gene und weitere Belege. Damit gilt heute das Flusspferd als nächster lebender Verwandter der Wale; dass die Seekuh entfernt ist, zeigen beide Proteine klar.</p>"
+},
+{
+"nr": 5,
+"niveau": 2,
+"niveau_wort": "Vertiefung",
+"stichwort": "Ausnahmen im genetischen Code beurteilen",
+"vorn": "<p>In den Mitochondrien des Menschen steht UGA nicht für Stopp, sondern für die Aminosäure Tryptophan. Bei manchen Wimpertierchen stehen UAA und UAG für Glutamin statt für Stopp.</p>\n<p>Ein Mitschüler sagt: „Damit ist der Code nicht bei allen gleich, also spricht er nicht für eine gemeinsame Abstammung.“</p>\n<p>Beurteilen Sie die Aussage. Nennen Sie dazu, wie viele der 64 Codons in den Beispielen betroffen sind und was für die übrigen gilt.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Ich nenne die Zahl der betroffenen Codons?</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Mein Urteil hat einen Grund?</span></label></div>",
+"hinten": "<p>Die Aussage trägt nicht. Betroffen sind jeweils nur wenige der 64 Codons (in den Beispielen eines bzw. zwei), oft Stoppcodons; alle übrigen Zuordnungen sind gleich. Das passt zu einem gemeinsamen Code, der sich in einzelnen Linien später an wenigen Stellen verändert hat. Unabhängig entstandene Codes müssten sich in sehr vielen Zuordnungen unterscheiden.</p>"
+},
+{
+"nr": 6,
+"niveau": 3,
+"niveau_wort": "Transfer",
+"stichwort": "Transfer: Erbgut einer ausgestorbenen Art",
+"vorn": "<p>Aus Mammutknochen aus dem sibirischen Dauerfrostboden ließ sich das Erbgut der Mitochondrien lesen. Verglichen wurden 13 Gene (etwa 11 400 Basen, eigene Auszählung aus der Gendatenbank NCBI).</p>\n<div class=\"tab\"><table><tr><th><strong>Vergleich</strong></th><th><strong>Unterschiede (Basen)</strong></th></tr><tr><td>Mammut und Asiatischer Elefant</td><td>633</td></tr><tr><td>Mammut und Afrikanischer Elefant</td><td>666</td></tr><tr><td>Asiatischer und Afrikanischer Elefant</td><td>672</td></tr></table></div>\n<p>a) Leiten Sie ab, mit welchem heutigen Elefanten das Mammut näher verwandt ist.</p>\n<p>b) Beurteilen Sie, wie sicher dieser Schluss ist.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>In a) begründe ich mit den Zahlen?</span></label><label class=\"haken\"><input type=\"checkbox\"><span>In b) beachte ich, wie dicht die Zahlen beieinander liegen?</span></label></div>",
+"hinten": "<p>a) Mit dem Asiatischen Elefanten: 633 Unterschiede gegen 666. Die Linien von Mammut und Asiatischem Elefant trennten sich also später als die vom Afrikanischen Elefanten.</p>\n<p>b) Nur ein Hinweis: Die Zahlen liegen dicht beieinander (etwa 5 % Abstand), und es sind nur Gene der Mitochondrien. Sicherer wird der Schluss mit Genen aus dem Zellkern; 2010 kam eine Forschungsgruppe damit zum selben Ergebnis.</p>"
 }
 ]
 }
@@ -1155,6 +1248,7 @@ window.KARTEN = {
 {
 "id": "b13lb2",
 "ds": [
+7,
 6,
 5,
 4,
