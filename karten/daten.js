@@ -1,5 +1,5 @@
 window.KARTEN = {
-"stand": "2026-11-25",
+"stand": "2026-11-26",
 "lbs": [
 {
 "id": "b13lb2",
