@@ -1,5 +1,5 @@
 window.KARTEN = {
-"stand": "2026-11-26",
+"stand": "2026-11-27",
 "lbs": [
 {
 "id": "b13lb2",
@@ -1237,6 +1237,99 @@ window.KARTEN = {
 "hinten": "<p>50 · 84 kg = 4200 kg CO₂.</p>\n<p>Ersparnis je km: 178 g − 58 g = 120 g. 4 200 000 g : 120 g = 35 000 km.</p>\n<p>Tragfähig ist zum Beispiel: Nein. Nach etwa 35 000 von 220 000 km hat das Elektroauto den Rucksack eingeholt; danach spart es je km 120 g.</p>"
 }
 ]
+},
+{
+"nr": 8,
+"key": "nw13lb2-ds8",
+"titel": "Wie viel CO₂ kostet Ihr Schulweg im Jahr, und ab wann wäre eine Alternative nach Kriterium 1 nachhaltiger?",
+"loesung": [
+{
+"kennung": "8.1 bis 8.3",
+"stichwort": "Aus dem Kopf",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Ich habe ohne Unterlagen geantwortet.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>8.1: durch die Personen geteilt.</span></label></div>",
+"hinten": "<p>8.1 178 g : 3 ≈ 59 g je Personenkilometer.</p>\n<p>8.2 Strom erzeugen: Bereitstellung. Erdöl transportieren: Bereitstellung. Diesel verbrennen: Nutzung.</p>\n<div class=\"kasten geloest\"><div class=\"klabel\">8.3</div><p>☐ Der Bus ist umweltfreundlicher als das Auto, weil viele mitfahren und es weniger Verkehr gibt.</p><p><strong>☒</strong> Mit Bereitstellung verursacht der Bus 90 g CO₂ je Personenkilometer, ein Auto allein 178 g: Der Bus ist besser.</p><p>☐ Das Elektroauto stößt 0 g CO₂ aus und ist deshalb auf jeden Fall besser als der Bus.</p></div>\n<p>Das zweite Urteil: Größe mit Einheit (g CO₂ je Personenkilometer) und Systemgrenze (mit Bereitstellung). Das erste nennt keine Größe, das dritte zählt nur den Auspuff.</p>\n<p>Wenn falsch: Antwort Schritt für Schritt mit dieser Karte vergleichen, dann nachfragen.</p>"
+},
+{
+"kennung": "8.5",
+"stichwort": "Ihr Schulweg im Jahr",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Mehrere Antworten gelten (Ihr eigener Weg).</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Strecke mal 2 mal 190, dann mal g je Personenkilometer.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Die Alternative braucht kein neues Fahrzeug.</span></label></div>",
+"hinten": "<div class=\"kasten geloest\"><div class=\"klabel\">8.5</div><div class=\"tab\"><table><tr><th></th><th><strong>Verkehrsmittel</strong></th><th><strong>Rechnung</strong></th><th><strong>kg CO₂ je Jahr</strong></th></tr><tr><td>mein Weg</td><td><em>z. B. Auto allein (Diesel)</em></td><td><em>14 km · 2 · 190 = 5320 km; · 178 g</em></td><td><em>947</em></td></tr><tr><td>Alternative</td><td><em>Linienbus</em></td><td><em>5320 km · 90 g</em></td><td><em>479</em></td></tr></table></div></div>\n<p>Beispiel Ben: 14 km · 2 · 190 = 5320 km; allein im Diesel 5320 · 178 g = 947 kg im Jahr. Alternative Linienbus: 5320 · 90 g = 479 kg, etwa die Hälfte.</p>\n<p>Fahren Sie mit zwei Personen im Auto, teilen Sie 178 g durch 2.</p>\n<div class=\"kasten fehler\"><div class=\"klabel\">⚠ Typischer Fehler</div><p>Viele denken: Die Strecke einfach reicht. Das stimmt nicht, weil jeder Schultag Hin- und Rückweg hat. Fachlich gilt: Strecke mal 2 mal 190.</p></div>\n<p>Wenn falsch: erst Übungskarte <a class=\"sprung\" href=\"#nw13lb2-ds8-u2\">2</a>, dann weiter.</p>"
+},
+{
+"kennung": "8.6",
+"stichwort": "Systemgrenze festlegen",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Jeder Schritt hat genau ein Kreuz.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Jedes „darf weg“ ist begründet.</span></label></div>",
+"hinten": "<div class=\"kasten geloest\"><div class=\"klabel\">8.6</div><div class=\"tab\"><table><tr><th><strong>Schritt</strong></th><th><strong>zählt mit</strong></th><th><strong>darf weg, weil …</strong></th></tr><tr><td>Batterie herstellen</td><td><strong>☒</strong></td><td>☐</td></tr><tr><td>Karosserie, Sitze und Räder herstellen</td><td>☐</td><td><strong>☒</strong><em> bei beiden gleich</em></td></tr><tr><td>Diesel und Strom bereitstellen</td><td><strong>☒</strong></td><td>☐</td></tr><tr><td>Fahren</td><td><strong>☒</strong></td><td>☐</td></tr><tr><td>Straße bauen</td><td>☐</td><td><strong>☒</strong><em> beide nutzen dieselbe Straße</em></td></tr></table></div></div>\n<p>Zählt mit: Batterie herstellen, Diesel und Strom bereitstellen, Fahren (hier unterscheiden sich die beiden).</p>\n<p>Darf weg: Karosserie, Sitze und Räder, weil Ben sie bei beiden neuen Autos gleich braucht; Straße bauen, weil beide dieselbe Straße nutzen.</p>\n<p>Ebenso richtig: Karosserie zählt mit, wenn Sie begründen, dass sie bei beiden nicht genau gleich ist.</p>\n<div class=\"kasten fehler\"><div class=\"klabel\">⚠ Typischer Fehler</div><p>Viele denken: Herstellung darf immer weg, sie ist ja vorbei. Das stimmt nicht, weil Ben ein Auto neu kauft. Fachlich gilt: Weg darf nur, was bei beiden gleich ist oder es ohnehin gibt.</p></div>\n<p>Wenn falsch: erst Übungskarte <a class=\"sprung\" href=\"#nw13lb2-ds8-u1\">1</a>, dann weiter.</p>"
+},
+{
+"kennung": "8.7 und 8.4",
+"stichwort": "Break-even Ben, zurück zur Vorhersage",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Ich teile durch die Einsparung, nicht durch einen der beiden Werte.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>d) ist kürzer als c).</span></label></div>",
+"hinten": "<div class=\"kasten geloest\"><div class=\"klabel\">8.4</div><p>☐ unter 2 Jahren     ☐ 2 bis 5 Jahre     <strong>☒</strong> 5 bis 10 Jahre     ☐ über 10 Jahre</p></div>\n<div class=\"kasten geloest\"><div class=\"klabel\">8.7</div><div class=\"tab\"><table><tr><th><strong>Schritt</strong></th><th><strong>Rechnung</strong></th><th><strong>Ergebnis</strong></th></tr><tr><td>a) Einsparung je km</td><td><em>178 g − 58 g</em></td><td><em>120 g</em></td></tr><tr><td>b) Einsparung je Jahr auf dem Schulweg</td><td><em>5320 km · 120 g</em></td><td><em>638 kg</em></td></tr><tr><td>c) Jahre, bis die Batterie eingespart ist</td><td><em>4200 kg : 638 kg</em></td><td><em>6,6 Jahre</em></td></tr><tr><td>d) Break-even bei 12 000 km im Jahr (alle Fahrten)</td><td><em>12 000 km · 120 g = 1440 kg; 4200 : 1440</em></td><td><em>2,9 Jahre</em></td></tr></table></div></div>\n<p>a) 178 g − 58 g = 120 g je km. b) 5320 km · 120 g = 638 kg im Jahr. c) 4200 kg : 638 kg ≈ 6,6 Jahre. d) 12 000 · 120 g = 1440 kg; 4200 : 1440 ≈ 2,9 Jahre.</p>\n<div class=\"kasten fehler\"><div class=\"klabel\">⚠ Typischer Fehler</div><p>Viele denken: Batterie durch das CO₂ des Elektroautos teilen. Das stimmt nicht, weil die Batterie nur durch das ausgeglichen wird, was es weniger verursacht. Fachlich gilt: Herstellung durch Einsparung je Jahr.</p></div>\n<p>Zurück zu 8.4: Richtig ist „5 bis 10 Jahre“ (6,6). Mit allen Fahrten sind es nur 2,9 Jahre: Je mehr Ben fährt, desto früher.</p>\n<p>Wenn falsch: erst Übungskarte <a class=\"sprung\" href=\"#nw13lb2-ds8-u2\">2</a>, dann weiter.</p>"
+},
+{
+"kennung": "8.8",
+"stichwort": "Fehler in Leas Urteil",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Mehrere Antworten gelten.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>a) Zwei Fehler, jeder mit Bezug auf Kriterium 1.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>b) Größe, Systemgrenze und Ergebnis mit Zahl.</span></label></div>",
+"hinten": "<p>a) Tragfähig ist zum Beispiel: 1. 0 g zählt nur den Auspuff; mit der Stromerzeugung sind es 58 g je km. 2. Die Herstellung fehlt: Lea kauft ein Fahrzeug neu, der Bus ist ohnehin gebaut.</p>\n<p>b) Tragfähig ist zum Beispiel: Größe kg CO₂ je Jahr für den Schulweg; Systemgrenze Herstellung, Bereitstellung und Nutzung. Im Betrieb spart sie 90 − 58 = 32 g je km, bei 3800 km 122 kg im Jahr. Schon die Batterie (4200 kg) braucht etwa 35 Jahre. Nach Kriterium 1 ist der Bus nachhaltiger.</p>\n<p>Nicht trägt: „Der Bus ist besser.“ Ohne Größe und Systemgrenze fehlt die Begründung.</p>\n<p>Wenn falsch: erst Übungskarte <a class=\"sprung\" href=\"#nw13lb2-ds8-u3\">3</a>, dann weiter.</p>"
+},
+{
+"kennung": "8.9 bis 8.11",
+"stichwort": "Ohne Nachsehen",
+"vorn": "<p><em>Erst fertig bearbeiten, dann aufdecken. Korrigieren Sie in Ihren Unterlagen in einer anderen Farbe: So sehen Sie später Ihre Übungsstellen.</em></p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>8.9: zwei Kreuze.</span></label><label class=\"haken\"><input type=\"checkbox\"><span>8.10 und 8.11: Mehrere Antworten gelten.</span></label></div>",
+"hinten": "<div class=\"kasten geloest\"><div class=\"klabel\">8.9</div><p>☐ A) sofort     ☐ B) nach 1,4 Jahren     <strong>☒</strong> C) nach 2,1 Jahren     ☐ D) nach 4,3 Jahren</p><p><strong>Kreuzen Sie den entscheidenden Grund an (genau ein Kreuz):</strong></p><p><strong>☒</strong> Man teilt die 2520 kg durch das, was das Elektroauto im Jahr weniger verursacht.</p><p>☐ Ab dem Kauf fährt es mit 58 g statt 178 g, es ist von Anfang an besser.</p><p>☐ Man teilt die 2520 kg durch das CO₂, das das Elektroauto im Jahr beim Fahren verursacht.</p><p>☐ Man teilt die 2520 kg durch das CO₂, das der Diesel im Jahr ausstößt.</p></div>\n<p>C und der erste Grund: 120 g · 10 000 km = 1200 kg im Jahr; 2520 : 1200 = 2,1 Jahre.</p>\n<p>8.10 Tragfähig ist zum Beispiel: Mein Schulweg verursacht etwa … kg CO₂ im Jahr (Ben: 947 kg; Personenkilometer mal g je Personenkilometer, Bereitstellung und Nutzung, kein neues Fahrzeug). Eine Alternative ist nach Kriterium 1 nachhaltiger, wenn sie für denselben Weg weniger verursacht (Bus: sofort); braucht sie ein neues Fahrzeug, zählt dessen Herstellung mit, und sie ist erst ab dem Break-even nachhaltiger (Elektroauto: nach 6,6 Jahren).</p>\n<p>8.11 Tragfähig ist zum Beispiel: Wie viel CO₂ verursacht derselbe Weg in kg je Jahr, mit Herstellung, Bereitstellung und Nutzung, und nach wie vielen Jahren gleicht die Einsparung die Herstellung aus?</p>\n<p>Wenn falsch: Übungskarte <a class=\"sprung\" href=\"#nw13lb2-ds8-u2\">2</a>.</p>"
+}
+],
+"uebung": [
+{
+"nr": 1,
+"niveau": 1,
+"niveau_wort": "Grundlagen",
+"stichwort": "Ich lege die Systemgrenze für einen Vergleich fest und begründe, was wegfallen darf.",
+"vorn": "<p>Familie Kaya braucht ein neues Auto: einen neuen Benziner oder ein gleich großes neues Elektroauto.</p>\n<p>Ordnen Sie jeden Schritt zu („zählt mit“ oder „darf weg“) und begründen Sie: Batterie herstellen · Sitze und Karosserie herstellen · Benzin und Strom bereitstellen · Garage bauen.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Jedes „darf weg“ begründet mit „bei beiden gleich“ oder „gibt es ohnehin“?</span></label></div>",
+"hinten": "<p>Zählt: Batterie herstellen; Benzin und Strom bereitstellen (verschieden).</p>\n<p>Darf weg: Sitze und Karosserie, Garage: bei beiden gleich.</p>"
+},
+{
+"nr": 2,
+"niveau": 1,
+"niveau_wort": "Grundlagen",
+"stichwort": "Ich berechne das CO₂ eines Wegs im Jahr und den Break-even einer Alternative.",
+"vorn": "<p>Paul fährt 5 km einfach mit der U-Bahn, an 190 Schultagen.</p>\n<p>Berechnen Sie sein CO₂ im Jahr (M1: 42 g je Personenkilometer) und das mit einem Pedelec (E-Bike, 3 g).</p>\n<p>Paul kauft dafür ein neues Pedelec, Herstellung etwa 100 kg CO₂ (Annahme). Berechnen Sie den Break-even.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Hin- und Rückweg gezählt?</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Herstellung durch die Einsparung geteilt?</span></label></div>",
+"hinten": "<p>5 · 2 · 190 = 1900 km. U-Bahn: 1900 · 42 g = 79 800 g ≈ 80 kg. Pedelec: 1900 · 3 g = 5,7 kg.</p>\n<p>Einsparung 80 − 5,7 ≈ 74 kg im Jahr; 100 kg : 74 kg ≈ 1,35 Jahre, also knapp eineinhalb Jahre.</p>"
+},
+{
+"nr": 3,
+"niveau": 1,
+"niveau_wort": "Grundlagen",
+"stichwort": "Ich beurteile mit Kriterium 1 und finde Fehler in einem fremden Urteil.",
+"vorn": "<p>Jonas urteilt: „Ein Pedelec (E-Bike) hat 3 g, der Bus 90 g. Also ist ein neues Pedelec 30-mal nachhaltiger.“</p>\n<p>Benennen Sie den Fehler mit Kriterium 1 und nennen Sie die Angaben, die für ein haltbares Urteil noch fehlen.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Fehler mit Herstellung, Bereitstellung oder Nutzung benannt?</span></label></div>",
+"hinten": "<p>Fehler: Die Herstellung fehlt. Jonas kauft das Pedelec neu, der Bus ist ohnehin gebaut.</p>\n<p>Es fehlt die Herstellung des Pedelecs (und die Strecke): Erst damit lässt sich der Break-even berechnen. Im Betrieb verursacht das Pedelec je Personenkilometer viel weniger CO₂ als der Bus.</p>"
+},
+{
+"nr": 4,
+"niveau": 2,
+"niveau_wort": "Vertiefung",
+"stichwort": "Break-even mit anderem Strom",
+"vorn": "<p>Bens Elektroauto lädt nur Windstrom: 3 g CO₂ je km statt 58 g. Der Diesel bleibt bei 178 g.</p>\n<p>Berechnen Sie die Strecke in km, nach der die Batterie (4200 kg) eingespart ist, und beschreiben Sie das CO₂ des Elektroautos nach diesem Punkt.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Durch die Einsparung geteilt?</span></label></div>",
+"hinten": "<p>Einsparung 175 g je km; 4 200 000 g : 175 g = 24 000 km.</p>\n<p>Danach verursacht es weiter CO₂, nur weniger als der Diesel: Break-even heißt Gleichstand, nicht null.</p>"
+},
+{
+"nr": 5,
+"niveau": 2,
+"niveau_wort": "Vertiefung",
+"stichwort": "Welche Zahl verschiebt den Break-even",
+"vorn": "<p>Ben fährt 12 000 km im Jahr; sein Break-even liegt bei 2,9 Jahren.</p>\n<p>Vergleichen Sie die Wirkung zweier Änderungen auf den Break-even: eine halb so große Batterie (2100 kg) oder Windstrom (3 g statt 58 g je km).</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Beide Fälle mit 12 000 km gerechnet?</span></label></div>",
+"hinten": "<p>Halbe Batterie: 2100 : (12 000 · 120 g = 1440 kg) ≈ 1,5 Jahre.</p>\n<p>Windstrom: 4200 : (12 000 · 175 g = 2100 kg) = 2,0 Jahre. Die kleinere Batterie verschiebt stärker.</p>"
+},
+{
+"nr": 6,
+"niveau": 3,
+"niveau_wort": "Transfer",
+"stichwort": "Break-even bei einem anderen Gerät",
+"vorn": "<p>Ein alter Kühlschrank funktioniert noch und braucht 300 kWh im Jahr, ein neuer 150 kWh. Seine Herstellung verursacht etwa 350 kg CO₂ (Annahme für die Aufgabe). Strommix 2025: 344 g je kWh.</p>\n<p>Beurteilen Sie mit Kriterium 1, ob sich der Austausch lohnt, und nennen Sie die Systemgrenze. Nehmen Sie dafür eine Lebensdauer des neuen Geräts an und nennen Sie sie.</p>\n<div class=\"kasten pruefen\"><div class=\"klabel\">✓ So prüfen Sie sich, bevor Sie aufdecken</div><label class=\"haken\"><input type=\"checkbox\"><span>Herstellung durch Einsparung je Jahr geteilt?</span></label><label class=\"haken\"><input type=\"checkbox\"><span>Annahme genannt?</span></label></div>",
+"hinten": "<p>Einsparung 150 kWh · 344 g = 51,6 kg im Jahr; 350 : 51,6 ≈ 6,8 Jahre bis zum Break-even.</p>\n<p>Systemgrenze: Herstellung des neuen Geräts, Bereitstellung des Stroms, Nutzung. Angenommen 15 Jahre Lebensdauer: Das ist länger als 6,8 Jahre, der Austausch lohnt sich; sinkt das CO₂ je kWh im Strommix, später.</p>"
+}
+]
 }
 ]
 }
@@ -1265,6 +1358,7 @@ window.KARTEN = {
 {
 "id": "nw13lb2",
 "ds": [
+8,
 7,
 6,
 5,
